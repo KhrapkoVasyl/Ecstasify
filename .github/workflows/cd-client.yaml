@@ -1,0 +1,51 @@
+name: Client CD
+
+on:
+  push:
+    paths:
+      - 'client/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: npm install, build
+        run: |
+          npm install
+          npm run build --if-present
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-app
+          path: dist/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: react-app
+
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'ecstasify'
+          publish-profile: '<publishData><publishProfile profileName="ecstasify - Web Deploy" publishMethod="MSDeploy" publishUrl="ecstasify.scm.azurewebsites.net:443" msdeploySite="ecstasify" userName="$ecstasify" userPWD="oHTW3ZejkXeAxqD4eimuDZX1qiwrJZ3gWQ9decuwg8bmWsTkGJvQodWqwCuj" destinationAppUrl="https://ecstasify.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile><publishProfile profileName="ecstasify - FTP" publishMethod="FTP" publishUrl="ftps://waws-prod-blu-417.ftp.azurewebsites.windows.net/site/wwwroot" ftpPassiveMode="True" userName="ecstasify\$ecstasify" userPWD="oHTW3ZejkXeAxqD4eimuDZX1qiwrJZ3gWQ9decuwg8bmWsTkGJvQodWqwCuj" destinationAppUrl="https://ecstasify.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile><publishProfile profileName="ecstasify - Zip Deploy" publishMethod="ZipDeploy" publishUrl="ecstasify.scm.azurewebsites.net:443" userName="$ecstasify" userPWD="oHTW3ZejkXeAxqD4eimuDZX1qiwrJZ3gWQ9decuwg8bmWsTkGJvQodWqwCuj" destinationAppUrl="https://ecstasify.azurewebsites.net" SQLServerDBConnectionString="" mySQLDBConnectionString="" hostingProviderForumLink="" controlPanelLink="http://windows.azure.com" webSystem="WebSites"><databases /></publishProfile></publishData>'
+          package: .
