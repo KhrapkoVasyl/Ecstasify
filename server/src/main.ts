@@ -1,4 +1,3 @@
-import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -7,30 +6,31 @@ import {
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { validationPipe } from './common/pipes';
+import { AppConfigService } from './config/app-config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
-  const configService = app.get<ConfigService>(ConfigService);
+  const appConfigService = app.get<AppConfigService>(AppConfigService);
 
-  const HOST = configService.get('NEST_HOST');
-  const PORT = configService.get('NEST_PORT');
-  const GLOBAL_PREFIX = configService.get('GLOBAL_PREFIX');
+  const HOST = appConfigService.get<string>('NEST_HOST');
+  const PORT = appConfigService.get<string>('NEST_PORT');
+  const GLOBAL_PREFIX = appConfigService.get<string>('GLOBAL_PREFIX');
 
   app.setGlobalPrefix(GLOBAL_PREFIX);
 
-  const ENABLE_SWAGGER = configService.get<boolean>('ENABLE_SWAGGER');
+  const ENABLE_SWAGGER = appConfigService.get<boolean>('ENABLE_SWAGGER');
   if (ENABLE_SWAGGER) {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle(configService.get('npm_package_name'))
-      .setVersion(configService.get('npm_package_version'))
+      .setTitle(appConfigService.get('npm_package_name'))
+      .setVersion(appConfigService.get('npm_package_version'))
       .addBearerAuth()
       .build();
 
     const document = SwaggerModule.createDocument(app, swaggerConfig);
-    const SWAGGER_DOCS_PATH = configService.get('SWAGGER_DOCS_PATH');
+    const SWAGGER_DOCS_PATH = appConfigService.get<string>('SWAGGER_DOCS_PATH');
     SwaggerModule.setup(SWAGGER_DOCS_PATH, app, document);
   }
 
