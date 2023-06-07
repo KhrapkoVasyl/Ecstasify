@@ -9,8 +9,14 @@ services:
       - POSTGRES_DB=ecstasify
     ports:
       - '5432:5432'
+    networks:
+      - network
     volumes:
-      - db:/var/lib/dic
+      - db:/var/lib/postgresql/data
+
+networks:
+  network:
+    driver: bridge
+
 volumes:
   db:
-    driver: local
