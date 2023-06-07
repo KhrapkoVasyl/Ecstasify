@@ -2,6 +2,7 @@ name: Client CD
 
 on:
   push:
+    branches: [dev, main]
     paths:
       - 'client/**'
   workflow_dispatch:
