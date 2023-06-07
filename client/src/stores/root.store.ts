@@ -10,7 +10,7 @@ import { UsersStore } from './users.store';
 
 export class RootStore {
   private rootService = new RootService(this);
-  
+
   errorHandler = new ErrorHandler();
   usersStore = new UsersStore(this.rootService, this);
   authorsStore = new AuthorsStore(this.rootService, this);
