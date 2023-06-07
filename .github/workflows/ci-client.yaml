@@ -16,7 +16,7 @@ jobs:
         run: npm i
 
       - name: 🍃 Lint
-        run: npm run lint
+        run: npm run lint:check
 
       - name: 🧪 Run tests
         run: npm run test
