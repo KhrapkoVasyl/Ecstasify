@@ -74,7 +74,7 @@ jobs:
           app-name: 'ecstasify-api'
           slot-name: 'production'
           publish-profile: ${{secrets.ECSTASIFY_API_PUBLISH_PROFILE}}
-          package: .
+          package: nest.zip
 
       - name: Delete zip file
-        run: rm ./server/nest.zip
+        run: rm nest.zip
