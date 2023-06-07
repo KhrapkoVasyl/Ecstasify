@@ -14,7 +14,8 @@
     "prettier:fix": "prettier --write . --ignore-path .gitignore",
     "lint:check": "npm run eslint:check && npm run prettier:check",
     "lint:fix": "npm run eslint:fix && npm run prettier:fix",
-    "lint:precommit": "npm run lint:fix"
+    "lint:precommit": "npm run lint:fix",
+    "prepare": "cd .. && husky install client/.husky"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
