@@ -4,9 +4,11 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
-  const env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+  const envDir = process.cwd() + '/env';
+  const env = { ...process.env, ...loadEnv(mode, envDir) };
 
   return defineConfig({
+    envDir,
     plugins: [react()],
     resolve: {
       alias: {
