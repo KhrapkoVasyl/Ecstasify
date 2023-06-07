@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./server
+        working-directory: server
 
     steps:
       - uses: actions/checkout@v3
@@ -72,7 +72,7 @@ jobs:
     needs: build-lint-and-test
     defaults:
       run:
-        working-directory: ./server
+        working-directory: server
     environment:
       name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
