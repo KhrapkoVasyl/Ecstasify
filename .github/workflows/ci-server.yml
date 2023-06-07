@@ -79,11 +79,11 @@ jobs:
     if: ${{ github.ref == 'refs/heads/chore/#7/setting-up-ci-for-server-deploy' }}
 
     steps:
-      - name: Print current working directory
-        run: echo $GITHUB_WORKSPACE
-
       - name: List files in current directory
         run: ls $GITHUB_WORKSPACE
+
+      - name: Print current working directory
+        run: echo $GITHUB_WORKSPACE
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
