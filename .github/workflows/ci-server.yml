@@ -70,21 +70,12 @@ jobs:
       contents: none
     runs-on: ubuntu-latest
     needs: build-lint-and-test
-    defaults:
-      run:
-        working-directory: server
     environment:
       name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     if: ${{ github.ref == 'refs/heads/chore/#7/setting-up-ci-for-server-deploy' }}
 
     steps:
-      - name: List files in current directory
-        run: ls $GITHUB_WORKSPACE
-
-      - name: Print current working directory
-        run: echo $GITHUB_WORKSPACE
-
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
