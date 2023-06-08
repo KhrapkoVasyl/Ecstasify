@@ -7,10 +7,15 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "eslint:check": "eslint --ignore-path .gitignore \"**/*.js\"",
-    "eslint:fix": "eslint --ignore-path .gitignore \"**/*.js\" --fix",
-    "prettier:check": "prettier --check . --ignore-path .gitignore",
-    "prettier:fix": "prettier --write . --ignore-path .gitignore"
+    "test": "echo \"Running tests\"",
+    "eslint:check": "eslint --ignore-path .gitignore \"src/**/*.{ts,tsx,js,jsx}\"",
+    "eslint:fix": "eslint --ignore-path .gitignore \"src/**/*.{ts,tsx,js,jsx}\" --fix",
+    "prettier:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json}\" --ignore-path .gitignore",
+    "prettier:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\" --ignore-path .gitignore",
+    "lint:check": "npm run eslint:check && npm run prettier:check",
+    "lint:fix": "npm run eslint:fix && npm run prettier:fix",
+    "lint:precommit": "npm run lint:fix",
+    "prepare": "cd .. && husky install client/.husky"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -18,6 +23,8 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
     "axios": "^1.1.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
     "mobx": "^6.6.2",
     "mobx-persist-store": "^1.1.3",
     "mobx-react-lite": "^3.4.0",
@@ -26,8 +33,8 @@
     "react-hook-form": "^7.39.1",
     "react-router-dom": "^6.4.3",
     "react-toastify": "^9.1.1",
-    "typescript": "^4.6.4",
-    "typeface-jost": "^1.1.13"
+    "typeface-jost": "^1.1.13",
+    "typescript": "^4.6.4"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
@@ -35,7 +42,7 @@
     "@types/react-dom": "^18.0.7",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
-    "@vitejs/plugin-react": "^2.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^3.5.2",
@@ -44,6 +51,9 @@
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.7.1",
-    "vite": "^3.2.0"
+    "vite": "^4.3.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx,json}": ["npm run lint:precommit"]
   }
 }
