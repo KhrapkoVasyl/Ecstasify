@@ -27,9 +27,11 @@ export class TrackEntity {
   name: string;
 
   @ManyToOne(() => AuthorEntity, (author) => author.tracks)
+  @JoinColumn()
   author: AuthorEntity;
 
   @ManyToOne(() => GenreEntity, (genre) => genre.tracks)
+  @JoinColumn()
   genre: GenreEntity;
 
   @ManyToMany(() => PlaylistEntity, (playlist) => playlist.tracks)

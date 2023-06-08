@@ -6,6 +6,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { SubscriptionPlanEntity } from '../subscription-plans/subscription-plan.entity';
 
@@ -35,6 +36,7 @@ export class UserEntity {
     () => SubscriptionPlanEntity,
     (subscriptionPlan) => subscriptionPlan.users,
   )
+  @JoinColumn()
   subscriptionPlan: SubscriptionPlanEntity;
 
   @ApiProperty()
