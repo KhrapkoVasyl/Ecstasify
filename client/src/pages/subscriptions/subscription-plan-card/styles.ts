@@ -1,6 +1,8 @@
-import { Styles } from '@/types/styles';
+import { createStyleSheet } from '@/helpers';
 
-export const cardWrapper: Styles = {
-  borderRadius: '10px',
-  padding: '15px',
-};
+export const styles = createStyleSheet({
+  cardWrapper: {
+    borderRadius: '10px',
+    padding: '15px',
+  },
+});

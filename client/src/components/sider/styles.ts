@@ -1,4 +1,4 @@
-import { Styles } from '@/types/styles';
+import { createStyleSheet } from '@/helpers';
 import styled from '@emotion/styled';
 import { alpha, Theme } from '@mui/material';
 import { NavLink as RouterNavLink, NavLinkProps } from 'react-router-dom';
@@ -32,15 +32,16 @@ export const NavLink = styled(RouterNavLink)<NavLinkProps & { theme?: Theme }>(
   }
 );
 
-export const list: Styles = {
-  padding: '10px',
-};
-
-export const logoWrapper: Styles = {
-  background: (theme) => theme.gradients.main,
-  padding: '20px',
-  h4: {
-    margin: 0,
-    fontSize: '20px',
+export const styles = createStyleSheet({
+  list: {
+    padding: '10px',
   },
-};
+  logoWrapper: {
+    background: (theme) => theme.gradients.main,
+    padding: '20px',
+    h4: {
+      margin: 0,
+      fontSize: '20px',
+    },
+  },
+});

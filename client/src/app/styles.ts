@@ -1,5 +1,7 @@
-import { SxProps } from '@mui/material';
+import { createStyleSheet } from '@/helpers';
 
-export const appWrapper: SxProps = {
-  height: '100%',
-};
+export const styles = createStyleSheet({
+  appWrapper: {
+    height: '100%',
+  },
+});

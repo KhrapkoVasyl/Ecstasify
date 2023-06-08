@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import DataTable from '../data-table';
 import { IColumn } from '../data-table/data-table.interface';
 import SectionHeader from '../section-header';
-import * as s from './styles';
+import { styles } from './styles';
 
 type EntityDashboardProps<T> = {
   columns: IColumn<T>[];
@@ -60,8 +60,8 @@ const EntityDashboard = <T,>(props: EntityDashboardProps<T>) => {
 
   return (
     <>
-      {getAllRecordsLoading ? <LinearProgress sx={s.progress} /> : null}
-      <Box sx={s.dashboardWrapper}>
+      {getAllRecordsLoading ? <LinearProgress sx={styles.progress} /> : null}
+      <Box sx={styles.dashboardWrapper}>
         <SectionHeader
           title={title}
           description={description}

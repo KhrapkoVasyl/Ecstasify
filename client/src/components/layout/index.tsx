@@ -3,23 +3,23 @@ import { Outlet } from 'react-router-dom';
 import AudioPlayer from '../audio-player';
 import Sider from '../sider';
 import Header from '../header';
-import * as s from './styles';
+import { styles } from './styles';
 
 const Layout = () => {
   return (
-    <Box sx={s.layout}>
+    <Box sx={styles.layout}>
       <Stack flexDirection="row" flex="1" height={0}>
-        <Box sx={s.siderWrapper}>
+        <Box sx={styles.siderWrapper}>
           <Sider />
         </Box>
-        <Paper sx={s.mainWrapper}>
+        <Paper sx={styles.mainWrapper}>
           <Header />
-          <Box sx={s.content}>
+          <Box sx={styles.content}>
             <Outlet />
           </Box>
         </Paper>
       </Stack>
-      <Box sx={s.audioPlayerWrapper}>
+      <Box sx={styles.audioPlayerWrapper}>
         <AudioPlayer />
       </Box>
     </Box>

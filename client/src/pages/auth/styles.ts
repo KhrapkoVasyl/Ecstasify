@@ -1,8 +1,10 @@
-import { Styles } from '@/types/styles';
+import { createStyleSheet } from '@/helpers';
 
-export const authPageWrapper: Styles = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100%',
-};
+export const styles = createStyleSheet({
+  authPageWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
+});

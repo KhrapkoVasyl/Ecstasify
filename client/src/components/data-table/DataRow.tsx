@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { IColumn } from './data-table.interface';
-import * as s from './styles';
+import { styles } from './styles';
 import { useMenuPopover } from '@/hooks';
 
 interface IDataRowProps<T> {
@@ -44,14 +44,14 @@ const DataRow = <T,>({
   ];
 
   return (
-    <TableRow hover sx={s.rowWrapper} {...MuiRowProps}>
+    <TableRow hover sx={styles.rowWrapper} {...MuiRowProps}>
       {columns.map(({ key, dataIndex, render }) => {
         const renderValue = render
           ? render(row[dataIndex])
           : (row[dataIndex] as React.ReactNode);
 
         return (
-          <TableCell key={key} sx={s.rowCell}>
+          <TableCell key={key} sx={styles.rowCell}>
             {renderValue}
           </TableCell>
         );

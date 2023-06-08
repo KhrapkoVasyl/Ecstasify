@@ -1,7 +1,7 @@
 import { Modal as MuiModal, Stack, Button, Box } from '@mui/material';
 import React from 'react';
 import SectionHeader from '../section-header';
-import * as s from './styles';
+import { styles } from './styles';
 
 type ModalProps = {
   open: boolean;
@@ -30,7 +30,7 @@ const Modal = ({
 }: ModalProps) => {
   return (
     <MuiModal open={open} onClose={onClose} keepMounted={false}>
-      <Box sx={s.modalWrapper}>
+      <Box sx={styles.modalWrapper}>
         {title ? (
           <SectionHeader
             title={title}

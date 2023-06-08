@@ -1,6 +1,6 @@
 import { Box, Typography, TypographyVariant } from '@mui/material';
 import React from 'react';
-import * as s from './styles';
+import { styles } from './styles';
 
 type SectionHeaderProps = {
   title: string;
@@ -22,7 +22,7 @@ const SectionHeader = ({
   descriptionProps,
 }: SectionHeaderProps) => {
   return (
-    <Box sx={s.sectionHeaderWrapper}>
+    <Box sx={styles.sectionHeaderWrapper}>
       <Box>
         <Typography variant={titleProps.variant} fontWeight={600}>
           {title}
