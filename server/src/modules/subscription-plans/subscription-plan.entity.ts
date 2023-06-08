@@ -18,8 +18,8 @@ export class SubscriptionPlanEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ maxLength: 50 })
-  @Column({ length: 50 })
+  @ApiProperty({ maxLength: 32 })
+  @Column({ length: 32 })
   name: string;
 
   @ApiProperty()

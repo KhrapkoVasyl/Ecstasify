@@ -16,16 +16,16 @@ export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ maxLength: 20 })
-  @Column({ length: 20 })
+  @ApiProperty({ maxLength: 32 })
+  @Column({ length: 32 })
   name: string;
 
   @ApiProperty({ maxLength: 16 })
   @Column({ length: 16 })
   password: string;
 
-  @ApiProperty({ maxLength: 254 })
-  @Column({ length: 254 })
+  @ApiProperty({ maxLength: 256 })
+  @Column({ length: 256 })
   email: string;
 
   @ApiProperty()
