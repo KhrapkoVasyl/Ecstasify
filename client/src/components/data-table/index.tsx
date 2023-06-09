@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import DataRow from './DataRow';
 import { IColumn } from './data-table.interface';
-import * as s from './styles';
+import { styles } from './styles';
 
 interface IDataTableProps<T> {
   rowKey: keyof T;
@@ -29,16 +29,16 @@ const DataTable = <T,>({
   return (
     <TableContainer>
       <Table>
-        <TableHead sx={s.tableHead}>
+        <TableHead sx={styles.tableHead}>
           <TableRow>
             {columns.map(({ title, key }) => {
               return (
-                <TableCell sx={s.tableCell} align="left" key={key}>
+                <TableCell sx={styles.tableCell} align="left" key={key}>
                   {title}
                 </TableCell>
               );
             })}
-            <TableCell sx={s.tableCell} align="right">
+            <TableCell sx={styles.tableCell} align="right">
               Actions
             </TableCell>
           </TableRow>

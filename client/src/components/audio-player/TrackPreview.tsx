@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
-import * as s from './styles';
+import { styles } from './styles';
 
 type TrackPreviewProps = {
   isFavorite?: boolean;
@@ -15,9 +15,9 @@ type TrackPreviewProps = {
 
 const TrackPreview = ({ isFavorite = true }: TrackPreviewProps) => {
   return (
-    <Card elevation={0} sx={s.trackCard}>
+    <Card elevation={0} sx={styles.trackCard}>
       <CardMedia
-        sx={s.trackImg}
+        sx={styles.trackImg}
         component="img"
         image="https://media.pitchfork.com/photos/623b686c6597466fa9d6e32d/master/w_1280%2Cc_limit/Harry-Styles-Harrys-House.jpeg"
       />
@@ -37,7 +37,7 @@ const TrackPreview = ({ isFavorite = true }: TrackPreviewProps) => {
       <Tooltip title="Add To Favorites">
         <IconButton>
           {isFavorite ? (
-            <Favorite sx={s.favoriteIcon} fontSize="small" />
+            <Favorite sx={styles.favoriteIcon} fontSize="small" />
           ) : (
             <FavoriteBorder fontSize="small" />
           )}

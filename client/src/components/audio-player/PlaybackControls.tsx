@@ -1,5 +1,4 @@
 import { Box, CircularProgress, Slider } from '@mui/material';
-import * as s from './styles';
 import {
   PauseCircle,
   PlayCircleFilledWhite,
@@ -11,8 +10,7 @@ import { observer } from 'mobx-react-lite';
 import { useCallback, useEffect, useState } from 'react';
 import CustomIconButton from '../icon-button';
 import { formatPlaybackTime } from '@/helpers';
-
-const { PlaybackTime } = s;
+import { styles, PlaybackTime } from './styles';
 
 const PlaybackControls = () => {
   const {
@@ -63,11 +61,11 @@ const PlaybackControls = () => {
   const disabledControls = !hasLoaded || hasError;
 
   return (
-    <Box sx={s.controlsWrapper}>
+    <Box sx={styles.controlsWrapper}>
       <Box>
         <CustomIconButton
           IconButtonProps={{
-            sx: s.skipButton,
+            sx: styles.skipButton,
             color: 'primary',
             disabled: disabledControls,
           }}
@@ -99,16 +97,19 @@ const PlaybackControls = () => {
           }
         />
         <CustomIconButton
-          IconButtonProps={{ sx: s.skipButton, disabled: disabledControls }}
+          IconButtonProps={{
+            sx: styles.skipButton,
+            disabled: disabledControls,
+          }}
           tooltipText="Next"
           icon={<SkipNext />}
         />
       </Box>
-      <Box sx={s.progressWrapper}>
+      <Box sx={styles.progressWrapper}>
         <PlaybackTime align="right">{formattedAudioCurrentTime}</PlaybackTime>
         <Slider
           size="small"
-          sx={s.slider}
+          sx={styles.slider}
           value={displayCurrentTime}
           disabled={disabledControls}
           max={hasLoaded ? getAudioDuration() : 0}

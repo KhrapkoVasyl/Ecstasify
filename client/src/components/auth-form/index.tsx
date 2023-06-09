@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../logo';
-import * as s from './styles';
+import { styles } from './styles';
 
 interface IAuthFormProps {
   mode: AuthFormMode;
@@ -45,11 +45,11 @@ const AuthForm = ({ mode }: IAuthFormProps) => {
   };
 
   return (
-    <Box sx={s.authFormWrapper}>
-      <Box sx={s.header}>
+    <Box sx={styles.authFormWrapper}>
+      <Box sx={styles.header}>
         <Logo />
       </Box>
-      <Box sx={s.controlsWrapper}>
+      <Box sx={styles.controlsWrapper}>
         {mode === 'sign-up' ? (
           <Controller
             name="name"
@@ -104,7 +104,7 @@ const AuthForm = ({ mode }: IAuthFormProps) => {
           }
           disableElevation
           variant="contained"
-          sx={s.containedBtn}
+          sx={styles.containedBtn}
           size="large"
           disabled={signInLoading || signUpLoading}
         >

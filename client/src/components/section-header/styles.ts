@@ -1,8 +1,10 @@
-import { Styles } from '@/types/styles';
+import { createStyleSheet } from '@/helpers';
 
-export const sectionHeaderWrapper: Styles = {
-  mb: '16px',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-};
+export const styles = createStyleSheet({
+  sectionHeaderWrapper: {
+    mb: '16px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+});
