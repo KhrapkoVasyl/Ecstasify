@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -9,6 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { SubscriptionPlanEntity } from '../subscription-plans/subscription-plan.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -20,7 +21,8 @@ export class UserEntity {
   @Column({ length: 32 })
   name: string;
 
-  @ApiProperty({ maxLength: 16 })
+  @ApiHideProperty()
+  @Exclude()
   @Column({ length: 16 })
   password: string;
 
