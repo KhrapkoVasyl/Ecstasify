@@ -32,6 +32,7 @@ export class UserEntity {
   @Column()
   role: number;
 
+  @ApiProperty()
   @ManyToOne(
     () => SubscriptionPlanEntity,
     (subscriptionPlan) => subscriptionPlan.users,

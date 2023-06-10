@@ -19,6 +19,7 @@ export class FeatureEntity {
   @Column({ length: 32 })
   name: string;
 
+  @ApiProperty()
   @ManyToMany(
     () => SubscriptionPlanEntity,
     (subscriptionPlan) => subscriptionPlan.features,

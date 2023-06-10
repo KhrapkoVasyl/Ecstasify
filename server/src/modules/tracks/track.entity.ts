@@ -26,18 +26,22 @@ export class TrackEntity {
   @Column({ length: 32 })
   name: string;
 
+  @ApiProperty()
   @ManyToOne(() => AuthorEntity, (author) => author.tracks)
   @JoinColumn()
   author: AuthorEntity;
 
+  @ApiProperty()
   @ManyToOne(() => GenreEntity, (genre) => genre.tracks)
   @JoinColumn()
   genre: GenreEntity;
 
+  @ApiProperty()
   @ManyToMany(() => PlaylistEntity, (playlist) => playlist.tracks)
   @JoinTable({ name: 'playlist-tracks' })
   playlists: PlaylistEntity[];
 
+  @ApiProperty()
   @OneToOne(() => FileEntity, (file) => file.track)
   @JoinColumn()
   file: FileEntity;

@@ -19,6 +19,7 @@ export class PlaylistEntity {
   @Column({ length: 32 })
   name: string;
 
+  @ApiProperty()
   @ManyToMany(() => TrackEntity, (track) => track.playlists)
   tracks: TrackEntity[];
 

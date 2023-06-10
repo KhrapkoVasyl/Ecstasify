@@ -26,9 +26,11 @@ export class SubscriptionPlanEntity {
   @Column({ type: 'double precision' })
   price: number;
 
+  @ApiProperty()
   @OneToMany(() => UserEntity, (user) => user.subscriptionPlan)
   users: UserEntity[];
 
+  @ApiProperty()
   @ManyToMany(() => FeatureEntity, (feature) => feature.subscriptionPlans)
   @JoinTable({ name: 'subscription-plan-features' })
   features: FeatureEntity[];

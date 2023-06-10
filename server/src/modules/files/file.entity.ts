@@ -31,6 +31,7 @@ export class FileEntity {
   @Column({ length: 256 })
   filepath: string;
 
+  @ApiProperty()
   @OneToOne(() => TrackEntity, (track) => track.genre)
   track: TrackEntity;
 

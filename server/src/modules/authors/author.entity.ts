@@ -19,6 +19,7 @@ export class AuthorEntity {
   @Column({ length: 32 })
   name: string;
 
+  @ApiProperty()
   @OneToMany(() => TrackEntity, (track) => track.author)
   tracks: TrackEntity[];
 
