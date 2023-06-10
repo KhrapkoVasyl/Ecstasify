@@ -19,7 +19,7 @@ export class SubscriptionPlanEntity {
   id: string;
 
   @ApiProperty({ maxLength: 32 })
-  @Column({ length: 32 })
+  @Column({ length: 32, unique: true })
   name: string;
 
   @ApiProperty()
