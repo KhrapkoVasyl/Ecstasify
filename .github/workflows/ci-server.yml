@@ -21,25 +21,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: npm i
-
-      - name: Format and lint
-        run: npm run format-and-lint
-
-      - name: Run tests
-        run: npm run test
-
-      - name: Print current working directory
-        run: echo $GITHUB_WORKSPACE
-
-      - name: List files in current directory
-        run: ls $GITHUB_WORKSPACE
-
-      - name: Build
-        if: ${{ github.ref == 'refs/heads/chore/#7/setting-up-ci-for-server-deploy' }}
-        run: npm run build
-
       - name: Zip all files for upload between jobs
         if: ${{ github.ref == 'refs/heads/chore/#7/setting-up-ci-for-server-deploy' }}
         run: zip --symlinks -r nest.zip ./*
