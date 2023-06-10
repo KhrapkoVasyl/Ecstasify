@@ -20,7 +20,7 @@ export class PlaylistEntity {
   name: string;
 
   @ApiProperty()
-  @ManyToMany(() => TrackEntity, (track) => track.playlists)
+  @ManyToMany(() => TrackEntity, ({ playlists }) => playlists)
   tracks: TrackEntity[];
 
   @ApiProperty()

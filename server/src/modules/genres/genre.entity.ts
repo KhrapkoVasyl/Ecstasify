@@ -20,7 +20,7 @@ export class GenreEntity {
   name: string;
 
   @ApiProperty()
-  @OneToMany(() => TrackEntity, (track) => track.genre)
+  @OneToMany(() => TrackEntity, ({ genre }) => genre)
   tracks: TrackEntity[];
 
   @ApiProperty()

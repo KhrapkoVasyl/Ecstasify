@@ -32,7 +32,7 @@ export class FileEntity {
   filepath: string;
 
   @ApiProperty()
-  @OneToOne(() => TrackEntity, (track) => track.genre)
+  @OneToOne(() => TrackEntity, ({ genre }) => genre)
   track: TrackEntity;
 
   @ApiProperty()

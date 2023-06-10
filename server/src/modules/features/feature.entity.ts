@@ -20,10 +20,7 @@ export class FeatureEntity {
   name: string;
 
   @ApiProperty()
-  @ManyToMany(
-    () => SubscriptionPlanEntity,
-    (subscriptionPlan) => subscriptionPlan.features,
-  )
+  @ManyToMany(() => SubscriptionPlanEntity, ({ features }) => features)
   subscriptionPlans: SubscriptionPlanEntity[];
 
   @ApiProperty()

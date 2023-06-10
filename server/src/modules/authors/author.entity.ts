@@ -20,7 +20,7 @@ export class AuthorEntity {
   name: string;
 
   @ApiProperty()
-  @OneToMany(() => TrackEntity, (track) => track.author)
+  @OneToMany(() => TrackEntity, ({ author }) => author)
   tracks: TrackEntity[];
 
   @ApiProperty()

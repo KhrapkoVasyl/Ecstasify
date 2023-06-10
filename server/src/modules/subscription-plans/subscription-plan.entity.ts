@@ -27,11 +27,11 @@ export class SubscriptionPlanEntity {
   price: number;
 
   @ApiProperty()
-  @OneToMany(() => UserEntity, (user) => user.subscriptionPlan)
+  @OneToMany(() => UserEntity, ({ subscriptionPlan }) => subscriptionPlan)
   users: UserEntity[];
 
   @ApiProperty()
-  @ManyToMany(() => FeatureEntity, (feature) => feature.subscriptionPlans)
+  @ManyToMany(() => FeatureEntity, (subscriptionPlans) => subscriptionPlans)
   @JoinTable({ name: 'subscription-plan-features' })
   features: FeatureEntity[];
 
