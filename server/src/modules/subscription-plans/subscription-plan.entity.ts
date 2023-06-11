@@ -1,45 +1,54 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToMany,
-  ManyToMany,
-  JoinTable,
-  CreateDateColumn,
   UpdateDateColumn,
+  CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { FeatureEntity } from '../features/feature.entity';
-import { UserEntity } from '../users/user.entity';
+import { SubscriptionFeatureEntity } from '../subscription-features/subscription-feature.entity';
 
-@Entity({ name: 'subscription-plans' })
+@Entity('subscription-plans')
 export class SubscriptionPlanEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public readonly id: string;
 
-  @ApiProperty({ maxLength: 32 })
-  @Column({ length: 32, unique: true })
-  name: string;
+  @ApiProperty({
+    type: 'string',
+    uniqueItems: true,
+    example: 'Premium',
+    required: true,
+  })
+  @Column({ type: 'varchar', length: 32, unique: true })
+  public readonly name: string;
 
-  @ApiProperty()
-  @Column({ type: 'double precision' })
-  price: number;
+  @ApiProperty({ type: 'numeric', required: true, example: 5.25 })
+  @Column({ type: 'numeric', scale: 2, precision: 9 })
+  public readonly price: number;
 
-  @ApiProperty()
-  @OneToMany(() => UserEntity, ({ subscriptionPlan }) => subscriptionPlan)
-  users: UserEntity[];
+  @ApiHideProperty()
+  @OneToMany(
+    () => SubscriptionFeatureEntity,
+    ({ subscriptionPlan }) => subscriptionPlan,
+    {
+      onDelete: 'SET NULL',
+      nullable: true,
+      eager: false,
+    },
+  )
+  public readonly subscriptionFeatures?: SubscriptionFeatureEntity[];
 
-  @ApiProperty()
-  @ManyToMany(() => FeatureEntity, (subscriptionPlans) => subscriptionPlans)
-  @JoinTable({ name: 'subscription-plan-features' })
-  features: FeatureEntity[];
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn({
+    readonly: true,
+  })
+  public readonly createdAt: Date;
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ApiProperty({ readOnly: true })
+  @UpdateDateColumn({
+    readonly: true,
+  })
+  public readonly updatedAt: Date;
 }
