@@ -1,33 +1,41 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
-  Entity,
-  Column,
   PrimaryGeneratedColumn,
-  ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  Column,
+  Entity,
+  OneToMany,
 } from 'typeorm';
-import { SubscriptionPlanEntity } from '../subscription-plans/subscription-plan.entity';
+import { SubscriptionFeatureEntity } from '../subscription-features/subscription-feature.entity';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
-@Entity({ name: 'features' })
+@Entity('features')
 export class FeatureEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public readonly id: string;
 
-  @ApiProperty({ maxLength: 32 })
-  @Column({ length: 32, unique: true })
-  name: string;
+  @ApiProperty({ type: 'string', maxLength: 256 })
+  @Column({ type: 'varchar', length: 256 })
+  public readonly name: string;
 
-  @ApiProperty()
-  @ManyToMany(() => SubscriptionPlanEntity, ({ features }) => features)
-  subscriptionPlans: SubscriptionPlanEntity[];
+  @ApiHideProperty()
+  @OneToMany(() => SubscriptionFeatureEntity, ({ feature }) => feature, {
+    onDelete: 'SET NULL',
+    nullable: true,
+    eager: false,
+  })
+  public readonly subscriptionFeatures?: SubscriptionFeatureEntity[];
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date;
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn({
+    readonly: true,
+  })
+  public readonly createdAt: Date;
 
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ApiProperty({ readOnly: true })
+  @UpdateDateColumn({
+    readonly: true,
+  })
+  public readonly updatedAt: Date;
 }
