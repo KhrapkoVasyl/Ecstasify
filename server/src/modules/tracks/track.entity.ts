@@ -42,7 +42,7 @@ export class TrackEntity {
   playlists: PlaylistEntity[];
 
   @ApiProperty()
-  @OneToOne(() => FileEntity, ({ track }) => track)
+  @OneToOne(() => FileEntity)
   @JoinColumn()
   file: FileEntity;
 
