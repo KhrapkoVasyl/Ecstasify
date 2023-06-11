@@ -1,45 +1,44 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  Entity,
-  Column,
   PrimaryGeneratedColumn,
-  OneToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  BaseEntity,
+  Column,
+  Entity,
 } from 'typeorm';
-import { TrackEntity } from '../tracks/track.entity';
 
-@Entity({ name: 'files' })
-export class FileEntity {
+@Entity('files')
+export class FileEntity extends BaseEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public readonly id: string;
 
-  @ApiProperty({ maxLength: 32 })
-  @Column({ length: 32 })
-  filename: string;
+  @ApiProperty({ type: 'string', maxLength: 64, required: true })
+  @Column({ type: 'varchar', length: 64 })
+  public readonly fileName: string;
 
-  @ApiProperty({ maxLength: 4 })
-  @Column({ length: 4 })
-  fileExt: string;
+  @ApiProperty({ type: 'string', maxLength: 64, required: true })
+  @Column({ type: 'varchar', length: 64 })
+  public readonly fileExt: string;
 
-  @ApiProperty({ maxLength: 37 })
-  @Column({ length: 37 })
-  filenameWithExt: string;
+  @ApiProperty({ type: 'string', maxLength: 128, required: true })
+  @Column({ type: 'varchar', length: 128 })
+  public readonly fileNameWithExt: string;
 
-  @ApiProperty({ maxLength: 256 })
-  @Column({ length: 256 })
-  filepath: string;
+  @ApiProperty({ type: 'string', maxLength: 256, required: true })
+  @Column({ type: 'varchar', length: 256 })
+  public readonly filePath: string;
 
-  @ApiProperty()
-  @OneToOne(() => TrackEntity, ({ genre }) => genre)
-  track: TrackEntity;
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn({
+    readonly: true,
+  })
+  public readonly createdAt: Date;
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ApiProperty({ readOnly: true })
+  @UpdateDateColumn({
+    readonly: true,
+  })
+  public readonly updatedAt: Date;
 }
