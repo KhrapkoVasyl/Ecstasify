@@ -35,7 +35,7 @@ export class UserEntity {
   role: number;
 
   @ApiProperty()
-  @ManyToOne(() => SubscriptionPlanEntity, ({ users }) => users)
+  @ManyToOne(() => SubscriptionPlanEntity)
   @JoinColumn()
   subscriptionPlan: SubscriptionPlanEntity;
 
