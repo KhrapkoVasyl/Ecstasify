@@ -6,7 +6,7 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import { MoreVert } from '@mui/icons-material';
+import { MoreVertRounded } from '@mui/icons-material';
 import { IColumn } from './data-table.interface';
 import { styles } from './styles';
 import { useMenuPopover } from '@/hooks';
@@ -58,7 +58,7 @@ const DataRow = <T,>({
       })}
       <TableCell align="right">
         <IconButton onClick={openMenu}>
-          <MoreVert color="primary" />
+          <MoreVertRounded color="primary" />
         </IconButton>
         <Menu anchorEl={anchorEl} open={open} onClose={closeMenu}>
           {menuItems.map(({ onClick, label }) => (

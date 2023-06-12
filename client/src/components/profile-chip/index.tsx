@@ -2,7 +2,7 @@ import { useMenuPopover, useStores } from '@/hooks';
 import { Avatar, Chip, Menu, MenuItem } from '@mui/material';
 import { Box } from '@mui/system';
 import { observer } from 'mobx-react-lite';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { LogoutRounded } from '@mui/icons-material';
 import { styles } from './styles';
 
 const ProfileChip = () => {
@@ -37,7 +37,7 @@ const ProfileChip = () => {
         onClose={closeMenu}
       >
         <MenuItem onClick={signOut}>
-          <LogoutIcon /> Sign Out
+          <LogoutRounded /> Sign Out
         </MenuItem>
       </Menu>
     </Box>

@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { FavoriteRounded, FavoriteBorderRounded } from '@mui/icons-material';
 import { styles } from './styles';
 
 type TrackPreviewProps = {
@@ -40,9 +40,9 @@ const TrackPreview = ({
     <Tooltip title="Add To Favorites">
       <IconButton>
         {isFavorite ? (
-          <Favorite sx={styles.favoriteIcon} fontSize="small" />
+          <FavoriteRounded sx={styles.favoriteIcon} fontSize="small" />
         ) : (
-          <FavoriteBorder fontSize="small" />
+          <FavoriteBorderRounded fontSize="small" />
         )}
       </IconButton>
     </Tooltip>

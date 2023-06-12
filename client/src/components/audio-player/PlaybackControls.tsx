@@ -1,9 +1,9 @@
 import { Box, CircularProgress, Slider, SliderProps } from '@mui/material';
 import {
-  PauseCircle,
-  PlayCircleFilledWhite,
-  SkipNext,
-  SkipPrevious,
+  PauseCircleRounded,
+  PlayCircleFilledWhiteRounded,
+  SkipNextRounded,
+  SkipPreviousRounded,
 } from '@mui/icons-material';
 import { useAudio, useStore } from '@/hooks';
 import { observer } from 'mobx-react-lite';
@@ -72,7 +72,7 @@ const PlaybackControls = () => {
             onClick: goToPrevTrack,
           }}
           tooltipText="Previous"
-          icon={<SkipPrevious fontSize="inherit" />}
+          icon={<SkipPreviousRounded fontSize="inherit" />}
         />
         <CustomIconButton
           tooltipText={isPlaying ? 'Pause' : 'Play'}
@@ -88,9 +88,9 @@ const PlaybackControls = () => {
                 <CircularProgress size="50px" sx={styles.audioLoader} />
               )}
               {isPlaying && !areDisabledControls ? (
-                <PauseCircle />
+                <PauseCircleRounded />
               ) : (
-                <PlayCircleFilledWhite />
+                <PlayCircleFilledWhiteRounded />
               )}
             </>
           }
@@ -101,7 +101,7 @@ const PlaybackControls = () => {
             onClick: goToNextTrack,
           }}
           tooltipText="Next"
-          icon={<SkipNext />}
+          icon={<SkipNextRounded />}
         />
       </Box>
       <Box sx={styles.progressWrapper}>
