@@ -24,12 +24,16 @@ export class PlaylistEntity {
   name: string;
 
   @ApiHideProperty()
-  @ManyToMany(() => TrackEntity, ({ playlists }) => playlists)
+  @ManyToMany(() => TrackEntity, ({ playlists }) => playlists, {
+    nullable: true,
+  })
   @JoinTable({ name: 'playlist-tracks' })
   tracks: TrackEntity[];
 
   @ApiProperty()
-  @ManyToOne(() => UserEntity, ({ playlists }) => playlists)
+  @ManyToOne(() => UserEntity, ({ playlists }) => playlists, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   user: UserEntity;
 

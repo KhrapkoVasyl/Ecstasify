@@ -37,12 +37,18 @@ export class UserEntity {
   role: number;
 
   @ApiProperty()
-  @ManyToOne(() => SubscriptionPlanEntity)
+  @ManyToOne(() => SubscriptionPlanEntity, {
+    onDelete: 'SET NULL',
+    nullable: true,
+    eager: true,
+  })
   @JoinColumn()
   subscriptionPlan: SubscriptionPlanEntity;
 
   @ApiHideProperty()
-  @OneToMany(() => PlaylistEntity, ({ user }) => user)
+  @OneToMany(() => PlaylistEntity, ({ user }) => user, {
+    nullable: true,
+  })
   playlists: PlaylistEntity[];
 
   @ApiProperty({ readOnly: true })

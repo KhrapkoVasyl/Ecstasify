@@ -26,21 +26,24 @@ export class TrackEntity {
   name: string;
 
   @ApiProperty()
-  @ManyToOne(() => AuthorEntity, ({ tracks }) => tracks)
+  @ManyToOne(() => AuthorEntity, ({ tracks }) => tracks, {
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
   @JoinColumn()
   author: AuthorEntity;
 
   @ApiProperty()
-  @ManyToOne(() => GenreEntity, ({ tracks }) => tracks)
+  @ManyToOne(() => GenreEntity, ({ tracks }) => tracks, { onDelete: 'CASCADE' })
   @JoinColumn()
   genre: GenreEntity;
 
   @ApiHideProperty()
-  @ManyToMany(() => PlaylistEntity, ({ tracks }) => tracks)
+  @ManyToMany(() => PlaylistEntity, ({ tracks }) => tracks, { nullable: true })
   playlists: PlaylistEntity[];
 
   @ApiProperty()
-  @OneToOne(() => FileEntity)
+  @OneToOne(() => FileEntity, { onDelete: 'CASCADE', eager: true })
   @JoinColumn()
   file: FileEntity;
 

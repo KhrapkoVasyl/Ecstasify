@@ -20,7 +20,7 @@ export class AuthorEntity {
   name: string;
 
   @ApiHideProperty()
-  @OneToMany(() => TrackEntity, ({ author }) => author)
+  @OneToMany(() => TrackEntity, ({ author }) => author, { nullable: true })
   tracks: TrackEntity[];
 
   @ApiProperty({ readOnly: true })

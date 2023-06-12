@@ -20,7 +20,9 @@ export class GenreEntity {
   name: string;
 
   @ApiHideProperty()
-  @OneToMany(() => TrackEntity, ({ genre }) => genre)
+  @OneToMany(() => TrackEntity, ({ genre }) => genre, {
+    nullable: true,
+  })
   tracks: TrackEntity[];
 
   @ApiProperty({ readOnly: true })
