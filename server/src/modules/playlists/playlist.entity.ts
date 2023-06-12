@@ -4,10 +4,13 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToMany,
+  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { TrackEntity } from '../tracks/track.entity';
+import { UserEntity } from '../users/user.entity';
 
 @Entity({ name: 'playlists' })
 export class PlaylistEntity {
@@ -22,6 +25,11 @@ export class PlaylistEntity {
   @ApiHideProperty()
   @ManyToMany(() => TrackEntity, ({ playlists }) => playlists)
   tracks: TrackEntity[];
+
+  @ApiProperty()
+  @ManyToOne(() => UserEntity, ({ playlists }) => playlists)
+  @JoinColumn()
+  user: UserEntity;
 
   @ApiProperty()
   @CreateDateColumn()

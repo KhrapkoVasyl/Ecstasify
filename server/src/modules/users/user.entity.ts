@@ -4,12 +4,14 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
 import { SubscriptionPlanEntity } from '../subscription-plans/subscription-plan.entity';
 import { Exclude } from 'class-transformer';
+import { PlaylistEntity } from '../playlists/playlist.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -38,6 +40,10 @@ export class UserEntity {
   @ManyToOne(() => SubscriptionPlanEntity)
   @JoinColumn()
   subscriptionPlan: SubscriptionPlanEntity;
+
+  @ApiHideProperty()
+  @OneToMany(() => PlaylistEntity, ({ user }) => user)
+  playlists: PlaylistEntity[];
 
   @ApiProperty()
   @CreateDateColumn()
