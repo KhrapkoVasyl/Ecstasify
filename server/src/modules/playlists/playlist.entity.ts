@@ -8,6 +8,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  JoinTable,
 } from 'typeorm';
 import { TrackEntity } from '../tracks/track.entity';
 import { UserEntity } from '../users/user.entity';
@@ -24,6 +25,7 @@ export class PlaylistEntity {
 
   @ApiHideProperty()
   @ManyToMany(() => TrackEntity, ({ playlists }) => playlists)
+  @JoinTable({ name: 'playlist-tracks' })
   tracks: TrackEntity[];
 
   @ApiProperty()

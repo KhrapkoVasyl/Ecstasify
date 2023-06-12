@@ -6,7 +6,6 @@ import {
   OneToOne,
   ManyToOne,
   ManyToMany,
-  JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
@@ -38,7 +37,6 @@ export class TrackEntity {
 
   @ApiHideProperty()
   @ManyToMany(() => PlaylistEntity, ({ tracks }) => tracks)
-  @JoinTable({ name: 'playlist-tracks' })
   playlists: PlaylistEntity[];
 
   @ApiProperty()
