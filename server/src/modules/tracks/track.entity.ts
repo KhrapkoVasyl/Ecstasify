@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -36,7 +36,7 @@ export class TrackEntity {
   @JoinColumn()
   genre: GenreEntity;
 
-  @ApiProperty()
+  @ApiHideProperty()
   @ManyToMany(() => PlaylistEntity, ({ tracks }) => tracks)
   @JoinTable({ name: 'playlist-tracks' })
   playlists: PlaylistEntity[];
@@ -46,11 +46,11 @@ export class TrackEntity {
   @JoinColumn()
   file: FileEntity;
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date;
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn({ readonly: true })
+  readonly createdAt: Date;
 
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ApiProperty({ readOnly: true })
+  @UpdateDateColumn({ readonly: true })
+  readonly updatedAt: Date;
 }

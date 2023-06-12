@@ -45,11 +45,11 @@ export class UserEntity {
   @OneToMany(() => PlaylistEntity, ({ user }) => user)
   playlists: PlaylistEntity[];
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date;
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn({ readonly: true })
+  readonly createdAt: Date;
 
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ApiProperty({ readOnly: true })
+  @UpdateDateColumn({ readonly: true })
+  readonly updatedAt: Date;
 }

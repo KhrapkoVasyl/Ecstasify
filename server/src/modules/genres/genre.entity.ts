@@ -23,11 +23,11 @@ export class GenreEntity {
   @OneToMany(() => TrackEntity, ({ genre }) => genre)
   tracks: TrackEntity[];
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date;
+  @ApiProperty({ readOnly: true })
+  @CreateDateColumn({ readonly: true })
+  readonly createdAt: Date;
 
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @ApiProperty({ readOnly: true })
+  @UpdateDateColumn({ readonly: true })
+  readonly updatedAt: Date;
 }
