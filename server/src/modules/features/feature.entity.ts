@@ -8,9 +8,10 @@ import {
 } from 'typeorm';
 import { SubscriptionFeatureEntity } from '../subscription-features/subscription-feature.entity';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { CommonEntity } from 'src/common/entities';
 
 @Entity('features')
-export class FeatureEntity {
+export class FeatureEntity extends CommonEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   public readonly id: string;
