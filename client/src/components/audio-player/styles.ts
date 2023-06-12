@@ -29,6 +29,16 @@ export const styles = createStyleSheet({
   skipButton: {
     color: (theme) => theme.palette.text.secondary,
   },
+  playbackToggle: {
+    padding: '6px',
+    position: 'relative',
+    '.MuiSvgIcon-root': {
+      fontSize: '40px',
+    },
+  },
+  audioLoader: {
+    position: 'absolute',
+  },
   progressWrapper: {
     display: 'flex',
     width: '100%',
@@ -51,12 +61,14 @@ export const styles = createStyleSheet({
     '.MuiSlider-track': {
       background: (theme) => theme.gradients.main,
       borderColor: 'transparent',
+      transition: 'none',
     },
     '.MuiSlider-rail, .MuiSlider-track': {
       height: '4px',
     },
     '.MuiSlider-thumb': {
       opacity: 0,
+      transition: 'none',
     },
     '&:hover, &:active': {
       '.MuiSlider-thumb': {

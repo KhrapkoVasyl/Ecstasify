@@ -6,4 +6,7 @@ export interface Track {
   id: string;
   name: string;
   author: Author;
+  genre: string;
+  file: string;
+  coverImg: string;
 }
