@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -19,7 +19,7 @@ export class GenreEntity {
   @Column({ length: 32, unique: true })
   name: string;
 
-  @ApiProperty()
+  @ApiHideProperty()
   @OneToMany(() => TrackEntity, ({ genre }) => genre)
   tracks: TrackEntity[];
 

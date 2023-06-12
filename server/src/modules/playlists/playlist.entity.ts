@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -19,7 +19,7 @@ export class PlaylistEntity {
   @Column({ length: 32 })
   name: string;
 
-  @ApiProperty()
+  @ApiHideProperty()
   @ManyToMany(() => TrackEntity, ({ playlists }) => playlists)
   tracks: TrackEntity[];
 
