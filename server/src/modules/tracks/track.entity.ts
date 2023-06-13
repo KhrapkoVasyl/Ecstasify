@@ -14,9 +14,10 @@ import { AuthorEntity } from '../authors/author.entity';
 import { GenreEntity } from '../genres/genre.entity';
 import { PlaylistEntity } from '../playlists/playlist.entity';
 import { FileEntity } from '../files/file.entity';
+import { CommonEntity } from 'src/common/entities';
 
 @Entity({ name: 'tracks' })
-export class TrackEntity {
+export class TrackEntity extends CommonEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;

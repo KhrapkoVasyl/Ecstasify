@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { AppConfigModule } from './config';
 import { DatabaseModule } from './systems/database';
 import { FeaturesModule } from './modules/features';
+import { TracksModule } from './modules/tracks';
 
 @Module({
-  imports: [AppConfigModule, DatabaseModule, FeaturesModule],
+  imports: [AppConfigModule, DatabaseModule, FeaturesModule, TracksModule],
   controllers: [AppController],
   providers: [AppService],
 })
