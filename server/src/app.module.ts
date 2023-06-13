@@ -6,6 +6,7 @@ import { DatabaseModule } from './systems/database';
 import { FeaturesModule } from './modules/features';
 import { AuthorsModule } from './modules/authors';
 import { GenresModule } from './modules/genres';
+import { PlaylistsModule } from './modules/playlists';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { GenresModule } from './modules/genres';
     FeaturesModule,
     AuthorsModule,
     GenresModule,
+    PlaylistsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
