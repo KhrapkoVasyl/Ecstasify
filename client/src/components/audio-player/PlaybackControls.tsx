@@ -31,7 +31,7 @@ const PlaybackControls = ({
       <Box>
         <CustomIconButton
           IconButtonProps={{
-            sx: styles.skipButton,
+            sx: styles.iconButton,
             onClick: onPrev,
           }}
           tooltipText="Previous"
@@ -60,7 +60,7 @@ const PlaybackControls = ({
         />
         <CustomIconButton
           IconButtonProps={{
-            sx: styles.skipButton,
+            sx: styles.iconButton,
             onClick: onNext,
           }}
           tooltipText="Next"

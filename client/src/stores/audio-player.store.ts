@@ -4,6 +4,7 @@ import { RootStore } from './root.store';
 import { Track } from '@/models/track';
 import mockTracks from '../mocks/tracks.json';
 import { makeAutoObservable } from 'mobx';
+import { VolumeLevels } from '@/enums';
 
 export class AudioPlayerStore {
   private rootStore: RootStore;
@@ -11,6 +12,7 @@ export class AudioPlayerStore {
 
   currentTrackIndex = 0;
   currentTrackDuration = 0;
+  volume = VolumeLevels.Medium;
 
   playlist: Track[] = mockTracks as unknown as Track[];
 
@@ -19,6 +21,10 @@ export class AudioPlayerStore {
     this.rootService = rootServise;
 
     makeAutoObservable(this, {}, { autoBind: true });
+  }
+
+  setVolume(value: number) {
+    this.volume = value;
   }
 
   get currentTrack() {
