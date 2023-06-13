@@ -12,9 +12,10 @@ import {
 import { SubscriptionPlanEntity } from '../subscription-plans/subscription-plan.entity';
 import { Exclude } from 'class-transformer';
 import { PlaylistEntity } from '../playlists/playlist.entity';
+import { CommonEntity } from 'src/common/entities';
 
 @Entity({ name: 'users' })
-export class UserEntity {
+export class UserEntity extends CommonEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -29,7 +30,7 @@ export class UserEntity {
   password: string;
 
   @ApiProperty({ maxLength: 256 })
-  @Column({ length: 256 })
+  @Column({ length: 256, unique: true })
   email: string;
 
   @ApiProperty()
