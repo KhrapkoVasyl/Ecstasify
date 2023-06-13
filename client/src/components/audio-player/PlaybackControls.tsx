@@ -1,64 +1,67 @@
-import { Box, CircularProgress, Slider } from '@mui/material';
+import { Box, CircularProgress, Slider, SliderProps } from '@mui/material';
 import {
-  PauseCircle,
-  PlayCircleFilledWhite,
-  SkipNext,
-  SkipPrevious,
+  PauseCircleRounded,
+  PlayCircleFilledWhiteRounded,
+  SkipNextRounded,
+  SkipPreviousRounded,
 } from '@mui/icons-material';
-import { useStore } from '@/hooks';
+import { useAudio, useStore } from '@/hooks';
 import { observer } from 'mobx-react-lite';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomIconButton from '../icon-button';
 import { formatPlaybackTime } from '@/helpers';
 import { styles, PlaybackTime } from './styles';
 
 const PlaybackControls = () => {
+  const { handleAudioError, goToNextTrack, goToPrevTrack, currentTrack } =
+    useStore('audioPlayerStore');
+
+  const [hasError, setHasError] = useState(false);
+
   const {
-    playAudio,
-    pauseAudio,
+    play,
+    pause,
     isPlaying,
+    duration,
     currentTime,
-    hasError,
     hasLoaded,
-    skipTime,
-    getAudioDuration,
-    attachAudioListeners,
-    removeAudioListeners,
-    setAudioSource,
-  } = useStore('audioPlayerStore');
+    handleSeekEnd,
+    handleSeekChange,
+  } = useAudio({
+    src: currentTrack?.file,
+    onLoadError: () => {
+      setHasError(true);
+      handleAudioError();
+    },
+  });
 
-  const [displayCurrentTime, setDisplayCurrentTime] = useState(0);
-  const [seeking, setSeeking] = useState(false);
+  useEffect(() => () => setHasError(false), [currentTrack?.file]);
 
-  useEffect(() => {
-    setAudioSource(import.meta.env.VITE_TEST_AUDIO_SRC);
-    attachAudioListeners();
-
-    return () => {
-      removeAudioListeners();
-      pauseAudio();
-      setAudioSource('');
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!seeking && currentTime !== displayCurrentTime) {
-      setDisplayCurrentTime(currentTime);
-    }
-  }, [currentTime]);
-
-  const handleTogglePlayback = useCallback(() => {
+  const handleTogglePlayback = () => {
     if (isPlaying) {
-      pauseAudio();
+      pause();
     } else {
-      playAudio();
+      play();
     }
-  }, [isPlaying]);
+  };
 
-  const formattedAudioDuration = formatPlaybackTime(getAudioDuration());
-  const formattedAudioCurrentTime = formatPlaybackTime(displayCurrentTime);
+  const handleSeekSliderChange: SliderProps['onChange'] = (_, value) => {
+    if (typeof value === 'number') {
+      handleSeekChange(value);
+    }
+  };
 
-  const disabledControls = !hasLoaded || hasError;
+  const handleSeekSliderChangeCommited: SliderProps['onChangeCommitted'] = (
+    _,
+    value
+  ) => {
+    if (typeof value === 'number') {
+      handleSeekEnd(value);
+    }
+  };
+
+  const areDisabledControls = hasError;
+  const isAudioLoaderShown = isPlaying && !hasLoaded && !hasError;
 
   return (
     <Box sx={styles.controlsWrapper}>
@@ -66,32 +69,28 @@ const PlaybackControls = () => {
         <CustomIconButton
           IconButtonProps={{
             sx: styles.skipButton,
-            color: 'primary',
-            disabled: disabledControls,
+            onClick: goToPrevTrack,
           }}
           tooltipText="Previous"
-          icon={<SkipPrevious fontSize="inherit" />}
+          icon={<SkipPreviousRounded fontSize="inherit" />}
         />
         <CustomIconButton
           tooltipText={isPlaying ? 'Pause' : 'Play'}
           IconButtonProps={{
-            disabled: disabledControls,
-            onClick: handleTogglePlayback,
             color: 'primary',
-            sx: {
-              padding: '6px',
-              position: 'relative',
-            },
+            sx: styles.playbackToggle,
+            disabled: areDisabledControls,
+            onClick: handleTogglePlayback,
           }}
           icon={
             <>
-              {!hasLoaded && (
-                <CircularProgress size="50px" sx={{ position: 'absolute' }} />
+              {isAudioLoaderShown && (
+                <CircularProgress size="50px" sx={styles.audioLoader} />
               )}
-              {isPlaying && hasLoaded ? (
-                <PauseCircle sx={{ fontSize: '40px' }} />
+              {isPlaying && !areDisabledControls ? (
+                <PauseCircleRounded />
               ) : (
-                <PlayCircleFilledWhite sx={{ fontSize: '40px' }} />
+                <PlayCircleFilledWhiteRounded />
               )}
             </>
           }
@@ -99,30 +98,26 @@ const PlaybackControls = () => {
         <CustomIconButton
           IconButtonProps={{
             sx: styles.skipButton,
-            disabled: disabledControls,
+            onClick: goToNextTrack,
           }}
           tooltipText="Next"
-          icon={<SkipNext />}
+          icon={<SkipNextRounded />}
         />
       </Box>
       <Box sx={styles.progressWrapper}>
-        <PlaybackTime align="right">{formattedAudioCurrentTime}</PlaybackTime>
+        <PlaybackTime align="right">
+          {formatPlaybackTime(currentTime)}
+        </PlaybackTime>
         <Slider
           size="small"
+          max={duration}
           sx={styles.slider}
-          value={displayCurrentTime}
-          disabled={disabledControls}
-          max={hasLoaded ? getAudioDuration() : 0}
-          onChangeCommitted={(_, value) => {
-            setSeeking(false);
-            skipTime(value as number);
-          }}
-          onChange={(_, value) => {
-            setSeeking(true);
-            setDisplayCurrentTime(value as number);
-          }}
+          value={currentTime}
+          disabled={areDisabledControls}
+          onChange={handleSeekSliderChange}
+          onChangeCommitted={handleSeekSliderChangeCommited}
         />
-        <PlaybackTime align="left">{formattedAudioDuration}</PlaybackTime>
+        <PlaybackTime align="left">{formatPlaybackTime(duration)}</PlaybackTime>
       </Box>
     </Box>
   );

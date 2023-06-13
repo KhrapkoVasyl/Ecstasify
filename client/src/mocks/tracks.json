@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "name": "AMAZING",
+    "author": { "name": "Rex Orange Country" },
+    "file": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/de/c6/6a/dec66ae6-410c-22d8-365e-dfbe9f765e5c/mzaf_9241087147223649117.plus.aac.ep.m4a",
+    "genre": "",
+    "createdAt": "",
+    "updatedAt": "",
+    "coverImg": "https://i.scdn.co/image/ab67616d0000b2735b656d32ea6b0b9c54c2d2e0"
+  },
+  {
+    "id": "2",
+    "name": "As It Was",
+    "author": { "name": "Harry Styles" },
+    "file": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/96/7e/ea/967eea0f-3d8e-9bb6-b4c5-fb255f50b906/mzaf_16046209671483865399.plus.aac.ep.m4a",
+    "genre": "",
+    "createdAt": "",
+    "updatedAt": "",
+    "coverImg": "https://media.pitchfork.com/photos/623b686c6597466fa9d6e32d/master/w_1280%2Cc_limit/Harry-Styles-Harrys-House.jpeg"
+  },
+  {
+    "id": "3",
+    "name": "Tattoo",
+    "author": { "name": "Loreen" },
+    "file": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/28/a3/3e/28a33e92-39f5-ba72-9b18-bba16f9b36de/mzaf_9634311354149611886.plus.aac.ep.m4a",
+    "genre": "",
+    "createdAt": "",
+    "updatedAt": "",
+    "coverImg": "https://upload.wikimedia.org/wikipedia/en/c/c2/Loreen_-_Tattoo.png"
+  }
+]
