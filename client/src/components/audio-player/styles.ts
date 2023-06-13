@@ -4,10 +4,11 @@ import { styled } from '@mui/material';
 export const styles = createStyleSheet({
   playerWrapper: {
     backgroundColor: '#fff',
-    height: '92px',
+    height: '85px',
     display: 'flex',
     padding: '10px 15px',
     boxShadow: '0px 2px 10px rgba(0,0,0,0.05)',
+    position: 'relative',
   },
   trackCard: {
     display: 'flex',
@@ -25,6 +26,7 @@ export const styles = createStyleSheet({
     flexDirection: 'column',
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   skipButton: {
     color: (theme) => theme.palette.text.secondary,
@@ -48,7 +50,7 @@ export const styles = createStyleSheet({
   timelineProgress: {
     flex: 1,
   },
-  expandButtonWrapper: {
+  playerExtraWrapper: {
     flex: 1,
     display: 'flex',
     alignItems: 'center',
@@ -78,7 +80,10 @@ export const styles = createStyleSheet({
     '.MuiSlider-thumb.Mui-active': {
       boxShadow: '0px 0px 0px 10px rgb(102 126 234 / 16%)',
     },
-    padding: '8px 0',
+    padding: 0,
+    position: 'absolute',
+    top: '1px',
+    left: 0,
   },
   favoriteIcon: {
     color: '#e74c3c',
