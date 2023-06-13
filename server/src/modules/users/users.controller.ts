@@ -14,7 +14,6 @@ import { UserEntity } from './user.entity';
 import { IdDto } from 'src/common/dto';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
 
 @ApiTags('users')
 @Controller('users')
@@ -34,9 +33,7 @@ export class UsersController {
 
   @Post()
   createOne(@Body() createEntityDto: CreateUserDto): Promise<UserEntity> {
-    const model = plainToInstance(UserEntity, createEntityDto);
-
-    return this.usersService.createOne(model);
+    return this.usersService.createOne(createEntityDto);
   }
 
   @Patch(':id')
@@ -44,9 +41,7 @@ export class UsersController {
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateUserDto,
   ) {
-    const model = plainToInstance(UserEntity, updateEntityDto);
-
-    return this.usersService.updateOne(conditions, model);
+    return this.usersService.updateOne(conditions, updateEntityDto);
   }
 
   @Delete(':id')

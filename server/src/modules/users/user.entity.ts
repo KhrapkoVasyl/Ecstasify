@@ -8,11 +8,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { SubscriptionPlanEntity } from '../subscription-plans/subscription-plan.entity';
 import { Exclude } from 'class-transformer';
 import { PlaylistEntity } from '../playlists/playlist.entity';
 import { CommonEntity } from 'src/common/entities';
+import * as bcrypt from 'bcrypt';
+import { SALT_ROUNDS } from './users.constants';
 
 @Entity({ name: 'users' })
 export class UserEntity extends CommonEntity {
@@ -26,7 +30,7 @@ export class UserEntity extends CommonEntity {
 
   @ApiHideProperty()
   @Exclude()
-  @Column({ length: 16 })
+  @Column({ length: 256 })
   password: string;
 
   @ApiProperty({ maxLength: 256 })
@@ -59,4 +63,12 @@ export class UserEntity extends CommonEntity {
   @ApiProperty({ readOnly: true })
   @UpdateDateColumn({ readonly: true })
   readonly updatedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  public async hashPassword() {
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+    }
+  }
 }
