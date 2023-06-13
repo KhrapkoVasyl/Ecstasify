@@ -3,14 +3,10 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
-  IsObject,
-  IsOptional,
   IsString,
   MaxLength,
   MinLength,
-  ValidateNested,
 } from 'class-validator';
-import { IdDto } from 'src/common/dto';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -60,15 +56,4 @@ export class CreateUserDto {
     nullable: false,
   })
   public readonly role: number;
-
-  @IsOptional()
-  @IsObject()
-  @ValidateNested()
-  @ApiProperty({
-    type: IdDto,
-    required: false,
-    nullable: true,
-    example: { id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' },
-  })
-  public readonly subscriptionPlan: IdDto;
 }
