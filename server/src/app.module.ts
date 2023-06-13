@@ -8,7 +8,13 @@ import { AuthorsModule } from './modules/authors';
 import { GenresModule } from './modules/genres';
 
 @Module({
-  imports: [AppConfigModule, DatabaseModule, FeaturesModule, AuthorsModule, GenresModule],
+  imports: [
+    AppConfigModule,
+    DatabaseModule,
+    FeaturesModule,
+    AuthorsModule,
+    GenresModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
