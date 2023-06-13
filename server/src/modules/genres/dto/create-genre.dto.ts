@@ -7,6 +7,7 @@ export class CreateGenreDto {
   @MinLength(2)
   @MaxLength(32)
   @ApiProperty({
+    uniqueItems: true,
     example: 'phonk',
     required: true,
     nullable: false,
