@@ -7,6 +7,7 @@ import { FeaturesModule } from './modules/features';
 import { AuthorsModule } from './modules/authors';
 import { GenresModule } from './modules/genres';
 import { PlaylistsModule } from './modules/playlists';
+import { UsersModule } from './modules/users';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PlaylistsModule } from './modules/playlists';
     AuthorsModule,
     GenresModule,
     PlaylistsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
