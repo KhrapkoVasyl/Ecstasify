@@ -1,75 +1,38 @@
-import { Box, CircularProgress, Slider, SliderProps } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import {
   PauseCircleRounded,
   PlayCircleFilledWhiteRounded,
   SkipNextRounded,
   SkipPreviousRounded,
 } from '@mui/icons-material';
-import { useAudio, useStore } from '@/hooks';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
 import CustomIconButton from '../icon-button';
-import { formatPlaybackTime } from '@/helpers';
-import { styles, PlaybackTime } from './styles';
+import { styles } from './styles';
 
-const PlaybackControls = () => {
-  const { handleAudioError, goToNextTrack, goToPrevTrack, currentTrack } =
-    useStore('audioPlayerStore');
+interface IPlaybackControls {
+  onTogglePlayback: () => void;
+  onNext: () => void;
+  onPrev: () => void;
+  loading?: boolean;
+  disabled?: boolean;
+  isPlaying?: boolean;
+}
 
-  const [hasError, setHasError] = useState(false);
-
-  const {
-    play,
-    pause,
-    isPlaying,
-    duration,
-    currentTime,
-    hasLoaded,
-    handleSeekEnd,
-    handleSeekChange,
-  } = useAudio({
-    src: currentTrack?.file,
-    onLoadError: () => {
-      setHasError(true);
-      handleAudioError();
-    },
-  });
-
-  useEffect(() => () => setHasError(false), [currentTrack?.file]);
-
-  const handleTogglePlayback = () => {
-    if (isPlaying) {
-      pause();
-    } else {
-      play();
-    }
-  };
-
-  const handleSeekSliderChange: SliderProps['onChange'] = (_, value) => {
-    if (typeof value === 'number') {
-      handleSeekChange(value);
-    }
-  };
-
-  const handleSeekSliderChangeCommited: SliderProps['onChangeCommitted'] = (
-    _,
-    value
-  ) => {
-    if (typeof value === 'number') {
-      handleSeekEnd(value);
-    }
-  };
-
-  const areDisabledControls = hasError;
-  const isAudioLoaderShown = isPlaying && !hasLoaded && !hasError;
-
+const PlaybackControls = ({
+  onTogglePlayback,
+  onNext,
+  onPrev,
+  loading = false,
+  disabled = false,
+  isPlaying = false,
+}: IPlaybackControls) => {
   return (
     <Box sx={styles.controlsWrapper}>
       <Box>
         <CustomIconButton
           IconButtonProps={{
             sx: styles.skipButton,
-            onClick: goToPrevTrack,
+            onClick: onPrev,
           }}
           tooltipText="Previous"
           icon={<SkipPreviousRounded fontSize="inherit" />}
@@ -77,17 +40,17 @@ const PlaybackControls = () => {
         <CustomIconButton
           tooltipText={isPlaying ? 'Pause' : 'Play'}
           IconButtonProps={{
+            disabled,
             color: 'primary',
             sx: styles.playbackToggle,
-            disabled: areDisabledControls,
-            onClick: handleTogglePlayback,
+            onClick: onTogglePlayback,
           }}
           icon={
             <>
-              {isAudioLoaderShown && (
+              {loading && (
                 <CircularProgress size="50px" sx={styles.audioLoader} />
               )}
-              {isPlaying && !areDisabledControls ? (
+              {isPlaying && !disabled ? (
                 <PauseCircleRounded />
               ) : (
                 <PlayCircleFilledWhiteRounded />
@@ -98,26 +61,11 @@ const PlaybackControls = () => {
         <CustomIconButton
           IconButtonProps={{
             sx: styles.skipButton,
-            onClick: goToNextTrack,
+            onClick: onNext,
           }}
           tooltipText="Next"
           icon={<SkipNextRounded />}
         />
-      </Box>
-      <Box sx={styles.progressWrapper}>
-        <PlaybackTime align="right">
-          {formatPlaybackTime(currentTime)}
-        </PlaybackTime>
-        <Slider
-          size="small"
-          max={duration}
-          sx={styles.slider}
-          value={currentTime}
-          disabled={areDisabledControls}
-          onChange={handleSeekSliderChange}
-          onChangeCommitted={handleSeekSliderChangeCommited}
-        />
-        <PlaybackTime align="left">{formatPlaybackTime(duration)}</PlaybackTime>
       </Box>
     </Box>
   );

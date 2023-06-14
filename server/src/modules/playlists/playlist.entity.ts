@@ -12,9 +12,10 @@ import {
 } from 'typeorm';
 import { TrackEntity } from '../tracks/track.entity';
 import { UserEntity } from '../users/user.entity';
+import { CommonEntity } from 'src/common/entities';
 
 @Entity({ name: 'playlists' })
-export class PlaylistEntity {
+export class PlaylistEntity extends CommonEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;

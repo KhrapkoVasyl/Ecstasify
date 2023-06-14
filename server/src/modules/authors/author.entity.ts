@@ -8,9 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TrackEntity } from '../tracks/track.entity';
+import { CommonEntity } from 'src/common/entities';
 
 @Entity({ name: 'authors' })
-export class AuthorEntity {
+export class AuthorEntity extends CommonEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
