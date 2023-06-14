@@ -2,6 +2,7 @@ import { TemplateNameEnum } from '../enums';
 import {
   IEmailContext,
   ITestEmailContext,
+  ITrackCreatedEmailContext,
   IUserRegisteredEmailContext,
 } from './email-context.interface';
 
@@ -19,4 +20,9 @@ export interface ITestEmailParams extends ITemplatedEmailParams {
 export interface IUserRegisteredEmailParams extends ITemplatedEmailParams {
   templateName: TemplateNameEnum.USER_REGISTERED;
   context: IUserRegisteredEmailContext;
+}
+
+export interface ITrackCreatedEmailParams extends ITemplatedEmailParams {
+  templateName: TemplateNameEnum.TRACK_CREATED;
+  context: ITrackCreatedEmailContext;
 }

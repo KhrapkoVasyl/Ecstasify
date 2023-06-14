@@ -9,3 +9,7 @@ export interface ITestEmailContext extends IEmailContext {
 export interface IUserRegisteredEmailContext extends IEmailContext {
   name: string;
 }
+
+export interface ITrackCreatedEmailContext extends IEmailContext {
+  trackName: string;
+}
