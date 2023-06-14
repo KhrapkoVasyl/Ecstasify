@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 
 type UseAudioConfig = {
   src: string;
+  volume: number;
   onLoadError?: () => void;
 };
 
-export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
+export const useAudio = ({ src, onLoadError, volume }: UseAudioConfig) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -21,6 +22,7 @@ export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
   useEffect(() => {
     if (!howl.current) {
       howl.current = new Howl({
+        volume,
         src: [src],
         html5: true,
         onloaderror: onLoadError,
@@ -44,6 +46,12 @@ export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
       }
     };
   }, [src]);
+
+  useEffect(() => {
+    if (howl.current) {
+      howl.current.volume(volume);
+    }
+  }, [volume]);
 
   useEffect(() => {
     raf.current = requestAnimationFrame(syncCurrentTime);
