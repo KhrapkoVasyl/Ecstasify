@@ -17,7 +17,7 @@ import { UsersModule } from './modules/users';
     AuthorsModule,
     GenresModule,
     PlaylistsModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
