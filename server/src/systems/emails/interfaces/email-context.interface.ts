@@ -5,3 +5,7 @@ export interface IEmailContext {
 export interface ITestEmailContext extends IEmailContext {
   testMessage: string;
 }
+
+export interface IUserRegisteredEmailContext extends IEmailContext {
+  name: string;
+}
