@@ -28,7 +28,7 @@ export const styles = createStyleSheet({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  skipButton: {
+  iconButton: {
     color: (theme) => theme.palette.text.secondary,
   },
   playbackToggle: {
@@ -55,6 +55,7 @@ export const styles = createStyleSheet({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    gap: 2,
   },
   expandButton: {
     alignSelf: 'center',
@@ -87,6 +88,12 @@ export const styles = createStyleSheet({
   },
   favoriteIcon: {
     color: '#e74c3c',
+  },
+  volumeControlWrapper: {
+    flexDirection: 'row',
+    width: '125px',
+    alignItems: 'center',
+    gap: 1.5,
   },
 });
 

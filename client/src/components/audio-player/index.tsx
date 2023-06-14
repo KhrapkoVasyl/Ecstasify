@@ -8,10 +8,17 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import SeekBar from './SeekBar';
 import PlaybackTime from './PlaybackTime';
+import VolumeControl from './VolumeControl';
 
 const AudioPlayer = () => {
-  const { handleAudioError, goToNextTrack, goToPrevTrack, currentTrack } =
-    useStore('audioPlayerStore');
+  const {
+    handleAudioError,
+    goToNextTrack,
+    goToPrevTrack,
+    currentTrack,
+    volume,
+    setVolume,
+  } = useStore('audioPlayerStore');
 
   const [hasError, setHasError] = useState(false);
 
@@ -25,6 +32,7 @@ const AudioPlayer = () => {
     handleSeekEnd,
     handleSeekChange,
   } = useAudio({
+    volume,
     src: currentTrack?.file,
     onLoadError: () => {
       setHasError(true);
@@ -62,6 +70,7 @@ const AudioPlayer = () => {
       />
       <Box sx={styles.playerExtraWrapper}>
         <PlaybackTime currentTime={currentTime} fullDuration={duration} />
+        <VolumeControl value={volume} onChange={setVolume} />
         <Tooltip title="Expand">
           <IconButton sx={styles.expandButton}>
             <KeyboardArrowUp />
