@@ -1,7 +1,7 @@
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { CreateUserDto } from '../users/dto';
@@ -80,12 +80,12 @@ export class AuthService {
         user: { id: userId },
       });
     } catch {
-      throw new ForbiddenException(authServiceErrorMessages.accessDenied);
+      throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
     }
 
     const refreshTokenMatches = await bcrypt.compare(refreshToken, token.value);
     if (!refreshTokenMatches) {
-      throw new ForbiddenException(authServiceErrorMessages.accessDenied);
+      throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
     }
 
     const tokens = await this.generateTokens(user);
