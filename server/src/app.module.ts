@@ -8,6 +8,7 @@ import { AuthorsModule } from './modules/authors';
 import { GenresModule } from './modules/genres';
 import { PlaylistsModule } from './modules/playlists';
 import { UsersModule } from './modules/users';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from './modules/users';
     GenresModule,
     PlaylistsModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
