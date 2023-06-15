@@ -13,8 +13,8 @@ export class RefreshTokensService extends BaseService<RefreshTokenEntity> {
   constructor(
     @InjectRepository(RefreshTokenEntity)
     private readonly refreshTokenEntityRepository: Repository<RefreshTokenEntity>,
-    private appConfigService: AppConfigService,
-    private usersService: UsersService,
+    private readonly appConfigService: AppConfigService,
+    private readonly usersService: UsersService,
   ) {
     super(refreshTokenEntityRepository, refreshTokensServiceErrorMessages);
   }

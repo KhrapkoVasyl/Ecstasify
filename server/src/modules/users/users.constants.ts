@@ -6,5 +6,3 @@ export const usersServiceErrorMessages: TServiceErrorMessages = {
   entityNotFound: ErrorMessagesEnum.USER_NOT_FOUND,
   invalidData: ErrorMessagesEnum.INVALID_DATA,
 };
-
-export const SALT_ROUNDS = 10;
