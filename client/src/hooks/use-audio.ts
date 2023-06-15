@@ -54,7 +54,9 @@ export const useAudio = ({ src, onLoadError, volume }: UseAudioConfig) => {
   }, [volume]);
 
   useEffect(() => {
-    raf.current = requestAnimationFrame(syncCurrentTime);
+    if (isPlaying) {
+      raf.current = requestAnimationFrame(syncCurrentTime);
+    }
 
     return () => {
       if (raf.current) {
@@ -77,9 +79,7 @@ export const useAudio = ({ src, onLoadError, volume }: UseAudioConfig) => {
       setCurrentTime(howl.current?.seek() ?? 0);
     }
 
-    if (isPlaying) {
-      raf.current = requestAnimationFrame(syncCurrentTime);
-    }
+    raf.current = requestAnimationFrame(syncCurrentTime);
   };
 
   const play = () => {
@@ -108,6 +108,7 @@ export const useAudio = ({ src, onLoadError, volume }: UseAudioConfig) => {
   const handleSeekEnd = (value: number) => {
     if (!howl.current) return;
 
+    setCurrentTime(value);
     howl.current.seek(value);
     setIsSeeking(false);
   };
