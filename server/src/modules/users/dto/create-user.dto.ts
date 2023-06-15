@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsString,
   MaxLength,
   MinLength,
@@ -48,12 +47,4 @@ export class CreateUserDto {
     maxLength: 256,
   })
   public readonly email: string;
-
-  @IsNumber()
-  @ApiProperty({
-    example: 1,
-    required: true,
-    nullable: false,
-  })
-  public readonly role: number;
 }

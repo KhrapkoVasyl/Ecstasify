@@ -12,6 +12,7 @@ import { authServiceErrorMessages } from './auth.constants';
 import { AuthTokens, JwtPayload } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { AppConfigService } from 'src/config/app-config.service';
+import { UserEntity } from '../users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -35,8 +36,8 @@ export class AuthService {
     }
 
     const user = await this.usersService.createOne(createUserDto);
-    const payload = { id: user.id, email: user.email };
-    const tokens = await this.generateTokens(payload);
+
+    const tokens = await this.generateTokens(user);
     await this.refreshTokensService.updateRefreshToken(
       user.id,
       tokens.refreshToken,
@@ -57,8 +58,7 @@ export class AuthService {
     if (!passwordMatches)
       throw new BadRequestException(authServiceErrorMessages.invalidData);
 
-    const payload = { id: user.id, email: user.email };
-    const tokens = await this.generateTokens(payload);
+    const tokens = await this.generateTokens(user);
     await this.refreshTokensService.updateRefreshToken(
       user.id,
       tokens.refreshToken,
@@ -87,8 +87,7 @@ export class AuthService {
       throw new ForbiddenException(authServiceErrorMessages.accessDenied);
     }
 
-    const payload = { id: user.id, email: user.email };
-    const tokens = await this.generateTokens(payload);
+    const tokens = await this.generateTokens(user);
     await this.refreshTokensService.updateRefreshToken(
       user.id,
       tokens.refreshToken,
@@ -97,7 +96,13 @@ export class AuthService {
     return { ...tokens };
   }
 
-  async generateTokens(payload: JwtPayload) {
+  async generateTokens(user: UserEntity) {
+    const payload: JwtPayload = {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+    };
+
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.appConfigService.get<string>('JWT_ACCESS_SECRET'),
