@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { AuthDto } from './dto/auth.dto';
 import { CreateUserDto } from '../users/dto';
 import { UsersService } from '../users/users.service';
@@ -52,6 +56,36 @@ export class AuthService {
     const passwordMatches = await bcrypt.compare(data.password, user.password);
     if (!passwordMatches)
       throw new BadRequestException(authServiceErrorMessages.invalidData);
+
+    const payload = { id: user.id, email: user.email };
+    const tokens = await this.generateTokens(payload);
+    await this.refreshTokensService.updateRefreshToken(
+      user.id,
+      tokens.refreshToken,
+    );
+
+    return { ...tokens };
+  }
+
+  async signOut(userId: string) {
+    return this.refreshTokensService.deleteOne({ user: { id: userId } });
+  }
+
+  async refreshTokens(userId: string, refreshToken: string) {
+    let user, token;
+    try {
+      user = await this.usersService.findOne({ id: userId });
+      token = await this.refreshTokensService.findOne({
+        user: { id: userId },
+      });
+    } catch {
+      throw new ForbiddenException(authServiceErrorMessages.accessDenied);
+    }
+
+    const refreshTokenMatches = await bcrypt.compare(refreshToken, token.value);
+    if (!refreshTokenMatches) {
+      throw new ForbiddenException(authServiceErrorMessages.accessDenied);
+    }
 
     const payload = { id: user.id, email: user.email };
     const tokens = await this.generateTokens(payload);
