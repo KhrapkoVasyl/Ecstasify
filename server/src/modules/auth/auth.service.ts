@@ -17,10 +17,10 @@ import { UserEntity } from '../users/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private refreshTokensService: RefreshTokensService,
-    private jwtService: JwtService,
-    private appConfigService: AppConfigService,
+    private readonly usersService: UsersService,
+    private readonly refreshTokensService: RefreshTokensService,
+    private readonly jwtService: JwtService,
+    private readonly appConfigService: AppConfigService,
   ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<AuthTokens> {
