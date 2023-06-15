@@ -23,11 +23,10 @@ export class AuthService {
     private appConfigService: AppConfigService,
   ) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<any> {
+  async signUp(createUserDto: CreateUserDto): Promise<AuthTokens> {
     const userExists = await this.usersService
       .findOne({ email: createUserDto.email })
-      .then(() => true)
-      .catch(() => false);
+      .catch(() => null);
 
     if (userExists) {
       throw new BadRequestException(
@@ -46,13 +45,12 @@ export class AuthService {
     return { ...tokens };
   }
 
-  async signIn(data: AuthDto) {
-    let user;
-    try {
-      user = await this.usersService.findOne({ email: data.email });
-    } catch {
-      throw new BadRequestException(authServiceErrorMessages.invalidData);
-    }
+  async signIn(data: AuthDto): Promise<AuthTokens> {
+    const user = await this.usersService
+      .findOne({ email: data.email })
+      .catch(() => {
+        throw new BadRequestException(authServiceErrorMessages.invalidData);
+      });
 
     const passwordMatches = await bcrypt.compare(data.password, user.password);
     if (!passwordMatches)
@@ -71,7 +69,10 @@ export class AuthService {
     return this.refreshTokensService.deleteOne({ user: { id: userId } });
   }
 
-  async refreshTokens(userId: string, refreshToken: string) {
+  async refreshTokens(
+    userId: string,
+    refreshToken: string,
+  ): Promise<AuthTokens> {
     let user, token;
     try {
       user = await this.usersService.findOne({ id: userId });
@@ -96,7 +97,7 @@ export class AuthService {
     return { ...tokens };
   }
 
-  async generateTokens(user: UserEntity) {
+  async generateTokens(user: UserEntity): Promise<AuthTokens> {
     const payload: JwtPayload = {
       id: user.id,
       name: user.name,

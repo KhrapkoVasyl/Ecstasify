@@ -17,7 +17,7 @@ import { PlaylistEntity } from '../playlists/playlist.entity';
 import { CommonEntity } from 'src/common/entities';
 import * as bcrypt from 'bcrypt';
 import { SALT_ROUNDS } from './users.constants';
-import { Roles } from 'src/common/enums/roles.enum';
+import { Roles } from 'src/common/enums';
 
 @Entity({ name: 'users' })
 export class UserEntity extends CommonEntity {
@@ -39,8 +39,8 @@ export class UserEntity extends CommonEntity {
   email: string;
 
   @ApiProperty()
-  @Column({ default: Roles.User })
-  role: number;
+  @Column({ default: Roles.USER })
+  role: Roles;
 
   @ApiProperty()
   @ManyToOne(() => SubscriptionPlanEntity, {
