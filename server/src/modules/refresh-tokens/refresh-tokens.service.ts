@@ -9,6 +9,7 @@ import * as ms from 'ms';
 import { AppConfigService } from 'src/config/app-config.service';
 import { UsersService } from '../users/users.service';
 import { UserEntity } from '../users/user.entity';
+import * as bcrypt from 'bcrypt';
 import { MAX_USER_SESSIONS_QUANTITY } from '../auth/auth.constants';
 
 @Injectable()
@@ -57,5 +58,24 @@ export class RefreshTokensService extends BaseService<RefreshTokenEntity> {
     if (tokenIdsToDelete.length) {
       await this.refreshTokenEntityRepository.delete(tokenIdsToDelete);
     }
+  }
+
+  async findUserTokenByValue(
+    condition: FindOptionsWhere<RefreshTokenEntity>,
+    refreshToken: string,
+  ) {
+    const userTokens = await this.refreshTokenEntityRepository.find({
+      where: condition,
+    });
+
+    let userToken = null;
+    for await (const token of userTokens) {
+      const isMatchTokens = await bcrypt.compare(refreshToken, token.value);
+      if (isMatchTokens) {
+        userToken = token;
+      }
+    }
+
+    return userToken;
   }
 }

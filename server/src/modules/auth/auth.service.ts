@@ -70,30 +70,31 @@ export class AuthService {
   }
 
   async signOut(userId: string, refreshToken: string) {
-    return this.refreshTokensService.deleteOne({
-      user: { id: userId },
-      value: refreshToken,
-    });
+    const userToken = await this.refreshTokensService.findUserTokenByValue(
+      { user: { id: userId } },
+      refreshToken,
+    );
+
+    return await this.refreshTokensService.deleteOne({ id: userToken.id });
   }
 
   async refreshTokens(
     condition: FindOptionsWhere<UserEntity>,
     refreshToken: string,
   ): Promise<AuthTokens> {
-    let user, token;
-    try {
-      user = await this.usersService.findOne(condition);
-      token = await this.refreshTokensService.findOne({
-        user: { id: user.id },
-      });
-    } catch {
+    const user = await this.usersService.findOne(condition).catch(() => {
+      throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
+    });
+
+    const userToken = await this.refreshTokensService.findUserTokenByValue(
+      { user: { id: user.id } },
+      refreshToken,
+    );
+    if (!userToken) {
       throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
     }
 
-    const refreshTokenMatches = await bcrypt.compare(refreshToken, token.value);
-    if (!refreshTokenMatches) {
-      throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
-    }
+    await this.refreshTokensService.deleteOne({ id: userToken.id });
 
     const tokens = await this.generateTokens(user);
     await this.refreshTokensService.createRefreshToken(

@@ -8,7 +8,6 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BeforeInsert,
-  BeforeUpdate,
 } from 'typeorm';
 import { CommonEntity } from 'src/common/entities';
 import { UserEntity } from '../users/user.entity';
@@ -45,7 +44,6 @@ export class RefreshTokenEntity extends CommonEntity {
   expiresAt: Date;
 
   @BeforeInsert()
-  @BeforeUpdate()
   public async hashRefreshToken() {
     if (this.value) {
       this.value = await bcrypt.hash(this.value, SALT_ROUNDS);
