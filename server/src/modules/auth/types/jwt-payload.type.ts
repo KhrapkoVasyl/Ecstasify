@@ -1,7 +1,7 @@
-import { Roles } from 'src/common/enums';
+import { UserRoleEnum } from 'src/common/enums';
 
 export type JwtPayload = {
   id: string;
   name: string;
-  role: Roles;
+  role: UserRoleEnum;
 };

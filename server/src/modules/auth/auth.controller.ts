@@ -3,7 +3,11 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { CreateUserDto } from '../users/dto';
 import { ApiTags } from '@nestjs/swagger';
-import { AccessTokenGuard, RefreshTokenGuard } from 'src/modules/auth/guards';
+import {
+  AccessTokenGuard,
+  RefreshTokenGuard,
+  RolesGuard,
+} from 'src/modules/auth/guards';
 import { User } from 'src/common/decorators';
 import { JwtPayloadUser } from './types';
 
@@ -28,7 +32,7 @@ export class AuthController {
     return this.authService.signOut(user.id);
   }
 
-  @UseGuards(RefreshTokenGuard)
+  @UseGuards(RefreshTokenGuard, RolesGuard)
   @Get('refresh')
   refreshTokens(@User() user: Partial<JwtPayloadUser>) {
     return this.authService.refreshTokens({ id: user.id }, user.refreshToken);
