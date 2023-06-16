@@ -25,12 +25,12 @@ export class AuthController {
   @UseGuards(RefreshTokenGuard)
   @Get('signout')
   signOut(@User() user: Partial<JwtPayloadUser>) {
-    return this.authService.signOut(user.id, user.refreshToken);
+    return this.authService.signOut(user.refreshTokenId);
   }
 
   @UseGuards(RefreshTokenGuard, RolesGuard)
   @Get('refresh')
   refreshTokens(@User() user: Partial<JwtPayloadUser>) {
-    return this.authService.refreshTokens({ id: user.id }, user.refreshToken);
+    return this.authService.refreshTokens({ id: user.id }, user.refreshTokenId);
   }
 }

@@ -2,12 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
   UpdateDateColumn,
   CreateDateColumn,
   BeforeInsert,
+  PrimaryColumn,
 } from 'typeorm';
 import { CommonEntity } from 'src/common/entities';
 import { UserEntity } from '../users/user.entity';
@@ -17,7 +17,7 @@ import { SALT_ROUNDS } from 'src/common/constants';
 @Entity({ name: 'refresh-tokens' })
 export class RefreshTokenEntity extends CommonEntity {
   @ApiProperty()
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @ApiProperty({ maxLength: 512, uniqueItems: true })

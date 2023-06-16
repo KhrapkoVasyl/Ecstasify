@@ -15,6 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AppConfigService } from 'src/config/app-config.service';
 import { UserEntity } from '../users/user.entity';
 import { FindOptionsWhere } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -36,10 +37,11 @@ export class AuthService {
 
     const user = await this.usersService.createOne(createUserDto);
 
-    const tokens = await this.generateTokens(user);
+    const refreshTokenId = uuidv4();
+    const tokens = await this.generateTokens(user, refreshTokenId);
     await this.refreshTokensService.createRefreshToken(
       { id: user.id },
-      tokens.refreshToken,
+      { value: tokens.refreshToken, id: refreshTokenId },
     );
 
     return { ...tokens };
@@ -56,12 +58,13 @@ export class AuthService {
     if (!passwordMatches)
       throw new BadRequestException(authServiceErrorMessages.invalidData);
 
-    const tokens = await this.generateTokens(user);
-
+    const refreshTokenId = uuidv4();
+    const tokens = await this.generateTokens(user, refreshTokenId);
     await this.refreshTokensService.createRefreshToken(
       { id: user.id },
-      tokens.refreshToken,
+      { value: tokens.refreshToken, id: refreshTokenId },
     );
+
     await this.refreshTokensService.deleteExpiredRefreshTokens({
       user: { id: user.id },
     });
@@ -69,55 +72,58 @@ export class AuthService {
     return { ...tokens };
   }
 
-  async signOut(userId: string, refreshToken: string) {
-    const userToken = await this.refreshTokensService.findUserTokenByValue(
-      { user: { id: userId } },
-      refreshToken,
-    );
-
-    return await this.refreshTokensService.deleteOne({ id: userToken.id });
+  async signOut(refreshTokenId: string) {
+    return await this.refreshTokensService.deleteOne({ id: refreshTokenId });
   }
 
   async refreshTokens(
     condition: FindOptionsWhere<UserEntity>,
-    refreshToken: string,
+    refreshTokenId: string,
   ): Promise<AuthTokens> {
-    const user = await this.usersService.findOne(condition).catch(() => {
-      throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
-    });
-
-    const userToken = await this.refreshTokensService.findUserTokenByValue(
-      { user: { id: user.id } },
-      refreshToken,
-    );
-    if (!userToken) {
+    let user;
+    try {
+      user = await this.usersService.findOne(condition);
+      await this.refreshTokensService.findOne({
+        id: refreshTokenId,
+        user: { id: user.id },
+      });
+    } catch {
       throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
     }
 
-    await this.refreshTokensService.deleteOne({ id: userToken.id });
+    await this.refreshTokensService.deleteOne({ id: refreshTokenId });
 
-    const tokens = await this.generateTokens(user);
+    const newRefreshTokenId = uuidv4();
+    const tokens = await this.generateTokens(user, refreshTokenId);
     await this.refreshTokensService.createRefreshToken(
       { id: user.id },
-      tokens.refreshToken,
+      { value: tokens.refreshToken, id: newRefreshTokenId },
     );
 
     return { ...tokens };
   }
 
-  async generateTokens(user: UserEntity): Promise<AuthTokens> {
-    const payload: JwtPayload = {
+  async generateTokens(
+    user: UserEntity,
+    refreshTokenId: string,
+  ): Promise<AuthTokens> {
+    const accessTokenPayload: JwtPayload = {
       id: user.id,
       name: user.name,
       role: user.role,
     };
 
+    const refreshTokenPayload: JwtPayload = {
+      ...accessTokenPayload,
+      refreshTokenId,
+    };
+
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(payload, {
+      this.jwtService.signAsync(accessTokenPayload, {
         secret: this.appConfigService.get<string>('JWT_ACCESS_SECRET'),
         expiresIn: this.appConfigService.get<string>('JWT_ACCESS_EXPIRES_IN'),
       }),
-      this.jwtService.signAsync(payload, {
+      this.jwtService.signAsync(refreshTokenPayload, {
         secret: this.appConfigService.get<string>('JWT_REFRESH_SECRET'),
         expiresIn: this.appConfigService.get<string>('JWT_REFRESH_EXPIRES_IN'),
       }),

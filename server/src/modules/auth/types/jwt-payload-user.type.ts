@@ -4,6 +4,5 @@ export type JwtPayloadUser = {
   id: string;
   name: string;
   role: UserRoleEnum;
-  accessToken?: string;
-  refreshToken?: string;
+  refreshTokenId?: string;
 };
