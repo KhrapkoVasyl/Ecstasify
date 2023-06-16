@@ -5,6 +5,7 @@ import { CreateUserDto } from '../users/dto';
 import { ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard, RefreshTokenGuard } from 'src/modules/auth/guards';
 import { User } from 'src/common/decorators';
+import { JwtPayloadUser } from './types';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -23,14 +24,13 @@ export class AuthController {
 
   @UseGuards(AccessTokenGuard)
   @Get('signout')
-  signOut(@User() user: { id: string }) {
+  signOut(@User() user: Partial<JwtPayloadUser>) {
     return this.authService.signOut(user.id);
   }
 
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
-  refreshTokens(@User() user: { id: string; refreshToken: string }) {
-    const { id, refreshToken } = user;
-    return this.authService.refreshTokens(id, refreshToken);
+  refreshTokens(@User() user: Partial<JwtPayloadUser>) {
+    return this.authService.refreshTokens({ id: user.id }, user.refreshToken);
   }
 }

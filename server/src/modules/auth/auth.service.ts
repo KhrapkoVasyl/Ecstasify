@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { AuthTokens, JwtPayload } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { AppConfigService } from 'src/config/app-config.service';
 import { UserEntity } from '../users/user.entity';
+import { FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -29,9 +31,7 @@ export class AuthService {
       .catch(() => null);
 
     if (userExists) {
-      throw new BadRequestException(
-        authServiceErrorMessages.entityAlreadyExists,
-      );
+      throw new ConflictException(authServiceErrorMessages.entityAlreadyExists);
     }
 
     const user = await this.usersService.createOne(createUserDto);
@@ -70,14 +70,14 @@ export class AuthService {
   }
 
   async refreshTokens(
-    userId: string,
+    condition: FindOptionsWhere<UserEntity>,
     refreshToken: string,
   ): Promise<AuthTokens> {
     let user, token;
     try {
-      user = await this.usersService.findOne({ id: userId });
+      user = await this.usersService.findOne(condition);
       token = await this.refreshTokensService.findOne({
-        user: { id: userId },
+        user: { id: user.id },
       });
     } catch {
       throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
