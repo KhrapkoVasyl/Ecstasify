@@ -7,7 +7,7 @@ import {
 import { AuthDto } from './dto/auth.dto';
 import { CreateUserDto } from '../users/dto';
 import { UsersService } from '../users/users.service';
-import { RefreshTokensService } from '../refresh-token/refresh-tokens.service';
+import { RefreshTokensService } from '../refresh-tokens/refresh-tokens.service';
 import * as bcrypt from 'bcrypt';
 import { authServiceErrorMessages } from './auth.constants';
 import { AuthTokens, JwtPayload } from './types';

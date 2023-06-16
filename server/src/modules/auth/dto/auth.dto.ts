@@ -17,7 +17,7 @@ export class AuthDto {
     required: true,
     nullable: false,
     minLength: 8,
-    maxLength: 16,
+    maxLength: 64,
   })
   public readonly password: string;
 

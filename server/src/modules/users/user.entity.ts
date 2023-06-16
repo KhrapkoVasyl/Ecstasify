@@ -31,7 +31,7 @@ export class UserEntity extends CommonEntity {
 
   @ApiHideProperty()
   @Exclude()
-  @Column({ length: 256 })
+  @Column({ length: 64 })
   password: string;
 
   @ApiProperty({ maxLength: 256 })
