@@ -85,7 +85,7 @@ export class AuthService {
       user = await this.usersService.findOne(condition);
       await this.refreshTokensService.findOne({
         id: refreshTokenId,
-        user: { id: user.id },
+        user: condition,
       });
     } catch {
       throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
@@ -94,7 +94,7 @@ export class AuthService {
     await this.refreshTokensService.deleteOne({ id: refreshTokenId });
 
     const newRefreshTokenId = uuidv4();
-    const tokens = await this.generateTokens(user, refreshTokenId);
+    const tokens = await this.generateTokens(user, newRefreshTokenId);
     await this.refreshTokensService.createRefreshToken(
       { id: user.id },
       { value: tokens.refreshToken, id: newRefreshTokenId },
