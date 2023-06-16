@@ -1,5 +1,5 @@
 import { RootService } from '@/services';
-import { ErrorHandler } from '@/utils/errorHandler';
+import { ErrorHandler } from '@/lib/error-handler';
 import { AudioPlayerStore } from './audio-player.store';
 import { AuthStore } from './auth.store';
 import { AuthorsStore } from './authors.store';

@@ -3,7 +3,7 @@ import { KeyboardArrowUp } from '@mui/icons-material';
 import PlaybackControls from './PlaybackControls';
 import TrackPreview from './TrackPreview';
 import { styles } from './styles';
-import { useAudio, useStore } from '@/hooks';
+import { useAudio, useMediaSession, useStore } from '@/hooks';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import SeekBar from './SeekBar';
@@ -23,12 +23,13 @@ const AudioPlayer = () => {
   const [hasError, setHasError] = useState(false);
 
   const {
+    stop,
     play,
     pause,
-    isPlaying,
     duration,
-    currentTime,
+    isPlaying,
     hasLoaded,
+    currentTime,
     handleSeekEnd,
     handleSeekChange,
   } = useAudio({
@@ -38,6 +39,22 @@ const AudioPlayer = () => {
       setHasError(true);
       handleAudioError();
     },
+  });
+
+  useMediaSession({
+    key: currentTrack?.file,
+    mediaMetadataInit: {
+      title: currentTrack.name,
+      artist: currentTrack.author.name,
+      artwork: [{ src: currentTrack.coverImg }],
+    },
+    actionHandlers: [
+      ['stop', stop],
+      ['play', play],
+      ['pause', pause],
+      ['nexttrack', goToNextTrack],
+      ['previoustrack', goToPrevTrack],
+    ],
   });
 
   useEffect(() => () => setHasError(false), [currentTrack?.file]);
