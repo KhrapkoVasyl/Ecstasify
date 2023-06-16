@@ -35,7 +35,7 @@ export class AudioPlayerStore {
     this.rootStore.errorHandler.handle(Errors.AudioLoadError, 'warning');
   }
 
-  setPlaylist(tracks: Track[]) {
+  setPlaylist() {
     this.playlist = mockTracks as unknown as Track[];
   }
 

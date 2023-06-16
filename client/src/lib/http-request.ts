@@ -1,4 +1,4 @@
-import { IHttpClient, HttpClientRequestConfig } from './httpClient';
+import { IHttpClient, HttpClientRequestConfig } from './http-client';
 
 export class HttpRequest {
   private httpClient: IHttpClient;
