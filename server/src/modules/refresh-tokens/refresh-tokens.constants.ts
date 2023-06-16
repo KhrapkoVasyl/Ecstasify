@@ -6,5 +6,3 @@ export const refreshTokensServiceErrorMessages: TServiceErrorMessages = {
   entityNotFound: ErrorMessagesEnum.REFRESH_TOKEN_NOT_FOUND,
   invalidData: ErrorMessagesEnum.INVALID_DATA,
 };
-
-export const SALT_ROUNDS = 10;

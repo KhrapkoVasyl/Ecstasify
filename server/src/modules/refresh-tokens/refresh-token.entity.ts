@@ -13,7 +13,7 @@ import {
 import { CommonEntity } from 'src/common/entities';
 import { UserEntity } from '../users/user.entity';
 import * as bcrypt from 'bcrypt';
-import { SALT_ROUNDS } from './/refresh-tokens.constants';
+import { SALT_ROUNDS } from 'src/common/constants';
 
 @Entity({ name: 'refresh-tokens' })
 export class RefreshTokenEntity extends CommonEntity {
@@ -21,8 +21,8 @@ export class RefreshTokenEntity extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ maxLength: 512 })
-  @Column({ length: 512, unique: true, nullable: true })
+  @ApiProperty({ maxLength: 512, uniqueItems: true })
+  @Column({ length: 512, unique: true })
   value: string;
 
   @ApiProperty()
@@ -32,15 +32,15 @@ export class RefreshTokenEntity extends CommonEntity {
   @JoinColumn()
   user: UserEntity;
 
-  @ApiProperty()
+  @ApiProperty({ readOnly: true })
   @CreateDateColumn({ readonly: true })
   readonly createdAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({ readOnly: true })
   @UpdateDateColumn({ readonly: true })
   readonly updatedAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({ readOnly: true })
   @Column({ readonly: true })
   expiresAt: Date;
 
