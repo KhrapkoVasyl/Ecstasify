@@ -100,6 +100,13 @@ export const useAudio = ({ src, onLoadError, volume }: UseAudioConfig) => {
     setIsPlaying(false);
   };
 
+  const stop = () => {
+    if (!howl.current) return;
+
+    howl.current.stop();
+    setIsPlaying(false);
+  };
+
   const handleSeekChange = (value: number) => {
     setIsSeeking(true);
     setCurrentTime(value);
@@ -114,6 +121,7 @@ export const useAudio = ({ src, onLoadError, volume }: UseAudioConfig) => {
   };
 
   return {
+    stop,
     play,
     pause,
     duration,
