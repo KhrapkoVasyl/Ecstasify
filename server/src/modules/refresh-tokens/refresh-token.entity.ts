@@ -3,7 +3,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
+  ManyToOne,
   JoinColumn,
   UpdateDateColumn,
   CreateDateColumn,
@@ -26,7 +26,7 @@ export class RefreshTokenEntity extends CommonEntity {
   value: string;
 
   @ApiProperty()
-  @OneToOne(() => UserEntity, {
+  @ManyToOne(() => UserEntity, {
     onDelete: 'CASCADE',
   })
   @JoinColumn()

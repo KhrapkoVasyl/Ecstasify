@@ -37,8 +37,8 @@ export class AuthService {
     const user = await this.usersService.createOne(createUserDto);
 
     const tokens = await this.generateTokens(user);
-    await this.refreshTokensService.updateRefreshToken(
-      user.id,
+    await this.refreshTokensService.createRefreshToken(
+      { id: user.id },
       tokens.refreshToken,
     );
 
@@ -57,16 +57,23 @@ export class AuthService {
       throw new BadRequestException(authServiceErrorMessages.invalidData);
 
     const tokens = await this.generateTokens(user);
-    await this.refreshTokensService.updateRefreshToken(
-      user.id,
+
+    await this.refreshTokensService.createRefreshToken(
+      { id: user.id },
       tokens.refreshToken,
     );
+    await this.refreshTokensService.deleteExpiredRefreshTokens({
+      user: { id: user.id },
+    });
 
     return { ...tokens };
   }
 
-  async signOut(userId: string) {
-    return this.refreshTokensService.deleteOne({ user: { id: userId } });
+  async signOut(userId: string, refreshToken: string) {
+    return this.refreshTokensService.deleteOne({
+      user: { id: userId },
+      value: refreshToken,
+    });
   }
 
   async refreshTokens(
@@ -89,8 +96,8 @@ export class AuthService {
     }
 
     const tokens = await this.generateTokens(user);
-    await this.refreshTokensService.updateRefreshToken(
-      user.id,
+    await this.refreshTokensService.createRefreshToken(
+      { id: user.id },
       tokens.refreshToken,
     );
 
