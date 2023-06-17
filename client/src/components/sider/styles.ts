@@ -21,9 +21,11 @@ export const NavLink = styled(RouterNavLink)<NavLinkProps & { theme?: Theme }>(
         backgroundColor: alpha(theme.palette.primary.main, 0.1),
       },
       '&.active': {
-        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+        backgroundColor: theme.palette.common.white,
         color: theme.palette.primary.main,
-        fontWeight: 700,
+        '& .MuiListItemText-root .MuiTypography-root': {
+          fontWeight: 500,
+        },
       },
       '& .MuiListItemIcon-root': {
         color: 'inherit',

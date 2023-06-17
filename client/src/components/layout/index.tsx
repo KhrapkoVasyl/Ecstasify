@@ -12,7 +12,7 @@ const Layout = () => {
         <Box sx={styles.siderWrapper}>
           <Sider />
         </Box>
-        <Paper sx={styles.mainWrapper}>
+        <Paper elevation={0} sx={styles.mainWrapper}>
           <Header />
           <Box sx={styles.content}>
             <Outlet />
