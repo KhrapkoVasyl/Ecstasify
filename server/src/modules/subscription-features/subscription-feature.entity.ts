@@ -21,7 +21,7 @@ export class SubscriptionFeatureEntity {
   @JoinColumn()
   @ManyToOne(() => SubscriptionPlanEntity, {
     onDelete: 'CASCADE',
-    eager: true,
+    eager: false,
   })
   public subscriptionPlan: SubscriptionPlanEntity;
 
@@ -29,7 +29,7 @@ export class SubscriptionFeatureEntity {
   @JoinColumn()
   @ManyToOne(() => FeatureEntity, {
     onDelete: 'CASCADE',
-    eager: true,
+    eager: false,
   })
   public feature: FeatureEntity;
 
