@@ -22,7 +22,6 @@ const ProfileChip = () => {
         onClick={openMenu}
       />
       <Menu
-        elevation={0}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',

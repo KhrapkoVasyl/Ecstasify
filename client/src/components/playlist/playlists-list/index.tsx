@@ -12,8 +12,13 @@ import {
 } from '@mui/material';
 import DefaultPlaylistCover from '../default-playlist-cover';
 import { styles } from './styles';
+import { useMenuPopover } from '@/hooks';
+import CreatePlaylistPopover from '../create-playlist-popover';
 
 const PlaylistsList = () => {
+  const { anchorEl, open, closeMenu, openMenu } =
+    useMenuPopover<HTMLButtonElement>();
+
   const mockPlaylists = ['My Playlist #1', 'My Playlist #2', 'My Playlist #3'];
 
   return (
@@ -23,9 +28,17 @@ const PlaylistsList = () => {
         <ListSubheader>
           <Stack direction="row" justifyContent="space-between">
             Playlists
-            <IconButton sx={styles.headerIcon} size="small" color="inherit">
+            <IconButton
+              size="small"
+              color="inherit"
+              onClick={openMenu}
+              sx={styles.headerIcon}
+            >
               <Add fontSize="small" />
             </IconButton>
+            <CreatePlaylistPopover
+              PopoverProps={{ open: open, onClose: closeMenu, anchorEl }}
+            />
           </Stack>
         </ListSubheader>
       }
