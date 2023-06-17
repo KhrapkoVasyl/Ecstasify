@@ -16,7 +16,7 @@ import { Exclude } from 'class-transformer';
 import { PlaylistEntity } from '../playlists/playlist.entity';
 import { CommonEntity } from 'src/common/entities';
 import * as bcrypt from 'bcrypt';
-import { SALT_ROUNDS } from './users.constants';
+import { SALT_ROUNDS } from 'src/common/constants';
 
 @Entity({ name: 'users' })
 export class UserEntity extends CommonEntity {
