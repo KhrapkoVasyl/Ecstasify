@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { palette, gradients } from './palette';
 import { typography } from './typography';
 import GlobalStyles from './GlobalStyles';
+import { overrides } from './overrides';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -28,6 +29,7 @@ const ThemeConfig = ({ children }: ThemeConfigProps) => {
       typography,
       palette,
       gradients,
+      components: overrides,
     }),
     []
   );

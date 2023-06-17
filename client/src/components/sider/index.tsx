@@ -11,10 +11,12 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
+  ListSubheader,
 } from '@mui/material';
 import Logo from '../logo';
 import { useStore } from '@/hooks';
 import { styles, NavLink } from './styles';
+import PlaylistsList from '../playlist/playlists-list';
 
 type MenuItem = {
   label: string;
@@ -57,12 +59,12 @@ const Sider = () => {
   };
 
   return (
-    <Box>
+    <Box sx={styles.wrapper}>
       <Box sx={styles.logoWrapper}>
         <Logo />
       </Box>
       <Divider />
-      <List sx={styles.list}>
+      <List sx={styles.list} subheader={<ListSubheader>Menu</ListSubheader>}>
         {getMenuItems().map(({ label, path, icon }) => (
           <ListItem key={path} disablePadding>
             <NavLink to={path}>
@@ -72,6 +74,7 @@ const Sider = () => {
           </ListItem>
         ))}
       </List>
+      <PlaylistsList />
     </Box>
   );
 };

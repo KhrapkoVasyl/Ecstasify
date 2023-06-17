@@ -35,6 +35,12 @@ export const NavLink = styled(RouterNavLink)<NavLinkProps & { theme?: Theme }>(
 );
 
 export const styles = createStyleSheet({
+  wrapper: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
   list: {
     padding: '10px',
   },
