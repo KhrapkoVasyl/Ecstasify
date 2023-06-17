@@ -8,9 +8,10 @@ import {
   OneToMany,
 } from 'typeorm';
 import { SubscriptionFeatureEntity } from '../subscription-features/subscription-feature.entity';
+import { CommonEntity } from 'src/common/entities';
 
 @Entity('subscription-plans')
-export class SubscriptionPlanEntity {
+export class SubscriptionPlanEntity extends CommonEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   public readonly id: string;

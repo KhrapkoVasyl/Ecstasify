@@ -8,11 +8,13 @@ import { AuthorsModule } from './modules/authors';
 import { GenresModule } from './modules/genres';
 import { PlaylistsModule } from './modules/playlists';
 import { UsersModule } from './modules/users';
+import { SubscriptionPlansModule } from './modules/subscription-plans';
 
 @Module({
   imports: [
     AppConfigModule,
     DatabaseModule,
+    SubscriptionPlansModule,
     FeaturesModule,
     AuthorsModule,
     GenresModule,
