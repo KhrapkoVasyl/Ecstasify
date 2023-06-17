@@ -9,6 +9,7 @@ import { GenresModule } from './modules/genres';
 import { PlaylistsModule } from './modules/playlists';
 import { UsersModule } from './modules/users';
 import { SubscriptionPlansModule } from './modules/subscription-plans';
+import { SubscriptionFeaturesModule } from './modules/subscription-features';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SubscriptionPlansModule } from './modules/subscription-plans';
     DatabaseModule,
     SubscriptionPlansModule,
     FeaturesModule,
+    SubscriptionFeaturesModule,
     AuthorsModule,
     GenresModule,
     PlaylistsModule,

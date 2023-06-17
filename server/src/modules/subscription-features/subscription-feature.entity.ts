@@ -10,9 +10,11 @@ import {
 import { FeatureEntity } from '../features/feature.entity';
 import { SubscriptionPlanEntity } from '../subscription-plans/subscription-plan.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { CommonEntity } from 'src/common/entities';
+import { Transform } from 'class-transformer';
 
 @Entity('subscription-features')
-export class SubscriptionFeatureEntity {
+export class SubscriptionFeatureEntity extends CommonEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   public readonly id: string;
@@ -34,7 +36,7 @@ export class SubscriptionFeatureEntity {
   public feature: FeatureEntity;
 
   @ApiProperty({ type: 'numeric', required: true, example: 12.55 })
-  @Column({ type: 'numeric', scale: 2, precision: 9 })
+  @Column({ type: 'numeric', scale: 2, precision: 9, nullable: false })
   public readonly value: number;
 
   @ApiProperty({ readOnly: true })
