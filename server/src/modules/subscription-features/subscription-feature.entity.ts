@@ -37,6 +37,7 @@ export class SubscriptionFeatureEntity extends CommonEntity {
 
   @ApiProperty({ type: 'numeric', required: true, example: 12.55 })
   @Column({ type: 'numeric', scale: 2, precision: 9, nullable: false })
+  @Transform(({ value }) => parseFloat(value))
   public readonly value: number;
 
   @ApiProperty({ readOnly: true })
