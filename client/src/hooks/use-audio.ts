@@ -72,6 +72,7 @@ export const useAudio = ({ src, onLoadError, volume }: UseAudioConfig) => {
 
   const handleOnEnd = () => {
     setIsPlaying(false);
+    setCurrentTime(0);
   };
 
   const syncCurrentTime = () => {
