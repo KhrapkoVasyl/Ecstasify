@@ -19,12 +19,28 @@ import { SingInDto } from './dto';
 
 @Injectable()
 export class AuthService {
+  private readonly jwtAccessSecret: string;
+  private readonly jwtAccessExpiresIn: string;
+  private readonly jwtRefreshSecret: string;
+  private readonly jwtRefreshExpiresIn: string;
+
   constructor(
     private readonly usersService: UsersService,
     private readonly refreshTokensService: RefreshTokensService,
     private readonly jwtService: JwtService,
     private readonly appConfigService: AppConfigService,
-  ) {}
+  ) {
+    this.jwtAccessSecret =
+      this.appConfigService.get<string>('JWT_ACCESS_SECRET');
+    this.jwtAccessExpiresIn = this.appConfigService.get<string>(
+      'JWT_ACCESS_EXPIRES_IN',
+    );
+    this.jwtRefreshSecret =
+      this.appConfigService.get<string>('JWT_REFRESH_SECRET');
+    this.jwtRefreshExpiresIn = this.appConfigService.get<string>(
+      'JWT_REFRESH_EXPIRES_IN',
+    );
+  }
 
   async signUp(createUserDto: CreateUserDto): Promise<AuthTokens> {
     const userExists = await this.usersService
@@ -120,12 +136,12 @@ export class AuthService {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(accessTokenPayload, {
-        secret: this.appConfigService.get<string>('JWT_ACCESS_SECRET'),
-        expiresIn: this.appConfigService.get<string>('JWT_ACCESS_EXPIRES_IN'),
+        secret: this.jwtAccessSecret,
+        expiresIn: this.jwtAccessExpiresIn,
       }),
       this.jwtService.signAsync(refreshTokenPayload, {
-        secret: this.appConfigService.get<string>('JWT_REFRESH_SECRET'),
-        expiresIn: this.appConfigService.get<string>('JWT_REFRESH_EXPIRES_IN'),
+        secret: this.jwtRefreshSecret,
+        expiresIn: this.jwtRefreshExpiresIn,
       }),
     ]);
 
