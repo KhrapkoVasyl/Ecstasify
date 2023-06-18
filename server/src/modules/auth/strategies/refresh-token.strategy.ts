@@ -24,18 +24,29 @@ export class RefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(req: Request, payload: RefreshJwtPayload) {
-    const { refreshTokenId, ...userData } = payload;
-    await this.usersService.findOne({
-      id: userData.id,
-      role: userData.role,
-      name: userData.name,
-    });
-    await this.refreshTokensService.findOne({
-      id: refreshTokenId,
-      user: { id: userData.id },
-    });
+  async validate(
+    req: Request,
+    { id, role, name, refreshTokenId }: RefreshJwtPayload,
+  ) {
+    const userData = await this.usersService.findOne(
+      { id, role, name },
+      {
+        select: { id: true, role: true, name: true },
+        loadEagerRelations: false,
+      },
+    );
+    const tokenData = await this.refreshTokensService.findOne(
+      {
+        id: refreshTokenId,
+        user: { id: userData.id },
+      },
+      {
+        select: { id: true },
+        loadEagerRelations: false,
+      },
+    );
 
-    return { payload };
+    console.log(tokenData);
+    return { ...userData, refreshTokenId: tokenData.id };
   }
 }

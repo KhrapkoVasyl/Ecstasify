@@ -17,13 +17,15 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  validate(payload: AccessJwtPayload) {
-    this.usersService.findOne({
-      id: payload.id,
-      role: payload.role,
-      name: payload.name,
-    });
+  async validate({ id, role, name }: AccessJwtPayload) {
+    const userData = await this.usersService.findOne(
+      { id, role, name },
+      {
+        select: { id: true, role: true, name: true },
+        loadEagerRelations: false,
+      },
+    );
 
-    return payload;
+    return userData;
   }
 }
