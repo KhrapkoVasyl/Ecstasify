@@ -7,7 +7,7 @@ import {
   IsEmail,
 } from 'class-validator';
 
-export class AuthDto {
+export class SingInDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(8)

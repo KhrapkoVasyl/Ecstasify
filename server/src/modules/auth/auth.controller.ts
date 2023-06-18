@@ -1,7 +1,13 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto/auth.dto';
-import { CreateUserDto } from '../users/dto';
+import { SingInDto, SignUpDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 import { RefreshTokenGuard, RolesGuard } from 'src/modules/auth/guards';
 import { User } from 'src/common/decorators';
@@ -9,16 +15,17 @@ import { JwtPayloadUser } from './types';
 
 @ApiTags('auth')
 @Controller('auth')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  signUp(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signUp(createUserDto);
+  signUp(@Body() signUpDto: SignUpDto) {
+    return this.authService.signUp(signUpDto);
   }
 
   @Post('signin')
-  signIn(@Body() data: AuthDto) {
+  signIn(@Body() data: SingInDto) {
     return this.authService.signIn(data);
   }
 
