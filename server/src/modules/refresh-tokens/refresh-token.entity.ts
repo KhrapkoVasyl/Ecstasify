@@ -2,13 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
-  OneToOne,
+  ManyToOne,
   JoinColumn,
   UpdateDateColumn,
   CreateDateColumn,
   BeforeInsert,
-  BeforeUpdate,
+  PrimaryColumn,
 } from 'typeorm';
 import { CommonEntity } from 'src/common/entities';
 import { UserEntity } from '../users/user.entity';
@@ -18,7 +17,7 @@ import { SALT_ROUNDS } from 'src/common/constants';
 @Entity({ name: 'refresh-tokens' })
 export class RefreshTokenEntity extends CommonEntity {
   @ApiProperty()
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @ApiProperty({ maxLength: 512, uniqueItems: true })
@@ -26,7 +25,7 @@ export class RefreshTokenEntity extends CommonEntity {
   value: string;
 
   @ApiProperty()
-  @OneToOne(() => UserEntity, {
+  @ManyToOne(() => UserEntity, {
     onDelete: 'CASCADE',
   })
   @JoinColumn()
@@ -45,7 +44,6 @@ export class RefreshTokenEntity extends CommonEntity {
   expiresAt: Date;
 
   @BeforeInsert()
-  @BeforeUpdate()
   public async hashRefreshToken() {
     if (this.value) {
       this.value = await bcrypt.hash(this.value, SALT_ROUNDS);

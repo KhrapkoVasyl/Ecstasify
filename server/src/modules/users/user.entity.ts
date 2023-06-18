@@ -16,6 +16,7 @@ import { Exclude } from 'class-transformer';
 import { PlaylistEntity } from '../playlists/playlist.entity';
 import { CommonEntity } from 'src/common/entities';
 import * as bcrypt from 'bcrypt';
+import { UserRoleEnum } from 'src/common/enums';
 import { SALT_ROUNDS } from 'src/common/constants';
 
 @Entity({ name: 'users' })
@@ -38,8 +39,8 @@ export class UserEntity extends CommonEntity {
   email: string;
 
   @ApiProperty()
-  @Column()
-  role: number;
+  @Column({ enum: UserRoleEnum, default: UserRoleEnum.USER, nullable: false })
+  role: UserRoleEnum;
 
   @ApiProperty()
   @ManyToOne(() => SubscriptionPlanEntity, {
