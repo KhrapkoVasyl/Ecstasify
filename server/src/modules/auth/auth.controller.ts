@@ -32,12 +32,15 @@ export class AuthController {
   @UseGuards(RefreshTokenGuard)
   @Post('signout')
   signOut(@User() user: JwtPayloadUser) {
-    return this.authService.signOut(user.refreshTokenId);
+    return this.authService.signOut({ id: user.refreshTokenId });
   }
 
   @UseGuards(RefreshTokenGuard, RolesGuard)
   @Post('tokens/refresh')
   refreshTokens(@User() user: JwtPayloadUser) {
-    return this.authService.refreshTokens({ id: user.id }, user.refreshTokenId);
+    return this.authService.refreshTokens(
+      { id: user.id },
+      { id: user.refreshTokenId },
+    );
   }
 }

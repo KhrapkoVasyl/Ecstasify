@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
@@ -16,6 +15,7 @@ import { UserEntity } from '../users/user.entity';
 import { FindOptionsWhere } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { SingInDto } from './dto';
+import { RefreshTokenEntity } from '../refresh-tokens/refresh-token.entity';
 
 @Injectable()
 export class AuthService {
@@ -53,70 +53,46 @@ export class AuthService {
 
     const user = await this.usersService.createOne(createUserDto);
 
-    const refreshTokenId = uuidv4();
-    const tokens = await this.generateTokens(user, refreshTokenId);
-    await this.refreshTokensService.createRefreshToken(
-      { id: user.id },
-      { value: tokens.refreshToken, id: refreshTokenId },
-    );
+    const tokens = await this.createUserTokens(user);
 
-    return { ...tokens };
+    return tokens;
   }
 
   async signIn(data: SingInDto): Promise<AuthTokens> {
     const user = await this.usersService
       .findOne({ email: data.email })
       .catch(() => {
-        throw new BadRequestException(authServiceErrorMessages.invalidData);
+        throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
       });
 
     const passwordMatches = await bcrypt.compare(data.password, user.password);
     if (!passwordMatches)
-      throw new BadRequestException(authServiceErrorMessages.invalidData);
+      throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
 
-    const refreshTokenId = uuidv4();
-    const tokens = await this.generateTokens(user, refreshTokenId);
-    await this.refreshTokensService.createRefreshToken(
-      { id: user.id },
-      { value: tokens.refreshToken, id: refreshTokenId },
-    );
+    const tokens = await this.createUserTokens(user);
 
     await this.refreshTokensService.deleteExpiredRefreshTokens({
       user: { id: user.id },
     });
 
-    return { ...tokens };
+    return tokens;
   }
 
-  async signOut(refreshTokenId: string) {
-    return await this.refreshTokensService.deleteOne({ id: refreshTokenId });
+  async signOut(refreshTokenId: FindOptionsWhere<RefreshTokenEntity>) {
+    return this.refreshTokensService.deleteOne(refreshTokenId);
   }
 
   async refreshTokens(
     condition: FindOptionsWhere<UserEntity>,
-    refreshTokenId: string,
+    refreshTokenId: FindOptionsWhere<RefreshTokenEntity>,
   ): Promise<AuthTokens> {
-    let user;
-    try {
-      user = await this.usersService.findOne(condition);
-      await this.refreshTokensService.findOne({
-        id: refreshTokenId,
-        user: condition,
-      });
-    } catch {
-      throw new UnauthorizedException(authServiceErrorMessages.unauthorized);
-    }
+    const user = await this.usersService.findOne(condition);
 
-    await this.refreshTokensService.deleteOne({ id: refreshTokenId });
+    await this.refreshTokensService.deleteOne(refreshTokenId);
 
-    const newRefreshTokenId = uuidv4();
-    const tokens = await this.generateTokens(user, newRefreshTokenId);
-    await this.refreshTokensService.createRefreshToken(
-      { id: user.id },
-      { value: tokens.refreshToken, id: newRefreshTokenId },
-    );
+    const tokens = await this.createUserTokens(user);
 
-    return { ...tokens };
+    return tokens;
   }
 
   async generateTokens(
@@ -149,6 +125,17 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+
+    return tokens;
+  }
+
+  async createUserTokens(user: UserEntity): Promise<AuthTokens> {
+    const refreshTokenId = uuidv4();
+    const tokens = await this.generateTokens(user, refreshTokenId);
+    await this.refreshTokensService.createRefreshToken(
+      { id: user.id },
+      { value: tokens.refreshToken, id: refreshTokenId },
+    );
 
     return tokens;
   }
