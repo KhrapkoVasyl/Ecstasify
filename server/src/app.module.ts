@@ -9,12 +9,16 @@ import { GenresModule } from './modules/genres';
 import { PlaylistsModule } from './modules/playlists';
 import { UsersModule } from './modules/users';
 import { AuthModule } from './modules/auth/auth.module';
+import { SubscriptionPlansModule } from './modules/subscription-plans';
+import { SubscriptionFeaturesModule } from './modules/subscription-features';
 
 @Module({
   imports: [
     AppConfigModule,
     DatabaseModule,
+    SubscriptionPlansModule,
     FeaturesModule,
+    SubscriptionFeaturesModule,
     AuthorsModule,
     GenresModule,
     PlaylistsModule,

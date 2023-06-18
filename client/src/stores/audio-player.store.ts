@@ -12,7 +12,7 @@ export class AudioPlayerStore {
 
   currentTrackIndex = 0;
   currentTrackDuration = 0;
-  volume = VolumeLevels.Medium;
+  volume = VolumeLevels.Low;
 
   playlist: Track[] = mockTracks as unknown as Track[];
 
@@ -35,7 +35,7 @@ export class AudioPlayerStore {
     this.rootStore.errorHandler.handle(Errors.AudioLoadError, 'warning');
   }
 
-  setPlaylist(tracks: Track[]) {
+  setPlaylist() {
     this.playlist = mockTracks as unknown as Track[];
   }
 
