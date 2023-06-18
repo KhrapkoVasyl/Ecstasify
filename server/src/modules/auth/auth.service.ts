@@ -71,7 +71,7 @@ export class AuthService {
 
     const tokens = await this.createUserTokens(user);
 
-    await this.refreshTokensService.deleteExpiredRefreshTokens({
+    await this.refreshTokensService.deleteExceededRefreshTokens({
       user: { id: user.id },
     });
 

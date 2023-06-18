@@ -42,10 +42,10 @@ export class RefreshTokensService extends BaseService<RefreshTokenEntity> {
     return this.createOne(refreshTokenModel);
   }
 
-  async deleteExpiredRefreshTokens(
+  async deleteExceededRefreshTokens(
     condition: FindOptionsWhere<RefreshTokenEntity>,
   ) {
-    const expiredTokens = await this.refreshTokenEntityRepository.find({
+    const exceededTokens = await this.refreshTokenEntityRepository.find({
       where: condition,
       order: {
         createdAt: 'DESC',
@@ -53,7 +53,7 @@ export class RefreshTokensService extends BaseService<RefreshTokenEntity> {
       skip: MAX_USER_SESSIONS_QUANTITY,
     });
 
-    const tokenIdsToDelete = expiredTokens.map((token) => token.id);
+    const tokenIdsToDelete = exceededTokens.map((token) => token.id);
     if (tokenIdsToDelete.length) {
       await this.refreshTokenEntityRepository.delete(tokenIdsToDelete);
     }
