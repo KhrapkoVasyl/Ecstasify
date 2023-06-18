@@ -39,7 +39,7 @@ export class UserEntity extends CommonEntity {
   email: string;
 
   @ApiProperty()
-  @Column({ default: UserRoleEnum.USER })
+  @Column({ enum: UserRoleEnum, default: UserRoleEnum.USER, nullable: false })
   role: UserRoleEnum;
 
   @ApiProperty()

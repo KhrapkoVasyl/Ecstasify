@@ -11,7 +11,7 @@ export class SingInDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(8)
-  @MaxLength(16)
+  @MaxLength(64)
   @ApiProperty({
     example: 'password1234',
     required: true,
