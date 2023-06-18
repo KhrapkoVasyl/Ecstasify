@@ -4,18 +4,18 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthDto } from './dto/sign-in.dto';
 import { CreateUserDto } from '../users/dto';
 import { UsersService } from '../users/users.service';
 import { RefreshTokensService } from '../refresh-tokens/refresh-tokens.service';
 import * as bcrypt from 'bcrypt';
 import { authServiceErrorMessages } from './auth.constants';
-import { AuthTokens, JwtPayload } from './types';
+import { AuthTokens, AccessJwtPayload, RefreshJwtPayload } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { AppConfigService } from 'src/config/app-config.service';
 import { UserEntity } from '../users/user.entity';
 import { FindOptionsWhere } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import { SingInDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -47,7 +47,7 @@ export class AuthService {
     return { ...tokens };
   }
 
-  async signIn(data: AuthDto): Promise<AuthTokens> {
+  async signIn(data: SingInDto): Promise<AuthTokens> {
     const user = await this.usersService
       .findOne({ email: data.email })
       .catch(() => {
@@ -107,13 +107,13 @@ export class AuthService {
     user: UserEntity,
     refreshTokenId: string,
   ): Promise<AuthTokens> {
-    const accessTokenPayload: JwtPayload = {
+    const accessTokenPayload: AccessJwtPayload = {
       id: user.id,
       name: user.name,
       role: user.role,
     };
 
-    const refreshTokenPayload: JwtPayload = {
+    const refreshTokenPayload: RefreshJwtPayload = {
       ...accessTokenPayload,
       refreshTokenId,
     };

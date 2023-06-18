@@ -31,13 +31,13 @@ export class AuthController {
 
   @UseGuards(RefreshTokenGuard)
   @Post('signout')
-  signOut(@User() user: Partial<JwtPayloadUser>) {
+  signOut(@User() user: JwtPayloadUser) {
     return this.authService.signOut(user.refreshTokenId);
   }
 
   @UseGuards(RefreshTokenGuard, RolesGuard)
   @Post('tokens/refresh')
-  refreshTokens(@User() user: Partial<JwtPayloadUser>) {
+  refreshTokens(@User() user: JwtPayloadUser) {
     return this.authService.refreshTokens({ id: user.id }, user.refreshTokenId);
   }
 }

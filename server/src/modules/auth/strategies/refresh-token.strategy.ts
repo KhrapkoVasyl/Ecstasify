@@ -3,7 +3,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { Injectable } from '@nestjs/common';
 import { AppConfigService } from 'src/config/app-config.service';
-import { JwtPayload } from '../types';
+import { RefreshJwtPayload } from '../types';
 import { UsersService } from 'src/modules/users/users.service';
 import { RefreshTokensService } from 'src/modules/refresh-tokens/refresh-tokens.service';
 
@@ -24,7 +24,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(req: Request, payload: JwtPayload) {
+  async validate(req: Request, payload: RefreshJwtPayload) {
     const { refreshTokenId, ...userData } = payload;
     await this.usersService.findOne({
       id: userData.id,
