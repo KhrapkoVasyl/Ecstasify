@@ -8,13 +8,19 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { SubscriptionPlanEntity } from '../subscription-plans/subscription-plan.entity';
 import { Exclude } from 'class-transformer';
 import { PlaylistEntity } from '../playlists/playlist.entity';
+import { CommonEntity } from 'src/common/entities';
+import * as bcrypt from 'bcrypt';
+import { UserRoleEnum } from 'src/common/enums';
+import { SALT_ROUNDS } from 'src/common/constants';
 
 @Entity({ name: 'users' })
-export class UserEntity {
+export class UserEntity extends CommonEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -25,16 +31,16 @@ export class UserEntity {
 
   @ApiHideProperty()
   @Exclude()
-  @Column({ length: 16 })
+  @Column({ length: 256 })
   password: string;
 
   @ApiProperty({ maxLength: 256 })
-  @Column({ length: 256 })
+  @Column({ length: 256, unique: true })
   email: string;
 
   @ApiProperty()
-  @Column()
-  role: number;
+  @Column({ enum: UserRoleEnum, default: UserRoleEnum.USER, nullable: false })
+  role: UserRoleEnum;
 
   @ApiProperty()
   @ManyToOne(() => SubscriptionPlanEntity, {
@@ -58,4 +64,12 @@ export class UserEntity {
   @ApiProperty({ readOnly: true })
   @UpdateDateColumn({ readonly: true })
   readonly updatedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  public async hashPassword() {
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+    }
+  }
 }

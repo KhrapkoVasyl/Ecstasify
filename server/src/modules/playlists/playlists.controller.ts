@@ -1,0 +1,58 @@
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
+import { PlaylistsService } from './playlists.service';
+import { PlaylistEntity } from './playlist.entity';
+import { IdDto } from 'src/common/dto';
+import { CreatePlaylistDto, UpdatePlaylistDto } from './dto';
+import { ApiTags } from '@nestjs/swagger';
+import { plainToInstance } from 'class-transformer';
+
+@ApiTags('playlists')
+@Controller('playlists')
+@UseInterceptors(ClassSerializerInterceptor)
+export class PlaylistsController {
+  constructor(private readonly playlistsService: PlaylistsService) {}
+
+  @Get()
+  findAll(): Promise<PlaylistEntity[]> {
+    return this.playlistsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param() conditions: IdDto): Promise<PlaylistEntity> {
+    return this.playlistsService.findOne(conditions);
+  }
+
+  @Post()
+  createOne(
+    @Body() createEntityDto: CreatePlaylistDto,
+  ): Promise<PlaylistEntity> {
+    const model = plainToInstance(PlaylistEntity, createEntityDto);
+
+    return this.playlistsService.createOne(model);
+  }
+
+  @Patch(':id')
+  updateOne(
+    @Param() conditions: IdDto,
+    @Body() updateEntityDto: UpdatePlaylistDto,
+  ) {
+    const model = plainToInstance(PlaylistEntity, updateEntityDto);
+
+    return this.playlistsService.updateOne(conditions, model);
+  }
+
+  @Delete(':id')
+  deleteOne(@Param() conditions: IdDto) {
+    return this.playlistsService.deleteOne(conditions);
+  }
+}

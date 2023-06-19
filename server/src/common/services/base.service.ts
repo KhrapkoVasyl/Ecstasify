@@ -1,5 +1,10 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
+import {
+  FindManyOptions,
+  FindOptionsWhere,
+  FindOneOptions,
+  Repository,
+} from 'typeorm';
 import { CommonEntity } from '../entities';
 import { TServiceErrorMessages } from '../types';
 
@@ -17,9 +22,13 @@ export abstract class BaseService<T extends CommonEntity> {
     });
   }
 
-  findOne(conditions: FindOptionsWhere<T>): Promise<T> {
+  findOne(
+    conditions: FindOptionsWhere<T>,
+    options: FindOneOptions<T> = { loadEagerRelations: true },
+  ): Promise<T> {
     return this.entityRepository
       .findOneOrFail({
+        ...options,
         where: conditions,
       })
       .catch(() => {
@@ -53,7 +62,9 @@ export abstract class BaseService<T extends CommonEntity> {
   }
 
   async deleteOne(conditions: FindOptionsWhere<T>): Promise<T> {
-    const entity = await this.findOne(conditions);
+    const entity = await this.findOne(conditions, {
+      loadEagerRelations: false,
+    });
 
     return this.entityRepository.remove(entity).catch(() => {
       throw new NotFoundException(this.serviceErrorMessages.entityNotFound);

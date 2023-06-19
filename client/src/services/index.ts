@@ -1,6 +1,6 @@
 import { RootStore } from '@/stores/root.store';
-import CustomHttpClient from '@/utils/httpClient';
-import HttpRequest from '@/utils/httpRequest';
+import CustomHttpClient from '@/lib/http-client';
+import HttpRequest from '@/lib/http-request';
 import AuthorsService from './authors.service';
 import SubscriptionsService from './subscriptions.service';
 import TracksService from './tracks.service';

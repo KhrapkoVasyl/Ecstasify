@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 
 type UseAudioConfig = {
   src: string;
+  volume: number;
   onLoadError?: () => void;
 };
 
-export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
+export const useAudio = ({ src, onLoadError, volume }: UseAudioConfig) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -21,6 +22,7 @@ export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
   useEffect(() => {
     if (!howl.current) {
       howl.current = new Howl({
+        volume,
         src: [src],
         html5: true,
         onloaderror: onLoadError,
@@ -46,7 +48,15 @@ export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
   }, [src]);
 
   useEffect(() => {
-    raf.current = requestAnimationFrame(syncCurrentTime);
+    if (howl.current) {
+      howl.current.volume(volume);
+    }
+  }, [volume]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      raf.current = requestAnimationFrame(syncCurrentTime);
+    }
 
     return () => {
       if (raf.current) {
@@ -69,9 +79,7 @@ export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
       setCurrentTime(howl.current?.seek() ?? 0);
     }
 
-    if (isPlaying) {
-      raf.current = requestAnimationFrame(syncCurrentTime);
-    }
+    raf.current = requestAnimationFrame(syncCurrentTime);
   };
 
   const play = () => {
@@ -92,6 +100,13 @@ export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
     setIsPlaying(false);
   };
 
+  const stop = () => {
+    if (!howl.current) return;
+
+    howl.current.stop();
+    setIsPlaying(false);
+  };
+
   const handleSeekChange = (value: number) => {
     setIsSeeking(true);
     setCurrentTime(value);
@@ -100,11 +115,13 @@ export const useAudio = ({ src, onLoadError }: UseAudioConfig) => {
   const handleSeekEnd = (value: number) => {
     if (!howl.current) return;
 
+    setCurrentTime(value);
     howl.current.seek(value);
     setIsSeeking(false);
   };
 
   return {
+    stop,
     play,
     pause,
     duration,

@@ -1,7 +1,7 @@
 import { Errors } from '@/enums/error';
 import { RootStore } from '@/stores/root.store';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
-import { ErrorHandler } from './errorHandler';
+import { ErrorHandler } from './error-handler';
 
 export type HttpClientRequestConfig = {
   url: string;
