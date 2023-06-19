@@ -57,4 +57,12 @@ export class TracksController {
   deleteOne(@Param() conditions: IdDto) {
     return this.tracksService.deleteOne(conditions);
   }
+
+  @Get('playlists/:id')
+  getAllTracksFromPlaylist(@Param() playlist: IdDto): Promise<TrackEntity[]> {
+    return this.tracksService.findAll({
+      where: { playlists: { id: playlist.id } },
+      relations: { author: true, genre: true },
+    });
+  }
 }
