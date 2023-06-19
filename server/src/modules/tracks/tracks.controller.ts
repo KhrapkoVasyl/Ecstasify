@@ -24,12 +24,16 @@ export class TracksController {
 
   @Get()
   findAll(): Promise<TrackEntity[]> {
-    return this.tracksService.findAll();
+    return this.tracksService.findAll({
+      relations: { author: true, genre: true },
+    });
   }
 
   @Get(':id')
   findOne(@Param() conditions: IdDto): Promise<TrackEntity> {
-    return this.tracksService.findOne(conditions);
+    return this.tracksService.findOne(conditions, {
+      relations: { author: true, genre: true },
+    });
   }
 
   @Post()

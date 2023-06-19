@@ -9,7 +9,7 @@ import { TrackEntity } from './track.entity';
 export class TracksService extends BaseService<TrackEntity> {
   constructor(
     @InjectRepository(TrackEntity)
-    trackEntityRepository: Repository<TrackEntity>,
+    private readonly trackEntityRepository: Repository<TrackEntity>,
   ) {
     super(trackEntityRepository, tracksServiceErrorMessages);
   }
