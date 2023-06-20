@@ -25,7 +25,7 @@ export class RefreshTokensService extends BaseService<RefreshTokenEntity> {
   async createRefreshToken(
     condition: FindOptionsWhere<UserEntity>,
     tokenData: Partial<RefreshTokenEntity>,
-  ) {
+  ): Promise<RefreshTokenEntity> {
     const user = await this.usersService.findOne(condition);
 
     const tokenLifetime = this.appConfigService.get('JWT_REFRESH_EXPIRES_IN');

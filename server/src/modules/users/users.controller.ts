@@ -40,12 +40,12 @@ export class UsersController {
   updateOne(
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateUserDto,
-  ) {
+  ): Promise<UserEntity> {
     return this.usersService.updateOne(conditions, updateEntityDto);
   }
 
   @Delete(':id')
-  deleteOne(@Param() conditions: IdDto) {
+  deleteOne(@Param() conditions: IdDto): Promise<UserEntity> {
     return this.usersService.deleteOne(conditions);
   }
 }

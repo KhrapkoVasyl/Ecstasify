@@ -47,14 +47,14 @@ export class TracksController {
   updateOne(
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateTrackDto,
-  ) {
+  ): Promise<TrackEntity> {
     const model = plainToInstance(TrackEntity, updateEntityDto);
 
     return this.tracksService.updateOne(conditions, model);
   }
 
   @Delete(':id')
-  deleteOne(@Param() conditions: IdDto) {
+  deleteOne(@Param() conditions: IdDto): Promise<TrackEntity> {
     return this.tracksService.deleteOne(conditions);
   }
 

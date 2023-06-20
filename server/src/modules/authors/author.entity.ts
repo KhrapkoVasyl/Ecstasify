@@ -12,11 +12,11 @@ import { CommonEntity } from 'src/common/entities';
 
 @Entity({ name: 'authors' })
 export class AuthorEntity extends CommonEntity {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ maxLength: 32 })
+  @ApiProperty({ type: 'string', maxLength: 32, uniqueItems: true })
   @Column({ length: 32, unique: true })
   name: string;
 
@@ -24,11 +24,11 @@ export class AuthorEntity extends CommonEntity {
   @OneToMany(() => TrackEntity, ({ author }) => author, { nullable: true })
   tracks: TrackEntity[];
 
-  @ApiProperty({ readOnly: true })
+  @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   @CreateDateColumn({ readonly: true })
   readonly createdAt: Date;
 
-  @ApiProperty({ readOnly: true })
+  @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   @UpdateDateColumn({ readonly: true })
   readonly updatedAt: Date;
 }

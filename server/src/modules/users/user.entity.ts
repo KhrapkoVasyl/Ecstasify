@@ -21,11 +21,11 @@ import { SALT_ROUNDS } from 'src/common/constants';
 
 @Entity({ name: 'users' })
 export class UserEntity extends CommonEntity {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ maxLength: 32 })
+  @ApiProperty({ type: 'string', maxLength: 32 })
   @Column({ length: 32 })
   name: string;
 
@@ -34,15 +34,15 @@ export class UserEntity extends CommonEntity {
   @Column({ length: 256 })
   password: string;
 
-  @ApiProperty({ maxLength: 256 })
+  @ApiProperty({ type: 'string', maxLength: 256, uniqueItems: true })
   @Column({ length: 256, unique: true })
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: UserRoleEnum, default: UserRoleEnum.USER })
   @Column({ enum: UserRoleEnum, default: UserRoleEnum.USER, nullable: false })
   role: UserRoleEnum;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => SubscriptionPlanEntity, nullable: true })
   @ManyToOne(() => SubscriptionPlanEntity, {
     onDelete: 'SET NULL',
     nullable: true,
@@ -57,11 +57,11 @@ export class UserEntity extends CommonEntity {
   })
   playlists: PlaylistEntity[];
 
-  @ApiProperty({ readOnly: true })
+  @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   @CreateDateColumn({ readonly: true })
   readonly createdAt: Date;
 
-  @ApiProperty({ readOnly: true })
+  @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   @UpdateDateColumn({ readonly: true })
   readonly updatedAt: Date;
 
