@@ -29,7 +29,7 @@ export class PlaylistEntity extends CommonEntity {
     nullable: true,
   })
   @JoinTable({ name: 'playlist-tracks' })
-  tracks: TrackEntity[];
+  tracks: Partial<TrackEntity>[];
 
   @ApiProperty()
   @ManyToOne(() => UserEntity, ({ playlists }) => playlists, {
