@@ -45,14 +45,14 @@ export class PlaylistsController {
   updateOne(
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdatePlaylistDto,
-  ) {
+  ): Promise<PlaylistEntity> {
     const model = plainToInstance(PlaylistEntity, updateEntityDto);
 
     return this.playlistsService.updateOne(conditions, model);
   }
 
   @Delete(':id')
-  deleteOne(@Param() conditions: IdDto) {
+  deleteOne(@Param() conditions: IdDto): Promise<PlaylistEntity> {
     return this.playlistsService.deleteOne(conditions);
   }
 

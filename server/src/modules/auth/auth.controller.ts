@@ -11,7 +11,7 @@ import { SingInDto, SignUpDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 import { RefreshTokenGuard, RolesGuard } from 'src/modules/auth/guards';
 import { User } from 'src/common/decorators';
-import { JwtPayloadUser } from './types';
+import { AuthTokens, JwtPayloadUser } from './types';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -20,12 +20,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  signUp(@Body() signUpDto: SignUpDto) {
+  signUp(@Body() signUpDto: SignUpDto): Promise<AuthTokens> {
     return this.authService.signUp(signUpDto);
   }
 
   @Post('signin')
-  signIn(@Body() data: SingInDto) {
+  signIn(@Body() data: SingInDto): Promise<AuthTokens> {
     return this.authService.signIn(data);
   }
 
@@ -37,7 +37,7 @@ export class AuthController {
 
   @UseGuards(RefreshTokenGuard, RolesGuard)
   @Post('tokens/refresh')
-  refreshTokens(@User() user: JwtPayloadUser) {
+  refreshTokens(@User() user: JwtPayloadUser): Promise<AuthTokens> {
     return this.authService.refreshTokens(
       { id: user.id },
       { id: user.refreshTokenId },

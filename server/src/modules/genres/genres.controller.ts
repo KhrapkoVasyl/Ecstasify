@@ -43,14 +43,14 @@ export class GenresController {
   updateOne(
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateGenreDto,
-  ) {
+  ): Promise<GenreEntity> {
     const model = plainToInstance(GenreEntity, updateEntityDto);
 
     return this.genresService.updateOne(conditions, model);
   }
 
   @Delete(':id')
-  deleteOne(@Param() conditions: IdDto) {
+  deleteOne(@Param() conditions: IdDto): Promise<GenreEntity> {
     return this.genresService.deleteOne(conditions);
   }
 }

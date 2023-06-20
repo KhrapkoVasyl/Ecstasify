@@ -43,14 +43,14 @@ export class AuthorsController {
   updateOne(
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateAuthorDto,
-  ) {
+  ): Promise<AuthorEntity> {
     const model = plainToInstance(AuthorEntity, updateEntityDto);
 
     return this.authorsService.updateOne(conditions, model);
   }
 
   @Delete(':id')
-  deleteOne(@Param() conditions: IdDto) {
+  deleteOne(@Param() conditions: IdDto): Promise<AuthorEntity> {
     return this.authorsService.deleteOne(conditions);
   }
 }
