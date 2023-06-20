@@ -9,7 +9,7 @@ import { UserEntity } from './user.entity';
 export class UsersService extends BaseService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
-    userEntityRepository: Repository<UserEntity>,
+    private readonly userEntityRepository: Repository<UserEntity>,
   ) {
     super(userEntityRepository, usersServiceErrorMessages);
   }
