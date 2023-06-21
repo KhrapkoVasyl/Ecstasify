@@ -14,20 +14,20 @@ export class FileEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public readonly id: string;
 
-  @ApiProperty({ type: 'string', maxLength: 64, required: true })
-  @Column({ type: 'varchar', length: 64 })
+  @ApiProperty({ type: 'string', maxLength: 256, required: true })
+  @Column({ type: 'varchar', length: 256 })
   public readonly fileName: string;
-
-  @ApiProperty({ type: 'string', maxLength: 64, required: true })
-  @Column({ type: 'varchar', length: 64 })
-  public readonly fileExt: string;
-
-  @ApiProperty({ type: 'string', maxLength: 128, required: true })
-  @Column({ type: 'varchar', length: 128 })
-  public readonly fileNameWithExt: string;
 
   @ApiProperty({ type: 'string', maxLength: 256, required: true })
   @Column({ type: 'varchar', length: 256 })
+  public readonly fileExt: string;
+
+  @ApiProperty({ type: 'string', maxLength: 512, required: true })
+  @Column({ type: 'varchar', length: 512 })
+  public readonly fileNameWithExt: string;
+
+  @ApiProperty({ type: 'string', maxLength: 512, required: true })
+  @Column({ type: 'varchar', length: 512 })
   public readonly filePath: string;
 
   @ApiProperty({ readOnly: true })
