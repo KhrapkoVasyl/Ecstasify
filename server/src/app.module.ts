@@ -10,6 +10,7 @@ import { PlaylistsModule } from './modules/playlists';
 import { UsersModule } from './modules/users';
 import { SubscriptionPlansModule } from './modules/subscription-plans';
 import { SubscriptionFeaturesModule } from './modules/subscription-features';
+import { FilesModule } from './modules/files';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SubscriptionFeaturesModule } from './modules/subscription-features';
     GenresModule,
     PlaylistsModule,
     UsersModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
