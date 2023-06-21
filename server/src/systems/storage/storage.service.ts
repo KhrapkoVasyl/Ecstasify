@@ -65,4 +65,15 @@ export class StorageService {
       throw new BadRequestException(ErrorMessagesEnum.FILE_UPLOAD_ERROR);
     });
   }
+
+  async deleteOne(filePath: string): Promise<BlobDeleteResponse> {
+    const containerClient = this.client.getContainerClient(
+      this.blobContainerName,
+    );
+    const blockBlobClient = containerClient.getBlockBlobClient(filePath);
+
+    return blockBlobClient.delete().catch(() => {
+      throw new BadRequestException(ErrorMessagesEnum.FILE_DELETION_ERROR);
+    });
+  }
 }
