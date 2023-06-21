@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FindOptionsWhere } from 'typeorm';
 import { Repository } from 'typeorm';
 import { RefreshTokenEntity } from './refresh-token.entity';
 import { refreshTokensServiceErrorMessages } from './refresh-tokens.constants';
@@ -7,6 +8,8 @@ import { BaseService } from 'src/common/services';
 import * as ms from 'ms';
 import { AppConfigService } from 'src/config/app-config.service';
 import { UsersService } from '../users/users.service';
+import { UserEntity } from '../users/user.entity';
+import { MAX_USER_SESSIONS_QUANTITY } from '../auth/auth.constants';
 
 @Injectable()
 export class RefreshTokensService extends BaseService<RefreshTokenEntity> {
@@ -19,8 +22,11 @@ export class RefreshTokensService extends BaseService<RefreshTokenEntity> {
     super(refreshTokenEntityRepository, refreshTokensServiceErrorMessages);
   }
 
-  async updateRefreshToken(userId: string, refreshToken: string) {
-    const user = await this.usersService.findOne({ id: userId });
+  async createRefreshToken(
+    condition: FindOptionsWhere<UserEntity>,
+    tokenData: Partial<RefreshTokenEntity>,
+  ): Promise<RefreshTokenEntity> {
+    const user = await this.usersService.findOne(condition);
 
     const tokenLifetime = this.appConfigService.get('JWT_REFRESH_EXPIRES_IN');
     const tokenDuration = ms(tokenLifetime);
@@ -29,18 +35,27 @@ export class RefreshTokensService extends BaseService<RefreshTokenEntity> {
 
     const refreshTokenModel: Partial<RefreshTokenEntity> = {
       user,
-      value: refreshToken,
+      ...tokenData,
       expiresAt,
     };
 
-    const existingRefreshToken = await this.findOne({
-      user: { id: userId },
-    }).catch(() => null);
+    return this.createOne(refreshTokenModel);
+  }
 
-    if (!existingRefreshToken) {
-      return this.createOne(refreshTokenModel);
+  async deleteExceededRefreshTokens(
+    condition: FindOptionsWhere<RefreshTokenEntity>,
+  ) {
+    const exceededTokens = await this.refreshTokenEntityRepository.find({
+      where: condition,
+      order: {
+        createdAt: 'DESC',
+      },
+      skip: MAX_USER_SESSIONS_QUANTITY,
+    });
+
+    const tokenIdsToDelete = exceededTokens.map((token) => token.id);
+    if (tokenIdsToDelete.length) {
+      await this.refreshTokenEntityRepository.delete(tokenIdsToDelete);
     }
-
-    return this.updateOne({ id: existingRefreshToken.id }, refreshTokenModel);
   }
 }

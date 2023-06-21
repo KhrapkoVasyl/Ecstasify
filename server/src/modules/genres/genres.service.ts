@@ -9,7 +9,7 @@ import { GenreEntity } from './genre.entity';
 export class GenresService extends BaseService<GenreEntity> {
   constructor(
     @InjectRepository(GenreEntity)
-    genreEntityRepository: Repository<GenreEntity>,
+    private readonly genreEntityRepository: Repository<GenreEntity>,
   ) {
     super(genreEntityRepository, genresServiceErrorMessages);
   }

@@ -16,11 +16,11 @@ import { CommonEntity } from 'src/common/entities';
 
 @Entity({ name: 'playlists' })
 export class PlaylistEntity extends CommonEntity {
-  @ApiProperty()
+  @ApiProperty({ type: 'string', format: 'uuid' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ maxLength: 32 })
+  @ApiProperty({ type: 'string', maxLength: 32 })
   @Column({ length: 32 })
   name: string;
 
@@ -29,20 +29,20 @@ export class PlaylistEntity extends CommonEntity {
     nullable: true,
   })
   @JoinTable({ name: 'playlist-tracks' })
-  tracks: TrackEntity[];
+  tracks: Partial<TrackEntity>[];
 
-  @ApiProperty()
+  @ApiProperty({ type: () => UserEntity })
   @ManyToOne(() => UserEntity, ({ playlists }) => playlists, {
     onDelete: 'CASCADE',
   })
   @JoinColumn()
   user: UserEntity;
 
-  @ApiProperty({ readOnly: true })
+  @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   @CreateDateColumn({ readonly: true })
   readonly createdAt: Date;
 
-  @ApiProperty({ readOnly: true })
+  @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   @UpdateDateColumn({ readonly: true })
   readonly updatedAt: Date;
 }

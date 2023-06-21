@@ -12,8 +12,8 @@ import {
 import { PlaylistsService } from './playlists.service';
 import { PlaylistEntity } from './playlist.entity';
 import { IdDto } from 'src/common/dto';
-import { CreatePlaylistDto, UpdatePlaylistDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { AddTrackDto, CreatePlaylistDto, UpdatePlaylistDto } from './dto';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 
 @ApiTags('playlists')
@@ -45,14 +45,26 @@ export class PlaylistsController {
   updateOne(
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdatePlaylistDto,
-  ) {
+  ): Promise<PlaylistEntity> {
     const model = plainToInstance(PlaylistEntity, updateEntityDto);
 
     return this.playlistsService.updateOne(conditions, model);
   }
 
   @Delete(':id')
-  deleteOne(@Param() conditions: IdDto) {
+  deleteOne(@Param() conditions: IdDto): Promise<PlaylistEntity> {
     return this.playlistsService.deleteOne(conditions);
+  }
+
+  @Post('tracks/:id')
+  @ApiParam({ name: 'id', description: 'Playlist id' })
+  addTrackToPlaylist(
+    @Param() playlist: IdDto,
+    @Body() addTrackDto: AddTrackDto,
+  ): Promise<PlaylistEntity> {
+    return this.playlistsService.addTrackToPlaylist(
+      { id: playlist.id },
+      { id: addTrackDto.trackId },
+    );
   }
 }

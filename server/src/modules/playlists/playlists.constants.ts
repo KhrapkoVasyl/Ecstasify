@@ -1,8 +1,8 @@
 import { ErrorMessagesEnum } from 'src/common/enums';
-import { TServiceErrorMessages } from 'src/common/types';
 
-export const playlistsServiceErrorMessages: TServiceErrorMessages = {
+export const playlistsServiceErrorMessages = {
   entitiesNotFound: ErrorMessagesEnum.PLAYLISTS_NOT_FOUND,
   entityNotFound: ErrorMessagesEnum.PLAYLIST_NOT_FOUND,
   invalidData: ErrorMessagesEnum.INVALID_DATA,
+  trackAlreadyInPlaylist: ErrorMessagesEnum.TRACK_ALREADY_IN_PLAYLIST,
 };
