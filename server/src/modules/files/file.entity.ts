@@ -30,6 +30,10 @@ export class FileEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 512 })
   public readonly filePath: string;
 
+  @ApiProperty({ type: 'string', maxLength: 256, required: true })
+  @Column({ type: 'varchar', length: 256 })
+  public readonly mimetype: string;
+
   @ApiProperty({ readOnly: true })
   @CreateDateColumn({
     readonly: true,
