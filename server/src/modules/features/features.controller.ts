@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FeaturesService } from './features.service';
@@ -15,9 +16,11 @@ import { IdDto } from 'src/common/dto';
 import { CreateFeatureDto, UpdateFeatureDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
+import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('features')
 @Controller('features')
+@UseGuards(AccessTokenGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class FeaturesController {
   constructor(private readonly featuresService: FeaturesService) {}
