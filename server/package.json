@@ -25,6 +25,8 @@
     "prepare": "cd .. && husky install server/.husky"
   },
   "dependencies": {
+    "@azure/storage-blob": "^12.14.0",
+    "@fastify/multipart": "^7.6.1",
     "@fastify/static": "^6.10.2",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.0.0",
