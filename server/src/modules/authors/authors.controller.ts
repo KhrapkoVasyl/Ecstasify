@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
@@ -15,9 +16,11 @@ import { IdDto } from 'src/common/dto';
 import { CreateAuthorDto, UpdateAuthorDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
+import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('authors')
 @Controller('authors')
+@UseGuards(AccessTokenGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}

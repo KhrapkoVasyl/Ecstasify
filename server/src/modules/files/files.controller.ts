@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
@@ -13,9 +14,11 @@ import { FileEntity } from './file.entity';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateFileDto } from './dto';
 import { IdDto } from 'src/common/dto';
+import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('files')
 @Controller('files')
+@UseGuards(AccessTokenGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}

@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
@@ -18,9 +19,11 @@ import { SubscriptionFeatureEntity } from './subscription-feature.entity';
 import { IdDto } from 'src/common/dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiTags } from '@nestjs/swagger';
+import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('subscription-features')
 @Controller('subscription-features')
+@UseGuards(AccessTokenGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class SubscriptionFeaturesController {
   constructor(

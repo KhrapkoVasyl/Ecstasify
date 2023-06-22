@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -14,9 +15,11 @@ import { UserEntity } from './user.entity';
 import { IdDto } from 'src/common/dto';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('users')
 @Controller('users')
+@UseGuards(AccessTokenGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
@@ -15,9 +16,11 @@ import { IdDto } from 'src/common/dto';
 import { CreateTrackDto, UpdateTrackDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
+import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('tracks')
 @Controller('tracks')
+@UseGuards(AccessTokenGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}

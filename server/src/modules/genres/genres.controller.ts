@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { GenresService } from './genres.service';
@@ -15,9 +16,11 @@ import { IdDto } from 'src/common/dto';
 import { CreateGenreDto, UpdateGenreDto } from './dto';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
+import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('genres')
 @Controller('genres')
+@UseGuards(AccessTokenGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class GenresController {
   constructor(private readonly genresService: GenresService) {}
