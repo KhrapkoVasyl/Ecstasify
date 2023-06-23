@@ -23,7 +23,7 @@ export const styles = createStyleSheet({
   },
   siderWrapper: {
     height: '100%',
-    flex: '0 0 240px',
+    flex: '0 0 260px',
   },
   audioPlayerWrapper: {
     gridColumn: '1 / -1',

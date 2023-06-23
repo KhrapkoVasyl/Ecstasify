@@ -7,6 +7,7 @@ import AuthorsPage from '@/pages/authors';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
 import { UserRole } from '@/enums/user-role';
+import PlaylistPage from '@/pages/playlist';
 
 const Router = () => {
   return (
@@ -22,6 +23,14 @@ const Router = () => {
         <Route path="tracks" element={<TracksPage />} />
         <Route path="subscriptions" element={<SubscriptionsPage />} />
         <Route path="authors" element={<AuthorsPage />} />
+      </Route>
+      <Route
+        path="/"
+        element={
+          <PrivateLayout allowedRoles={[UserRole.Admin, UserRole.User]} />
+        }
+      >
+        <Route path="playlist/:id" element={<PlaylistPage />} />
       </Route>
       <Route path="/auth" element={<PublicLayout />}>
         <Route

@@ -8,6 +8,7 @@ import {
 import { observer } from 'mobx-react-lite';
 import CustomIconButton from '../icon-button';
 import { styles } from './styles';
+import PlayButton from '../play-button';
 
 interface IPlaybackControls {
   onTogglePlayback: () => void;
@@ -37,26 +38,11 @@ const PlaybackControls = ({
           tooltipText="Previous"
           icon={<SkipPreviousRounded fontSize="inherit" />}
         />
-        <CustomIconButton
-          tooltipText={isPlaying ? 'Pause' : 'Play'}
-          IconButtonProps={{
-            disabled,
-            color: 'primary',
-            sx: styles.playbackToggle,
-            onClick: onTogglePlayback,
-          }}
-          icon={
-            <>
-              {loading && (
-                <CircularProgress size="50px" sx={styles.audioLoader} />
-              )}
-              {isPlaying && !disabled ? (
-                <PauseCircleRounded />
-              ) : (
-                <PlayCircleFilledWhiteRounded />
-              )}
-            </>
-          }
+        <PlayButton
+          loading={loading}
+          disabled={disabled}
+          isPlaying={isPlaying}
+          onClick={onTogglePlayback}
         />
         <CustomIconButton
           IconButtonProps={{

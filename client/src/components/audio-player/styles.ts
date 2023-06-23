@@ -31,16 +31,6 @@ export const styles = createStyleSheet({
   iconButton: {
     color: (theme) => theme.palette.text.secondary,
   },
-  playbackToggle: {
-    padding: '6px',
-    position: 'relative',
-    '.MuiSvgIcon-root': {
-      fontSize: '40px',
-    },
-  },
-  audioLoader: {
-    position: 'absolute',
-  },
   progressWrapper: {
     display: 'flex',
     width: '100%',
