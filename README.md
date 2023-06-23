@@ -28,11 +28,9 @@ This project is implemented by a team of 3 developers:
 
 - Khrapko Vasyl <br>
   (khrapko2002@gmail.com, https://github.com/KhrapkoVasyl) <br>
-  Implemented: 'subscriptions', 'files', 'notifications' services
 
 - Zinovyj Bogdan <br>
   (bogdanolexandrov@gmail.com, https://github.com/Bogdan-Zinovij) <br>
-  Implemented: 'users(+auth)', 'authors' services
 
 ### Frontend:
 
@@ -70,12 +68,22 @@ git clone https://github.com/KhrapkoVasyl/Ecstasify.git
    npm install
    ```
 
-   Create the configuration file `.env` as shown in the [example](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/server/.env.example).
+   Set up env configuration in the configuration file [.env.development](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/server/.env.development) for development and [.env.production](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/server/.env.production) for production.
 
-   And start the server:
+   To start the server in the development mode run:
 
    ```sh
    npm start:dev
+   ```
+
+   To start the server in the production mode run:
+
+   ```sh
+   # Build the application:
+   npm run build
+
+   # And start it in production mode:
+   npm run start:prod
    ```
 
 4. Open http://127.0.0.1:5173 to view the app in your browser.
