@@ -46,19 +46,29 @@ This project is implemented by a team of 3 developers:
 git clone https://github.com/KhrapkoVasyl/Ecstasify.git
 ```
 
-2. Install NPM packages:
+2. Install NPM packages for the client:
 
    ```sh
    cd client
    npm install
    ```
 
-   Create the configuration file `.env.local` as shown in the [example](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/client/env/.env.example).
+   Set up env configuration in the configuration file [.env.development](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/client/env/.env.development) for development and [.env.production](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/client/env/.env.production) for production under `env` directory.
 
-   And start the client:
+   To start the client in the development mode run:
 
    ```sh
    npm run dev
+   ```
+
+   To start the client in the production mode run:
+
+   ```sh
+   # Build the application:
+   npm run build
+
+   # And start it in production mode:
+   npm run preview
    ```
 
 3. Install NPM packages for the server:
