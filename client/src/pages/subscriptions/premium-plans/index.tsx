@@ -8,7 +8,7 @@ type PremiumPlansProps = {
 
 const PremiumPlans = ({ plans }: PremiumPlansProps) => {
   return (
-    <Stack gap={3} alignItems={'stretch'} paddingBottom={4}>
+    <Stack gap={3} alignItems="stretch" paddingBottom={4}>
       {plans.map(({ id, subscriptionFeatures, name, price }, i) => {
         return (
           <SubscriptionPlanCard

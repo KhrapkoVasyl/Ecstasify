@@ -1,30 +1,20 @@
 import { Errors } from '@/enums/error';
 import { RootService } from '@/services';
-import { makeAutoObservable, runInAction } from 'mobx';
 import { RootStore } from './root.store';
+import { Track } from '@/models/track';
+import mockTracks from '../mocks/tracks.json';
+import { makeAutoObservable } from 'mobx';
+import { VolumeLevels } from '@/enums';
 
 export class AudioPlayerStore {
   private rootStore: RootStore;
   private rootService: RootService;
 
-  private audio: HTMLAudioElement = new Audio();
+  currentTrackIndex = 0;
+  currentTrackDuration = 0;
+  volume = VolumeLevels.Low;
 
-  private AUDIO_END_OFFSET = 1;
-
-  private audioEventHandlers: {
-    event: keyof HTMLMediaElementEventMap;
-    handler: () => void;
-  }[] = [
-    { event: 'timeupdate', handler: this.syncAudioCurrentTime.bind(this) },
-    { event: 'ended', handler: this.handleAudioEnded.bind(this) },
-    { event: 'canplay', handler: this.handleAudioCanPlay.bind(this) },
-    { event: 'error', handler: this.handleAudioError.bind(this) },
-  ];
-
-  currentTime = 0;
-  isPlaying = false;
-  hasLoaded = false;
-  hasError = false;
+  playlist: Track[] = mockTracks as unknown as Track[];
 
   constructor(rootServise: RootService, rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -33,75 +23,47 @@ export class AudioPlayerStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  attachAudioListeners() {
-    for (const { event, handler } of this.audioEventHandlers) {
-      this.audio.addEventListener(event, handler);
-    }
+  setVolume(value: number) {
+    this.volume = value;
   }
 
-  removeAudioListeners() {
-    for (const { event, handler } of this.audioEventHandlers) {
-      this.audio.removeEventListener(event, handler);
-    }
-  }
-
-  handleAudioCanPlay() {
-    runInAction(() => {
-      this.hasLoaded = true;
-    });
-  }
-
-  handleAudioEnded() {
-    this.audio.currentTime = 0;
-    this.setIsPlaying(false);
+  get currentTrack() {
+    return this.playlist[this.currentTrackIndex];
   }
 
   handleAudioError() {
-    this.hasError = true;
-    this.hasLoaded = true;
     this.rootStore.errorHandler.handle(Errors.AudioLoadError, 'warning');
   }
 
-  syncAudioCurrentTime() {
-    runInAction(() => {
-      this.currentTime = this.audio.currentTime;
-    });
+  setPlaylist() {
+    this.playlist = mockTracks as unknown as Track[];
   }
 
-  setIsPlaying(isPlaying: boolean) {
-    this.isPlaying = isPlaying;
-  }
+  skipTrack(direction: 'next' | 'prev') {
+    let index = 0;
 
-  playAudio() {
-    this.isPlaying = true;
-    this.audio.play();
-  }
+    if (direction === 'prev') {
+      index = this.currentTrackIndex - 1;
 
-  pauseAudio() {
-    this.isPlaying = false;
-    this.audio.pause();
-  }
-
-  setAudioSource(src: string) {
-    this.audio.src = src;
-  }
-
-  getAudioDuration() {
-    return this.audio.duration || 0;
-  }
-
-  getAudioCurrentTime() {
-    return this.audio.currentTime;
-  }
-
-  skipTime(time: number) {
-    if (time === this.getAudioDuration()) {
-      // sometimes when trying to skip the audio exactly
-      // till the end (set audio.currentTime = audio.duration) the duration gets
-      // modifed a bit (increases for a 1s or so) - so this is workaround to avoid that
-      this.audio.currentTime = this.getAudioDuration() - this.AUDIO_END_OFFSET;
+      if (index < 0) {
+        index = this.playlist.length - 1;
+      }
     } else {
-      this.audio.currentTime = time;
+      index = this.currentTrackIndex + 1;
+
+      if (index >= this.playlist.length) {
+        index = 0;
+      }
     }
+
+    this.currentTrackIndex = index;
+  }
+
+  goToNextTrack() {
+    this.skipTrack('next');
+  }
+
+  goToPrevTrack() {
+    this.skipTrack('prev');
   }
 }

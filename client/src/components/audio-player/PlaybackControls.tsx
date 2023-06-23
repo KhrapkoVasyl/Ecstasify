@@ -1,127 +1,71 @@
-import { Box, CircularProgress, Slider } from '@mui/material';
-import * as s from './styles';
+import { Box, CircularProgress } from '@mui/material';
 import {
-  PauseCircle,
-  PlayCircleFilledWhite,
-  SkipNext,
-  SkipPrevious,
+  PauseCircleRounded,
+  PlayCircleFilledWhiteRounded,
+  SkipNextRounded,
+  SkipPreviousRounded,
 } from '@mui/icons-material';
-import { useStore } from '@/hooks';
 import { observer } from 'mobx-react-lite';
-import { useCallback, useEffect, useState } from 'react';
 import CustomIconButton from '../icon-button';
-import { formatPlaybackTime } from '@/helpers';
+import { styles } from './styles';
 
-const { PlaybackTime } = s;
+interface IPlaybackControls {
+  onTogglePlayback: () => void;
+  onNext: () => void;
+  onPrev: () => void;
+  loading?: boolean;
+  disabled?: boolean;
+  isPlaying?: boolean;
+}
 
-const PlaybackControls = () => {
-  const {
-    playAudio,
-    pauseAudio,
-    isPlaying,
-    currentTime,
-    hasError,
-    hasLoaded,
-    skipTime,
-    getAudioDuration,
-    attachAudioListeners,
-    removeAudioListeners,
-    setAudioSource,
-  } = useStore('audioPlayerStore');
-
-  const [displayCurrentTime, setDisplayCurrentTime] = useState(0);
-  const [seeking, setSeeking] = useState(false);
-
-  useEffect(() => {
-    setAudioSource(import.meta.env.VITE_TEST_AUDIO_SRC);
-    attachAudioListeners();
-
-    return () => {
-      removeAudioListeners();
-      pauseAudio();
-      setAudioSource('');
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!seeking && currentTime !== displayCurrentTime) {
-      setDisplayCurrentTime(currentTime);
-    }
-  }, [currentTime]);
-
-  const handleTogglePlayback = useCallback(() => {
-    if (isPlaying) {
-      pauseAudio();
-    } else {
-      playAudio();
-    }
-  }, [isPlaying]);
-
-  const formattedAudioDuration = formatPlaybackTime(getAudioDuration());
-  const formattedAudioCurrentTime = formatPlaybackTime(displayCurrentTime);
-
-  const disabledControls = !hasLoaded || hasError;
-
+const PlaybackControls = ({
+  onTogglePlayback,
+  onNext,
+  onPrev,
+  loading = false,
+  disabled = false,
+  isPlaying = false,
+}: IPlaybackControls) => {
   return (
-    <Box sx={s.controlsWrapper}>
+    <Box sx={styles.controlsWrapper}>
       <Box>
         <CustomIconButton
           IconButtonProps={{
-            sx: s.skipButton,
-            color: 'primary',
-            disabled: disabledControls,
+            sx: styles.iconButton,
+            onClick: onPrev,
           }}
           tooltipText="Previous"
-          icon={<SkipPrevious fontSize="inherit" />}
+          icon={<SkipPreviousRounded fontSize="inherit" />}
         />
         <CustomIconButton
           tooltipText={isPlaying ? 'Pause' : 'Play'}
           IconButtonProps={{
-            disabled: disabledControls,
-            onClick: handleTogglePlayback,
+            disabled,
             color: 'primary',
-            sx: {
-              padding: '6px',
-              position: 'relative',
-            },
+            sx: styles.playbackToggle,
+            onClick: onTogglePlayback,
           }}
           icon={
             <>
-              {!hasLoaded && (
-                <CircularProgress size="50px" sx={{ position: 'absolute' }} />
+              {loading && (
+                <CircularProgress size="50px" sx={styles.audioLoader} />
               )}
-              {isPlaying && hasLoaded ? (
-                <PauseCircle sx={{ fontSize: '40px' }} />
+              {isPlaying && !disabled ? (
+                <PauseCircleRounded />
               ) : (
-                <PlayCircleFilledWhite sx={{ fontSize: '40px' }} />
+                <PlayCircleFilledWhiteRounded />
               )}
             </>
           }
         />
         <CustomIconButton
-          IconButtonProps={{ sx: s.skipButton, disabled: disabledControls }}
+          IconButtonProps={{
+            sx: styles.iconButton,
+            onClick: onNext,
+          }}
           tooltipText="Next"
-          icon={<SkipNext />}
+          icon={<SkipNextRounded />}
         />
-      </Box>
-      <Box sx={s.progressWrapper}>
-        <PlaybackTime align="right">{formattedAudioCurrentTime}</PlaybackTime>
-        <Slider
-          size="small"
-          sx={s.slider}
-          value={displayCurrentTime}
-          disabled={disabledControls}
-          max={hasLoaded ? getAudioDuration() : 0}
-          onChangeCommitted={(_, value) => {
-            setSeeking(false);
-            skipTime(value as number);
-          }}
-          onChange={(_, value) => {
-            setSeeking(true);
-            setDisplayCurrentTime(value as number);
-          }}
-        />
-        <PlaybackTime align="left">{formattedAudioDuration}</PlaybackTime>
       </Box>
     </Box>
   );

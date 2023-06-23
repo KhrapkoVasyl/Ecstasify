@@ -1,27 +1,26 @@
-import { Styles } from '@/types/styles';
-import { NavigateBefore, NavigateNext } from '@mui/icons-material';
-import { lighten, Stack } from '@mui/material';
+import {
+  NavigateBeforeRounded,
+  NavigateNextRounded,
+} from '@mui/icons-material';
+import { Stack } from '@mui/material';
 import CustomIconButton from '../icon-button';
-
-const iconButtonStyles: Styles = {
-  backgroundColor: ({ palette }) => lighten(palette.text.secondary, 0.9),
-};
+import { styles } from './styles';
 
 const PageNavigationControls = () => {
   return (
     <Stack direction="row" gap="10px" alignItems="center">
       <CustomIconButton
         tooltipText="Previous Page"
-        icon={<NavigateBefore />}
+        icon={<NavigateBeforeRounded />}
         IconButtonProps={{
-          sx: iconButtonStyles,
+          sx: styles.iconButton,
         }}
       />
       <CustomIconButton
         tooltipText="Next Page"
-        icon={<NavigateNext />}
+        icon={<NavigateNextRounded />}
         IconButtonProps={{
-          sx: iconButtonStyles,
+          sx: styles.iconButton,
         }}
       />
     </Stack>

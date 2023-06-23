@@ -22,21 +22,15 @@ This project is the implementation of an online platform for listening to music 
 
 # Who worked on the project
 
-This project is implemented by a team of four developers:
+This project is implemented by a team of 3 developers:
 
 ### Backend:
 
 - Khrapko Vasyl <br>
   (khrapko2002@gmail.com, https://github.com/KhrapkoVasyl) <br>
-  Implemented: 'subscriptions', 'files', 'notifications' services
 
 - Zinovyj Bogdan <br>
   (bogdanolexandrov@gmail.com, https://github.com/Bogdan-Zinovij) <br>
-  Implemented: 'users(+auth)', 'authors' services
-
-- Byaliy Danil <br>
-  (byaliy03@gmail.com, https://github.com/DanilByaliy) <br>
-  Implemented: 'tracks', 'playlists' services
 
 ### Frontend:
 
@@ -46,77 +40,65 @@ This project is implemented by a team of four developers:
 
 # Installation
 
-Make sure you have [Minikube](https://kubernetes.io/uk/docs/tasks/tools/install-minikube/) and [kubectl](https://kubernetes.io/docs/tasks/tools/) installed.
- 
 1. Clone the repo:
- ```sh
- git clone https://github.com/Bogdan-Zinovij/Ecstasify.git
- ```
 
-2. Start minikube
- ```sh
- minikube start
- ```
+```sh
+git clone https://github.com/KhrapkoVasyl/Ecstasify.git
+```
 
-3. Switch to the minikube environment
- ```sh
- eval $(minikube -p minikube docker-env)
- ```
+2. Install NPM packages for the client:
 
-4. Enable extensions for minikube
- ```sh
- minikube addons enable ingress
- ```
- 
-Create the configuration file `.env` for each service as shown in the respective `.env.example` files.
- 
-5. Create Docker images of service migrations
- ```sh
- docker build -t tracks-migrations:0.1 -f ./services/tracks/migrations/Dockerfile .
- docker build -t users-migrations:0.1 -f ./services/users/src/db/migrations/Dockerfile .
- docker build -t authors-migrations:0.1 -f ./services/authors/src/db/migrations/Dockerfile .
- docker build -t subscriptions-migrations:0.1 -f ./services/subscriptions/src/db/migrations/Dockerfile .
- docker build -t playlists-migrations:0.1 -f ./services/playlists/migrations/Dockerfile .
- docker build -t files-migrations:0.1 -f ./services/files/src/db/migrations/Dockerfile .
- ```
+   ```sh
+   cd client
+   npm install
+   ```
 
-6. Create a Docker image for each service and client
- ```sh
- docker build -t tracks:0.1 ./services/tracks/
- docker build -t users:0.1 ./services/users/
- docker build -t authors:0.1 ./services/authors/
- docker build -t subscriptions:0.1 ./services/subscriptions/
- docker build -t notifications:0.1 ./services/notifications/
- docker build -t playlists:0.1 ./services/playlists/
- docker build -t files:0.1 ./services/files/
- docker build -t client:0.1 ./services/client/
- ```
+   Set up env configuration in the configuration file [.env.development](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/client/env/.env.development) for development and [.env.production](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/client/env/.env.production) for production under `env` directory.
 
-7. Сompile dependencies for all services
- ```sh
- helm dep build ./helm/charts/tracks
- helm dep build ./helm/charts/users
- helm dep build ./helm/charts/subscriptions
- helm dep build ./helm/charts/authors
- helm dep build ./helm/charts/notifications
- helm dep build ./helm/charts/playlists
- helm dep build ./helm/charts/files
- ```
+   To start the client in the development mode run:
 
-8. Сompile the dependencies for the application
- ```sh
- helm dep update helm
- helm dep build helm
- ```
+   ```sh
+   npm run dev
+   ```
 
-9. Install the ecstasify app
- ```sh
- helm install ecstasify ./helm
- ```
+   To start the client in the production mode run:
 
-10. Run the tunnel in a separate terminal
- ```sh
- minikube tunnel
- ```
- 
-11. Open http://localhost to view the app in your browser.
+   ```sh
+   # Build the application:
+   npm run build
+
+   # And start it in production mode:
+   npm run preview
+   ```
+
+3. Install NPM packages for the server:
+
+   ```sh
+   cd server
+   npm install
+   ```
+
+   Set up env configuration in the configuration file [.env.development](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/server/.env.development) for development and [.env.production](https://github.com/KhrapkoVasyl/Ecstasify/blob/main/server/.env.production) for production.
+
+   To start the server in the development mode run:
+
+   ```sh
+   npm start:dev
+   ```
+
+   To start the server in the production mode run:
+
+   ```sh
+   # Build the application:
+   npm run build
+
+   # And start it in production mode:
+   npm run start:prod
+   ```
+
+4. Open http://127.0.0.1:5173 to view the app in your browser.
+
+# Deployments
+
+- Client - https://ecstasify.azurewebsites.net/
+- Server - https://ecstasify-api.azurewebsites.net/

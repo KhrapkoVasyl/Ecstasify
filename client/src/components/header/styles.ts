@@ -1,6 +1,8 @@
-import { Styles } from '@/types/styles';
+import { createStyleSheet } from '@/helpers';
 
-export const toolbar: Styles = {
-  padding: '10px 32px 0 32px',
-  justifyContent: 'space-between',
-};
+export const styles = createStyleSheet({
+  toolbar: {
+    padding: '10px 32px 0 32px',
+    justifyContent: 'space-between',
+  },
+});

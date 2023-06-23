@@ -13,9 +13,8 @@ import {
   Box,
 } from '@mui/material';
 import Logo from '../logo';
-import { NavLink } from './styles';
-import * as s from './styles';
 import { useStore } from '@/hooks';
+import { styles, NavLink } from './styles';
 
 type MenuItem = {
   label: string;
@@ -59,11 +58,11 @@ const Sider = () => {
 
   return (
     <Box>
-      <Box sx={s.logoWrapper}>
+      <Box sx={styles.logoWrapper}>
         <Logo />
       </Box>
       <Divider />
-      <List sx={s.list}>
+      <List sx={styles.list}>
         {getMenuItems().map(({ label, path, icon }) => (
           <ListItem key={path} disablePadding>
             <NavLink to={path}>
