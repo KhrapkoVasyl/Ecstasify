@@ -28,14 +28,14 @@ export class TracksController {
   @Get()
   findAll(): Promise<TrackEntity[]> {
     return this.tracksService.findAll({
-      relations: { author: true, genre: true },
+      relations: { genre: true },
     });
   }
 
   @Get(':id')
   findOne(@Param() conditions: IdDto): Promise<TrackEntity> {
     return this.tracksService.findOne(conditions, {
-      relations: { author: true, genre: true },
+      relations: { genre: true },
     });
   }
 
@@ -65,7 +65,7 @@ export class TracksController {
   getAllTracksFromPlaylist(@Param() playlist: IdDto): Promise<TrackEntity[]> {
     return this.tracksService.findAll({
       where: { playlists: { id: playlist.id } },
-      relations: { author: true, genre: true },
+      relations: { genre: true },
     });
   }
 }

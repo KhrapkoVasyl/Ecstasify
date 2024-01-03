@@ -10,7 +10,6 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { AuthorEntity } from '../authors/author.entity';
 import { GenreEntity } from '../genres/genre.entity';
 import { PlaylistEntity } from '../playlists/playlist.entity';
 import { FileEntity } from '../files/file.entity';
@@ -26,13 +25,9 @@ export class TrackEntity extends CommonEntity {
   @Column({ length: 32 })
   name: string;
 
-  @ApiProperty({ type: () => AuthorEntity, nullable: true })
-  @ManyToOne(() => AuthorEntity, ({ tracks }) => tracks, {
-    onDelete: 'SET NULL',
-    nullable: true,
-  })
-  @JoinColumn()
-  author: AuthorEntity;
+  @ApiProperty({ type: 'string', maxLength: 36, nullable: true })
+  @Column({ length: 36 })
+  author: string;
 
   @ApiProperty({ type: () => GenreEntity })
   @ManyToOne(() => GenreEntity, ({ tracks }) => tracks, { onDelete: 'CASCADE' })
