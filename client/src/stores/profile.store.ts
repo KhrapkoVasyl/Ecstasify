@@ -9,7 +9,7 @@ export class ProfileStore {
   private rootStore: RootStore;
   private rootService: RootService;
 
-  currentUser: User = {} as User;
+  currentUser: User = { name: 'artemko', role: UserRole.Admin } as User;
 
   constructor(rootService: RootService, rootStore: RootStore) {
     this.rootStore = rootStore;

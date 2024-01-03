@@ -41,23 +41,15 @@ class UsersService extends BaseService {
   };
 
   signUp = (data: SignUpRequest) => {
-    return this.httpRequest.post<SignUpResponse>(
-      '/users/auth/sign-up',
-      data,
-      false
-    );
+    return this.httpRequest.post<SignUpResponse>('/auth/signup', data, false);
   };
 
   signIn = (data: SignInRequest) => {
-    return this.httpRequest.post<SignInResponse>(
-      '/users/auth/sign-in',
-      data,
-      false
-    );
+    return this.httpRequest.post<SignInResponse>('/auth/signin', data, false);
   };
 
   signOut = () => {
-    return this.httpRequest.post('/users/auth/sign-out', null, false);
+    return this.httpRequest.post('/auth/signout', null, false);
   };
 
   refreshAuth = () => {
