@@ -5,7 +5,7 @@ import { AppConfigModule } from './config';
 import { DatabaseModule, NoSqlDatabaseModule } from './systems/database';
 import { FeaturesModule } from './modules/features';
 import { TracksModule } from './modules/tracks';
-import { AuthorsModule } from './modules/authors2';
+import { AuthorsModule } from './modules/authors';
 import { GenresModule } from './modules/genres';
 import { PlaylistsModule } from './modules/playlists';
 import { UsersModule } from './modules/users';
