@@ -22,7 +22,7 @@ import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('authors')
 @Controller('authors')
-//@UseGuards(AccessTokenGuard)
+@UseGuards(AccessTokenGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
