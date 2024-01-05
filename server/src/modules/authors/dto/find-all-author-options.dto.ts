@@ -8,8 +8,8 @@ export class FindAllAuthorOptionsDto {
   @MaxLength(32)
   @ApiProperty({
     example: 'Linkin Park',
-    required: true,
-    nullable: false,
+    required: false,
+    nullable: true,
     minLength: 1,
     maxLength: 32,
   })

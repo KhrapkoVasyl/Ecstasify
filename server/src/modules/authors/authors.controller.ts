@@ -19,6 +19,7 @@ import {
 } from './dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from '../auth/guards';
+import { IdDto } from 'src/common/dto';
 
 @ApiTags('authors')
 @Controller('authors')
@@ -34,8 +35,8 @@ export class AuthorsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authorsService.findOne(id);
+  findOne(@Param() conditions: IdDto) {
+    return this.authorsService.findOne(conditions);
   }
 
   @Post()
@@ -44,12 +45,15 @@ export class AuthorsController {
   }
 
   @Patch(':id')
-  updateOne(@Param('id') id: string, @Body() updateEntityDto: UpdateAuthorDto) {
-    return this.authorsService.updateOne(id, updateEntityDto);
+  updateOne(
+    @Param() conditions: IdDto,
+    @Body() updateEntityDto: UpdateAuthorDto,
+  ) {
+    return this.authorsService.updateOne(conditions, updateEntityDto);
   }
 
   @Delete(':id')
-  deleteOne(@Param('id') id: string) {
-    return this.authorsService.deleteOne(id);
+  deleteOne(@Param() conditions: IdDto) {
+    return this.authorsService.deleteOne(conditions);
   }
 }

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -8,6 +9,7 @@ import { Model } from 'mongoose';
 import { ErrorMessagesEnum } from 'src/common/enums';
 import { AuthorEntity } from './author.schema';
 import { FindAllAuthorOptionsDto } from './dto';
+import { IdDto } from 'src/common/dto';
 
 @Injectable()
 export class AuthorsService {
@@ -15,18 +17,18 @@ export class AuthorsService {
     @InjectModel('Author') private authorModel: Model<AuthorEntity>,
   ) {}
 
-  async createOne(author) {
+  async createOne(author: Partial<AuthorEntity>) {
     const newAuthor = new this.authorModel(author);
     await newAuthor.save().catch(() => {
-      throw new BadRequestException(ErrorMessagesEnum.INVALID_DATA);
+      throw new ConflictException(ErrorMessagesEnum.AUTHOR_ALREADY_EXISTS);
     });
 
-    return this.findOne(newAuthor.id);
+    return this.findOne({ id: newAuthor.id });
   }
 
-  async updateOne(authorId: string, author) {
+  async updateOne(conditions: IdDto, author: Partial<AuthorEntity>) {
     const existingAuthor = await this.authorModel
-      .findOneAndUpdate({ id: authorId }, author, {
+      .findOneAndUpdate(conditions, author, {
         new: true,
       })
       .lean()
@@ -39,10 +41,14 @@ export class AuthorsService {
     return existingAuthor;
   }
 
-  async findAll(options: FindAllAuthorOptionsDto) {
-    let authorData;
+  async findAll(
+    options: FindAllAuthorOptionsDto,
+  ): Promise<Partial<AuthorEntity>[]> {
+    let authorData: Partial<AuthorEntity>[];
 
-    if (options?.name) {
+    const name = options?.name;
+
+    if (name) {
       const regex = new RegExp('.*' + name + '.*', 'i');
       authorData = await this.authorModel
         .find({ name: { $regex: regex } })
@@ -59,11 +65,9 @@ export class AuthorsService {
     return authorData;
   }
 
-  async findOne(authorId: string) {
+  async findOne(conditions: IdDto): Promise<AuthorEntity> {
     const existingAuthor = await this.authorModel
-      .findOne({
-        id: authorId,
-      })
+      .findOne(conditions)
       .lean()
       .exec();
     if (!existingAuthor) {
@@ -72,11 +76,9 @@ export class AuthorsService {
     return existingAuthor;
   }
 
-  async deleteOne(authorId: string) {
+  async deleteOne(conditions: IdDto) {
     const deletedAuthor = await this.authorModel
-      .findOneAndDelete({
-        id: authorId,
-      })
+      .findOneAndDelete(conditions)
       .lean()
       .catch(() => {
         throw new NotFoundException(ErrorMessagesEnum.AUTHOR_NOT_FOUND);
