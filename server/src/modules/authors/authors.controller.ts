@@ -17,12 +17,13 @@ import {
   FindAllAuthorOptionsDto,
   UpdateAuthorDto,
 } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('authors')
 @Controller('authors')
 @UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}

@@ -14,13 +14,14 @@ import { TracksService } from './tracks.service';
 import { TrackEntity } from './track.entity';
 import { IdDto } from 'src/common/dto';
 import { CreateTrackDto, UpdateTrackDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('tracks')
 @Controller('tracks')
 @UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}

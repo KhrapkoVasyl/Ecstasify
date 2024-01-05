@@ -18,12 +18,13 @@ import { SubscriptionFeaturesService } from './subscription-features.service';
 import { SubscriptionFeatureEntity } from './subscription-feature.entity';
 import { IdDto } from 'src/common/dto';
 import { plainToInstance } from 'class-transformer';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('subscription-features')
 @Controller('subscription-features')
 @UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class SubscriptionFeaturesController {
   constructor(

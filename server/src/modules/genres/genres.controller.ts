@@ -14,13 +14,14 @@ import { GenresService } from './genres.service';
 import { GenreEntity } from './genre.entity';
 import { IdDto } from 'src/common/dto';
 import { CreateGenreDto, UpdateGenreDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('genres')
 @Controller('genres')
 @UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class GenresController {
   constructor(private readonly genresService: GenresService) {}
