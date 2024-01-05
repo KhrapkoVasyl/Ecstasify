@@ -13,7 +13,7 @@ services:
     networks:
       - network
     volumes:
-      - db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
   mongodb:
     image: mongo:latest
@@ -34,5 +34,5 @@ networks:
     driver: bridge
 
 volumes:
-  db:
+  postgres_data:
   mongodb_data:

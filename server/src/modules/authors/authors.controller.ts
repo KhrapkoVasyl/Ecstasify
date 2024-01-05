@@ -12,7 +12,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
-import { CreateAuthorDto, UpdateAuthorDto } from './dto';
+import {
+  CreateAuthorDto,
+  FindAllAuthorOptionsDto,
+  UpdateAuthorDto,
+} from './dto';
 import { ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from '../auth/guards';
 
@@ -24,12 +28,8 @@ export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Get()
-  findAll(@Query() query: any) {
-    if (query.name) {
-      return this.authorsService.findAll(query['name']);
-    }
-
-    return this.authorsService.findAll();
+  findAll(@Query() options: FindAllAuthorOptionsDto) {
+    return this.authorsService.findAll(options);
   }
 
   @Get(':id')

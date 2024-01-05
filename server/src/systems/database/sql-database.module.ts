@@ -15,4 +15,4 @@ import { AppConfigService } from '../../config/app-config.service';
   ],
   exports: [TypeOrmModule],
 })
-export class DatabaseModule {}
+export class SqlDatabaseModule {}

@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
-import * as uuid from 'uuid'; // Додано імпорт uuid
+import * as uuid from 'uuid';
 
 @Schema({ collection: 'authors', timestamps: true })
 export class AuthorEntity {
-  @ApiProperty({ type: 'string', maxLength: 36, uniqueItems: true }) // Збільшено maxLength на 36 для UUID
+  @ApiProperty({ type: 'string', maxLength: 36, uniqueItems: true })
   @Prop({
     type: MongooseSchema.Types.String,
     maxlength: 36,
