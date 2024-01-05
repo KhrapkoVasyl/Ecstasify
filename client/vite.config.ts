@@ -15,19 +15,15 @@ export default ({ mode }) => {
         '@': path.resolve(__dirname, 'src'),
       },
     },
-    ...(env.VITE_SERVER_PROXY
-      ? {
-          server: {
-            proxy: {
-              [env.VITE_API_URL]: {
-                target: env.VITE_API_HOST,
-                changeOrigin: true,
-                secure: false,
-                ws: true,
-              },
-            },
-          },
-        }
-      : {}),
+    server: {
+      proxy: {
+        [env.VITE_API_URL]: {
+          target: env.VITE_API_HOST,
+          changeOrigin: true,
+          secure: false,
+          ws: true,
+        },
+      },
+    },
   });
 };

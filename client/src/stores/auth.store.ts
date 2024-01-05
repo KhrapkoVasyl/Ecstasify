@@ -34,7 +34,7 @@ export class AuthStore {
   }
 
   get isAuthenticated() {
-    return true;
+    return !!this.auth.accessToken;
   }
 
   setAuth(auth: Auth) {
