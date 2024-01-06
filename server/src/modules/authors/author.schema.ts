@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Schema as MongooseSchema } from 'mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
 import * as uuid from 'uuid';
 import { DbFileEntity } from '../db-files/db-file.schema';
 
@@ -25,8 +25,12 @@ export class AuthorEntity {
   @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   updatedAt: Date;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'DbFileEntity',  })
-  image: DbFileEntity;
+  @ApiProperty({ type: 'string', maxLength: 36, nullable: true })
+  @Prop({ type: MongooseSchema.Types.String, maxlength: 36, required: false })
+  imageId: string;
+
+  @ApiHideProperty()
+  imageFile?: Partial<DbFileEntity>;
 }
 
 export const AuthorSchema = SchemaFactory.createForClass(AuthorEntity);

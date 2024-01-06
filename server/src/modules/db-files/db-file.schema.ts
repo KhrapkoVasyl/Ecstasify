@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
 import * as uuid from 'uuid';
@@ -28,6 +28,9 @@ export class DbFileEntity {
   @ApiProperty({ type: 'blob', required: true })
   @Prop({ type: Buffer })
   data: Buffer;
+
+  @ApiHideProperty()
+  base64: string;
 
   @ApiProperty({ readOnly: true })
   @Prop({ type: Date, default: Date.now })

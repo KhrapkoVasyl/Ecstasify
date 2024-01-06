@@ -23,14 +23,14 @@ export class AuthorsService {
   ) {}
 
   async createOne(author: Partial<AuthorEntity>, file?: Partial<DbFileEntity>) {
-    console.log('\n\nFile: ', file, '\n\n');
-    const authorCover = file ? await this.dbFilesService.createOne(file) : null;
+    const authorCoverId = file
+      ? await this.dbFilesService.createOne(file).then(({ id }) => id)
+      : undefined;
 
-    console.log('\n\nauthorCover: ', authorCover, '\n\n');
-
-    const newAuthor = new this.authorModel({ ...author, image: authorCover });
-
-    console.log('\n\nNew authro: ', newAuthor, '\n\n');
+    const newAuthor = new this.authorModel({
+      ...author,
+      imageId: authorCoverId,
+    });
 
     await newAuthor.save().catch(() => {
       throw new ConflictException(ErrorMessagesEnum.AUTHOR_ALREADY_EXISTS);
@@ -71,8 +71,8 @@ export class AuthorsService {
       authorData = await this.authorModel.find().lean().exec();
     }
 
-    if (!authorData) {
-      throw new NotFoundException(ErrorMessagesEnum.AUTHORS_NOT_FOUND);
+    for (const author of authorData) {
+      await this.assignImage(author);
     }
 
     return authorData;
@@ -81,12 +81,27 @@ export class AuthorsService {
   async findOne(conditions: IdDto): Promise<AuthorEntity> {
     const existingAuthor = await this.authorModel
       .findOne(conditions)
-      .populate('image')
+      .lean()
       .exec();
     if (!existingAuthor) {
       throw new NotFoundException(ErrorMessagesEnum.AUTHOR_NOT_FOUND);
     }
+    await this.assignImage(existingAuthor);
     return existingAuthor;
+  }
+
+  private async assignImage(author: Partial<AuthorEntity>) {
+    const imageId = author.imageId;
+    const imageFile = imageId
+      ? await this.dbFilesService.findOne({ id: imageId })
+      : null;
+
+    if (imageFile) {
+      const dataBuffer = Buffer.from(imageFile.data?.buffer);
+      imageFile.base64 = dataBuffer.toString('base64');
+    }
+
+    author.imageFile = imageFile;
   }
 
   async deleteOne(conditions: IdDto) {
