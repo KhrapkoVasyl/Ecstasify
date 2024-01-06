@@ -1,17 +1,18 @@
 import { LoadingProgress } from '@/components/loading-progress';
 import { useMounted, useStores } from '@/hooks';
-import { MusicNote } from '@mui/icons-material';
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useMemo } from 'react';
 import debounce from 'lodash.debounce';
+
+const image = {
+  small:
+    'https://htmlcolorcodes.com/assets/images/colors/red-color-solid-background-1920x1080.png',
+  medium:
+    'https://htmlcolorcodes.com/assets/images/colors/bright-blue-color-solid-background-1920x1080.png',
+  large:
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Flag_of_Libya_%281977%E2%80%932011%29.svg/300px-Flag_of_Libya_%281977%E2%80%932011%29.svg.png',
+};
 
 const HomePage = () => {
   const {
@@ -59,23 +60,11 @@ const HomePage = () => {
               alignSelf: 'start',
             }}
           >
-            {/* <CardMedia
-              sx={{ width: 156, height: 156 }}
-              component="img"
-              src="https://cdn-icons-png.flaticon.com/512/6373/6373791.png"
-            /> */}
-            <CardMedia
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 156,
-                height: 156,
-                background: (theme) => theme.palette.grey[200],
-              }}
-            >
-              <MusicNote color="primary" sx={{ fontSize: '40px' }} />
-            </CardMedia>
+            <picture>
+              <source srcSet={image.large} media="(min-width: 1200px)" />
+              <source srcSet={image.medium} media="(min-width: 700px)" />
+              <img width={156} height={156} src={image.small} />
+            </picture>
             <CardContent
               sx={{ padding: 0, mt: '16px', paddingBottom: '0 !important' }}
             >
