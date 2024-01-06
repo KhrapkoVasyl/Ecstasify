@@ -2,8 +2,8 @@ import { Author } from '@/models/author';
 import BaseService from './base.service';
 
 class AuthorsService extends BaseService {
-  getAllAuthors = () => {
-    return this.httpRequest.get<Author[]>('/authors');
+  getAllAuthors = (query: { name?: string }) => {
+    return this.httpRequest.get<Author[]>('/authors', true, query);
   };
 
   createAuthor = (data: Author) => {

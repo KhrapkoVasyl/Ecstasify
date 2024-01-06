@@ -1,5 +1,5 @@
 import { LoadingProgress } from '@/components/loading-progress';
-import { useStores } from '@/hooks';
+import { useMounted, useStores } from '@/hooks';
 import { MusicNote } from '@mui/icons-material';
 import {
   Box,
@@ -15,17 +15,29 @@ import debounce from 'lodash.debounce';
 
 const HomePage = () => {
   const {
-    tracksStore: { tracks, getAllTracks, getAllTracksLoading },
-    headerStore: { searchString },
+    tracksStore: { tracks, getAllTracks, getAllTracksLoading, resetTracks },
+    headerStore: { searchString, setSearchString },
   } = useStores();
 
-  const debouncedGetAllTracks = useMemo(() => debounce(getAllTracks, 500), []);
+  const mounted = useMounted();
 
-  useEffect(() => {
-    getAllTracks();
+  const debouncedGetAllTracks = useMemo(
+    () => (mounted ? debounce(getAllTracks, 500) : getAllTracks),
+    [mounted]
+  );
 
-    return () => debouncedGetAllTracks.cancel();
-  }, []);
+  useEffect(
+    () => () => {
+      if ('cancel' in debouncedGetAllTracks) {
+        debouncedGetAllTracks.cancel();
+      }
+
+      resetTracks();
+
+      setSearchString('');
+    },
+    []
+  );
 
   useEffect(() => {
     debouncedGetAllTracks(searchString);

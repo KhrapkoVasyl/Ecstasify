@@ -21,6 +21,7 @@ type EntityDashboardProps<T> = {
   onDeleteRecord: (record: T) => void;
   onEditRecord: (record: T) => void;
   resetRecords: () => void;
+  extra?: React.ReactNode;
 };
 
 const EntityDashboard = <T,>(props: EntityDashboardProps<T>) => {
@@ -37,6 +38,7 @@ const EntityDashboard = <T,>(props: EntityDashboardProps<T>) => {
     onDeleteRecord,
     getAllRecordsLoading,
     onEditRecord,
+    extra,
   } = props;
 
   const { isModalOpen, closeModal, openModal } = useModal();
@@ -66,11 +68,14 @@ const EntityDashboard = <T,>(props: EntityDashboardProps<T>) => {
           title={title}
           description={description}
           extra={
-            <Tooltip title="Add new record">
-              <IconButton onClick={openModal} color="secondary" size="large">
-                <Add fontSize="medium" />
-              </IconButton>
-            </Tooltip>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+              {extra}
+              <Tooltip title="Add new record">
+                <IconButton onClick={openModal} color="primary" size="large">
+                  <Add fontSize="medium" />
+                </IconButton>
+              </Tooltip>
+            </Box>
           }
         />
         {dataSource && dataSource.length > 0 ? (

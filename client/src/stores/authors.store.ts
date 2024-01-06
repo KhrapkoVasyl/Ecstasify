@@ -23,13 +23,13 @@ export class AuthorsStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  async getAllAuthors() {
+  async getAllAuthors(name?: string) {
     runInAction(() => {
       this.getAllAuthorsLoading = true;
     });
 
     const { getAllAuthors } = this.rootService.authorsService;
-    const data = await getAllAuthors();
+    const data = await getAllAuthors({ name });
 
     if (data) {
       runInAction(() => {
