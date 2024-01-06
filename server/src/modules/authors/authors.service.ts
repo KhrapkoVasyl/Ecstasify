@@ -20,7 +20,7 @@ export class AuthorsService {
   ) {}
 
   async createOne(author: Partial<AuthorEntity>) {
-    const newAuthor = new this.authorModel(author);
+    const newAuthor = new this.authorModel({ ...author });
     await newAuthor.save().catch(() => {
       throw new ConflictException(ErrorMessagesEnum.AUTHOR_ALREADY_EXISTS);
     });
