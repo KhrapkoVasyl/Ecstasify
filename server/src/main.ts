@@ -45,7 +45,7 @@ async function bootstrap() {
   app.useGlobalPipes(validationPipe);
 
   await app.listen(PORT, HOST, () => {
-    console.log(`Server listens on http://${HOST}:${PORT}`);
+    console.log(`Server listens on port ${PORT}`);
   });
 }
 
