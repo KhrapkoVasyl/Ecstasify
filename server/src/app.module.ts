@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppConfigModule } from './config';
-import { DatabaseModule } from './systems/database';
+import { SqlDatabaseModule, NoSqlDatabaseModule } from './systems/database';
 import { FeaturesModule } from './modules/features';
 import { TracksModule } from './modules/tracks';
 import { AuthorsModule } from './modules/authors';
@@ -17,7 +17,8 @@ import { FilesModule } from './modules/files';
 @Module({
   imports: [
     AppConfigModule,
-    DatabaseModule,
+    SqlDatabaseModule,
+    NoSqlDatabaseModule,
     SubscriptionPlansModule,
     FeaturesModule,
     SubscriptionFeaturesModule,
@@ -27,7 +28,7 @@ import { FilesModule } from './modules/files';
     UsersModule,
     AuthModule,
     TracksModule,
-    FilesModule,
+    //FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

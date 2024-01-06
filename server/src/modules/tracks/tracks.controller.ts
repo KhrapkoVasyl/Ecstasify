@@ -7,35 +7,40 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { TrackEntity } from './track.entity';
 import { IdDto } from 'src/common/dto';
-import { CreateTrackDto, UpdateTrackDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { CreateTrackDto, FindAllTracksOptionsDto, UpdateTrackDto } from './dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { AccessTokenGuard } from '../auth/guards';
 
 @ApiTags('tracks')
 @Controller('tracks')
 @UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
   @Get()
-  findAll(): Promise<TrackEntity[]> {
+  findAll(
+    @Query() { searchName }: FindAllTracksOptionsDto,
+  ): Promise<TrackEntity[]> {
     return this.tracksService.findAll({
-      relations: { author: true, genre: true },
+      relations: { genre: true },
+      where: { name: searchName },
     });
   }
 
   @Get(':id')
   findOne(@Param() conditions: IdDto): Promise<TrackEntity> {
     return this.tracksService.findOne(conditions, {
-      relations: { author: true, genre: true },
+      relations: { genre: true },
     });
   }
 
@@ -65,7 +70,7 @@ export class TracksController {
   getAllTracksFromPlaylist(@Param() playlist: IdDto): Promise<TrackEntity[]> {
     return this.tracksService.findAll({
       where: { playlists: { id: playlist.id } },
-      relations: { author: true, genre: true },
+      relations: { genre: true },
     });
   }
 }

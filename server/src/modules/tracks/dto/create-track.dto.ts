@@ -4,6 +4,7 @@ import {
   IsObject,
   IsOptional,
   IsString,
+  IsUUID,
   MaxLength,
   MinLength,
   ValidateNested,
@@ -25,15 +26,14 @@ export class CreateTrackDto {
   public readonly name: string;
 
   @IsOptional()
-  @IsObject()
-  @ValidateNested()
+  @IsUUID()
   @ApiProperty({
-    type: IdDto,
+    type: 'string',
     required: false,
     nullable: true,
-    example: { id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' },
+    example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
   })
-  public readonly author: IdDto;
+  public readonly authorId?: string;
 
   @IsObject()
   @ValidateNested()
@@ -45,13 +45,13 @@ export class CreateTrackDto {
   })
   public readonly genre: IdDto;
 
-  @IsObject()
-  @ValidateNested()
-  @ApiProperty({
-    type: IdDto,
-    example: { id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' },
-    required: true,
-    nullable: false,
-  })
-  public readonly file: IdDto;
+  // @IsObject()
+  // @ValidateNested()
+  // @ApiProperty({
+  //   type: IdDto,
+  //   example: { id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' },
+  //   required: true,
+  //   nullable: false,
+  // })
+  // public readonly file: IdDto;
 }
