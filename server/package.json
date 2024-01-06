@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@azure/service-bus": "^7.9.3",
-    "@azure/storage-blob": "^12.14.0",
+    "@azure/storage-blob": "^12.17.0",
     "@fastify/multipart": "^7.6.1",
     "@fastify/static": "^6.10.2",
     "@nestjs-modules/mailer": "^1.8.1",
@@ -51,7 +51,8 @@
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "sharp": "^0.33.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
