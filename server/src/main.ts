@@ -17,6 +17,7 @@ async function bootstrap() {
   );
   const appConfigService = app.get<AppConfigService>(AppConfigService);
 
+  app.enableCors();
   await app.register(multipart, {
     limits: {
       fileSize: appConfigService.get<number>('MULTIPART_FILE_SIZE_LIMIT'),
@@ -45,7 +46,7 @@ async function bootstrap() {
   app.useGlobalPipes(validationPipe);
 
   await app.listen(PORT, HOST, () => {
-    console.log(`Server listens on http://${HOST}:${PORT}`);
+    console.log(`Server listens on port ${PORT}`);
   });
 }
 

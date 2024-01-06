@@ -14,7 +14,8 @@ const PrivateLayout = ({ allowedRoles = [] }: PrivateLayoutProps) => {
     profileStore: { currentUser },
   } = useStores();
   const location = useLocation();
-  const isAllowedRole = allowedRoles.includes(currentUser.role);
+  const isAllowedRole =
+    currentUser?.role && allowedRoles.includes(currentUser.role);
 
   if (allowedRoles.length > 0 && !isAllowedRole) {
     return <Navigate to="/" state={{ from: location }} replace />;

@@ -5,12 +5,14 @@ import AuthorsService from './authors.service';
 import SubscriptionsService from './subscriptions.service';
 import TracksService from './tracks.service';
 import UsersService from './users.service';
+import FilesService from './files.service';
 
 export class RootService {
   usersService: UsersService;
   authorsService: AuthorsService;
   tracksService: TracksService;
   subscriptionsService: SubscriptionsService;
+  filesService: FilesService;
 
   constructor(rootStore: RootStore) {
     const httpRequest = new HttpRequest(
@@ -21,5 +23,6 @@ export class RootService {
     this.authorsService = new AuthorsService(httpRequest);
     this.tracksService = new TracksService(httpRequest);
     this.subscriptionsService = new SubscriptionsService(httpRequest);
+    this.filesService = new FilesService(httpRequest);
   }
 }

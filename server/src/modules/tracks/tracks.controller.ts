@@ -7,43 +7,59 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { TrackEntity } from './track.entity';
 import { IdDto } from 'src/common/dto';
-import { CreateTrackDto, UpdateTrackDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { CreateTrackDto, FindAllTracksOptionsDto, UpdateTrackDto } from './dto';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { AccessTokenGuard } from '../auth/guards';
+import { FileMimetypeValidationPipe } from 'src/common/pipes';
+import { imagesMimetypes } from 'src/common/constants';
 
 @ApiTags('tracks')
 @Controller('tracks')
 @UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
   @Get()
-  findAll(): Promise<TrackEntity[]> {
+  findAll(
+    @Query() { searchName }: FindAllTracksOptionsDto,
+  ): Promise<TrackEntity[]> {
     return this.tracksService.findAll({
-      relations: { author: true, genre: true },
+      relations: { genre: true },
+      where: { name: searchName },
     });
   }
 
   @Get(':id')
   findOne(@Param() conditions: IdDto): Promise<TrackEntity> {
     return this.tracksService.findOne(conditions, {
-      relations: { author: true, genre: true },
+      relations: { genre: true },
     });
   }
 
   @Post()
-  createOne(@Body() createEntityDto: CreateTrackDto): Promise<TrackEntity> {
-    const model = plainToInstance(TrackEntity, createEntityDto);
+  @ApiBody({ type: CreateTrackDto })
+  @ApiConsumes('multipart/form-data')
+  createOne(
+    @Body(new FileMimetypeValidationPipe(imagesMimetypes))
+    createEntityDto: CreateTrackDto,
+  ): Promise<TrackEntity> {
+    const { file, genreId, ...dto } = createEntityDto;
+    const model = plainToInstance(TrackEntity, {
+      ...dto,
+      genre: { id: genreId },
+    });
 
-    return this.tracksService.createOne(model);
+    return this.tracksService.createOne(model, file);
   }
 
   @Patch(':id')
@@ -51,7 +67,11 @@ export class TracksController {
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateTrackDto,
   ): Promise<TrackEntity> {
-    const model = plainToInstance(TrackEntity, updateEntityDto);
+    const { genreId } = updateEntityDto;
+    const model = plainToInstance(TrackEntity, {
+      ...updateEntityDto,
+      genre: { id: genreId },
+    });
 
     return this.tracksService.updateOne(conditions, model);
   }
@@ -65,7 +85,7 @@ export class TracksController {
   getAllTracksFromPlaylist(@Param() playlist: IdDto): Promise<TrackEntity[]> {
     return this.tracksService.findAll({
       where: { playlists: { id: playlist.id } },
-      relations: { author: true, genre: true },
+      relations: { genre: true },
     });
   }
 }

@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import * as path from 'path';
 import { AppConfigService } from 'src/config/app-config.service';
 import {
   PrimaryGeneratedColumn,
@@ -43,8 +44,24 @@ export class FileEntity extends BaseEntity {
   @ApiProperty({ readOnly: true })
   get src(): string {
     if (!this.filePath) return null;
-    const fileUri = new URL(this.filePath, appConfigService.get('CDN'));
-    return fileUri.toString();
+    const filePath = path
+      .join(appConfigService.get('CDN'), this.filePath)
+      .replace(/\\/g, '/');
+
+    return new URL(filePath).toString();
+  }
+
+  // TODO: реализовать 3 метода, srcSmall srcMedium и srcLarge, каждый из которых возвращает файл в соответсвующей папке
+  @Expose()
+  @ApiProperty({ readOnly: true })
+  get srcSmall(): string {
+    const isImage = true; // TODO
+    if (!this.filePath || !isImage) return null;
+    const filePath = path
+      .join(appConfigService.get('CDN'), this.filePath) //
+      .replace(/\\/g, '/');
+
+    return new URL(filePath).toString();
   }
 
   @ApiProperty({ readOnly: true })

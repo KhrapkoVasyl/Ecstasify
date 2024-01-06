@@ -1,16 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
+  IsUUID,
   MaxLength,
   MinLength,
-  ValidateNested,
 } from 'class-validator';
-import { IdDto } from 'src/common/dto';
+import { CreateFileDto } from 'src/modules/files/dto';
 
-export class CreateTrackDto {
+export class CreateTrackDto extends PartialType(CreateFileDto) {
   @IsNotEmpty()
   @IsString()
   @MinLength(1)
@@ -25,33 +24,21 @@ export class CreateTrackDto {
   public readonly name: string;
 
   @IsOptional()
-  @IsObject()
-  @ValidateNested()
+  @IsUUID()
   @ApiProperty({
-    type: IdDto,
+    type: 'string',
     required: false,
     nullable: true,
-    example: { id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' },
+    example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
   })
-  public readonly author: IdDto;
+  public readonly authorId?: string;
 
-  @IsObject()
-  @ValidateNested()
+  @IsUUID()
   @ApiProperty({
-    type: IdDto,
-    example: { id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' },
+    type: 'string',
+    example: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
     required: true,
     nullable: false,
   })
-  public readonly genre: IdDto;
-
-  @IsObject()
-  @ValidateNested()
-  @ApiProperty({
-    type: IdDto,
-    example: { id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' },
-    required: true,
-    nullable: false,
-  })
-  public readonly file: IdDto;
+  public readonly genreId: string;
 }

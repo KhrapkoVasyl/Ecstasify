@@ -1,8 +1,8 @@
 import {
   LibraryMusic,
   Group,
-  CardGiftcard,
   AccountCircle,
+  HomeRounded,
 } from '@mui/icons-material';
 import {
   Divider,
@@ -26,7 +26,9 @@ const Sider = () => {
   const { isAdmin } = useStore('profileStore');
 
   const getMenuItems = () => {
-    let menuItems: MenuItem[] = [];
+    let menuItems: MenuItem[] = [
+      { label: 'Home', path: '/', icon: <HomeRounded /> },
+    ];
 
     if (isAdmin) {
       menuItems = menuItems.concat([
@@ -39,11 +41,6 @@ const Sider = () => {
           label: 'Tracks',
           path: '/tracks',
           icon: <LibraryMusic />,
-        },
-        {
-          label: 'Subscriptions',
-          path: '/subscriptions',
-          icon: <CardGiftcard />,
         },
         {
           label: 'Authors',

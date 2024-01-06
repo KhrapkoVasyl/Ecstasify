@@ -7,11 +7,6 @@ import EntityDashboard from '@/components/entity-dashboard';
 
 const columns: IColumn<User>[] = [
   {
-    title: 'ID',
-    key: 'id',
-    dataIndex: 'id',
-  },
-  {
     title: 'Name',
     key: 'name',
     dataIndex: 'name',

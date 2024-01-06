@@ -34,7 +34,7 @@ const AudioPlayer = () => {
     handleSeekChange,
   } = useAudio({
     volume,
-    src: currentTrack?.file,
+    src: currentTrack?.file as unknown as string,
     onLoadError: () => {
       setHasError(true);
       handleAudioError();
@@ -42,10 +42,10 @@ const AudioPlayer = () => {
   });
 
   useMediaSession({
-    key: currentTrack?.file,
+    key: currentTrack?.file as unknown as string,
     mediaMetadataInit: {
       title: currentTrack.name,
-      artist: currentTrack.author.name,
+      artist: currentTrack.author?.name,
       artwork: [{ src: currentTrack.coverImg }],
     },
     actionHandlers: [
@@ -76,7 +76,7 @@ const AudioPlayer = () => {
       <TrackPreview
         trackName={currentTrack.name}
         trackCoverImg={currentTrack.coverImg}
-        authorName={currentTrack.author.name}
+        authorName={currentTrack.author?.name ?? ''}
       />
       <PlaybackControls
         loading={isLoading}

@@ -21,7 +21,7 @@ const UserForm = ({ open, onClose }: IEntityFormProps) => {
 
   const defaultValues: Partial<User> =
     formMode === FormMode.Edit
-      ? { ...currentUser }
+      ? { name: currentUser?.name, email: currentUser?.email }
       : {
           name: '',
           email: '',
@@ -52,6 +52,7 @@ const UserForm = ({ open, onClose }: IEntityFormProps) => {
   };
 
   const handleUpdateUser = async (data: User) => {
+    console.log({ data });
     if (currentUser) {
       await updateUser(currentUser?.id, data);
       handleClose();

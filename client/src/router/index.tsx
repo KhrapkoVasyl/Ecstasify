@@ -7,12 +7,13 @@ import AuthorsPage from '@/pages/authors';
 import PrivateLayout from './PrivateLayout';
 import PublicLayout from './PublicLayout';
 import { UserRole } from '@/enums/user-role';
+import HomePage from '@/pages/home';
 
 const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<PrivateLayout />}>
-        <Route index element={<div>🏠 Home page</div>} />
+        <Route index element={<HomePage />} />
       </Route>
       <Route
         path="/"

@@ -1,4 +1,3 @@
-import { User } from '@/models/user';
 import { RootService } from '@/services';
 import { SignInRequest, SignUpRequest } from '@/services/users.service';
 import { makeAutoObservable, runInAction } from 'mobx';
@@ -14,7 +13,7 @@ export class AuthStore {
   private rootStore: RootStore;
   private rootService: RootService;
 
-  auth: Auth = {} as Auth;
+  auth: Auth | null = null;
 
   signUpLoading = false;
   signInLoading = false;
@@ -34,10 +33,13 @@ export class AuthStore {
   }
 
   get isAuthenticated() {
-    return true;
+    return (
+      Boolean(this.auth?.accessToken) &&
+      Boolean(this.rootStore.profileStore.currentUser)
+    );
   }
 
-  setAuth(auth: Auth) {
+  setAuth(auth: typeof this.auth) {
     this.auth = auth;
   }
 
@@ -54,9 +56,6 @@ export class AuthStore {
         accessToken: res.accessToken,
         refreshToken: res.refreshToken,
       });
-
-      const { setCurrentUser } = this.rootStore.profileStore;
-      setCurrentUser(res.user);
     }
 
     runInAction(() => {
@@ -77,9 +76,6 @@ export class AuthStore {
         accessToken: res.accessToken,
         refreshToken: res.refreshToken,
       });
-
-      const { setCurrentUser } = this.rootStore.profileStore;
-      setCurrentUser(res.user);
     }
 
     runInAction(() => {
@@ -88,23 +84,9 @@ export class AuthStore {
   }
 
   async signOut() {
-    runInAction(() => {
-      this.signOutLoading = true;
-    });
-
-    const { signOut } = this.rootService.usersService;
-    const res = await signOut();
-
-    if (res) {
-      this.setAuth({} as Auth);
-
-      const { setCurrentUser } = this.rootStore.profileStore;
-      setCurrentUser({} as User);
-    }
-
-    runInAction(() => {
-      this.signOutLoading = false;
-    });
+    this.setAuth(null);
+    const { setCurrentUser } = this.rootStore.profileStore;
+    setCurrentUser(null);
   }
 
   async refreshAuth() {
@@ -116,9 +98,6 @@ export class AuthStore {
         accessToken: res.accessToken,
         refreshToken: res.refreshToken,
       });
-
-      const { setCurrentUser } = this.rootStore.profileStore;
-      setCurrentUser(res.user);
 
       return res.accessToken;
     } else {

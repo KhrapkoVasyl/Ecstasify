@@ -7,53 +7,64 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
-import { AuthorEntity } from './author.entity';
+import {
+  CreateAuthorDto,
+  FindAllAuthorOptionsDto,
+  UpdateAuthorDto,
+} from './dto';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { IdDto } from 'src/common/dto';
-import { CreateAuthorDto, UpdateAuthorDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
-import { AccessTokenGuard } from '../auth/guards';
+import { FileMimetypeValidationPipe } from 'src/common/pipes';
+import { imagesMimetypes } from 'src/common/constants';
 
 @ApiTags('authors')
 @Controller('authors')
-@UseGuards(AccessTokenGuard)
+//@UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthorsController {
-  constructor(private readonly authorsService: AuthorsService) {}
+  constructor(
+    private readonly authorsService: AuthorsService, // private readonly dbFilesService: DbFilesService,
+  ) {}
 
   @Get()
-  findAll(): Promise<AuthorEntity[]> {
-    return this.authorsService.findAll();
+  findAll(@Query() options: FindAllAuthorOptionsDto) {
+    return this.authorsService.findAll(options);
   }
 
   @Get(':id')
-  findOne(@Param() conditions: IdDto): Promise<AuthorEntity> {
+  findOne(@Param() conditions: IdDto) {
     return this.authorsService.findOne(conditions);
   }
 
   @Post()
-  createOne(@Body() createEntityDto: CreateAuthorDto): Promise<AuthorEntity> {
-    const model = plainToInstance(AuthorEntity, createEntityDto);
+  @ApiBody({ type: CreateAuthorDto })
+  @ApiConsumes('multipart/form-data')
+  createOne(
+    @Body(new FileMimetypeValidationPipe(imagesMimetypes))
+    createAuthorDto: CreateAuthorDto,
+  ) {
+    const { file, ...dto } = createAuthorDto;
+    const { data, filename: fileName, mimetype } = file;
 
-    return this.authorsService.createOne(model);
+    return this.authorsService.createOne(dto, { data, fileName, mimetype });
   }
 
   @Patch(':id')
   updateOne(
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateAuthorDto,
-  ): Promise<AuthorEntity> {
-    const model = plainToInstance(AuthorEntity, updateEntityDto);
-
-    return this.authorsService.updateOne(conditions, model);
+  ) {
+    return this.authorsService.updateOne(conditions, updateEntityDto);
   }
 
   @Delete(':id')
-  deleteOne(@Param() conditions: IdDto): Promise<AuthorEntity> {
+  deleteOne(@Param() conditions: IdDto) {
     return this.authorsService.deleteOne(conditions);
   }
 }

@@ -1,21 +1,19 @@
-# stage 1
+FROM node:20.10-alpine as build
 
-FROM node:16.14.2-alpine3.14 AS build
- 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json .
 
-RUN npm i
+RUN npm ci
 
 COPY . .
- 
+
 RUN npm run build
 
-# stage 2
+FROM nginx:alpine3.18
 
-FROM nginx:1.21.6-alpine
+EXPOSE 80
 
-WORKDIR /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
-COPY --from=build /app/dist ./
+COPY --from=build /app/ngnix.conf /etc/nginx/conf.d/default.conf

@@ -3,18 +3,18 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
   ManyToOne,
   ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
-import { AuthorEntity } from '../authors/author.entity';
 import { GenreEntity } from '../genres/genre.entity';
 import { PlaylistEntity } from '../playlists/playlist.entity';
-import { FileEntity } from '../files/file.entity';
 import { CommonEntity } from 'src/common/entities';
+import { AuthorEntity } from '../authors/author.schema';
+import { FileEntity } from '../files/file.entity';
 
 @Entity({ name: 'tracks' })
 export class TrackEntity extends CommonEntity {
@@ -26,13 +26,12 @@ export class TrackEntity extends CommonEntity {
   @Column({ length: 32 })
   name: string;
 
-  @ApiProperty({ type: () => AuthorEntity, nullable: true })
-  @ManyToOne(() => AuthorEntity, ({ tracks }) => tracks, {
-    onDelete: 'SET NULL',
-    nullable: true,
-  })
-  @JoinColumn()
-  author: AuthorEntity;
+  @ApiProperty({ type: 'string', maxLength: 36, nullable: true })
+  @Column({ length: 36, nullable: true })
+  authorId: string;
+
+  @ApiHideProperty()
+  author?: Partial<AuthorEntity>;
 
   @ApiProperty({ type: () => GenreEntity })
   @ManyToOne(() => GenreEntity, ({ tracks }) => tracks, { onDelete: 'CASCADE' })
@@ -44,9 +43,13 @@ export class TrackEntity extends CommonEntity {
   playlists: PlaylistEntity[];
 
   @ApiProperty({ type: () => FileEntity })
-  @OneToOne(() => FileEntity, { onDelete: 'CASCADE', eager: true })
+  @OneToOne(() => FileEntity, {
+    onDelete: 'CASCADE',
+    eager: true,
+    nullable: true,
+  })
   @JoinColumn()
-  file: FileEntity;
+  image: Partial<FileEntity>;
 
   @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   @CreateDateColumn({ readonly: true })

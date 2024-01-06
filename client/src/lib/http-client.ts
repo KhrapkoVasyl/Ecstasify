@@ -8,6 +8,8 @@ export type HttpClientRequestConfig = {
   method: string;
   data?: any;
   isAuth?: boolean;
+  query?: Record<string, unknown>;
+  headers?: Record<string, string>;
 };
 
 export interface IHttpClient {
@@ -47,28 +49,8 @@ class CustomHttpClient implements IHttpClient {
   }
 
   private async handleUnauthorized(axiosError: AxiosError) {
-    const originalRequest = axiosError.config as AxiosRequestConfig & {
-      sent: boolean;
-    };
-
-    if (!axiosError?.response || !originalRequest) {
-      return Promise.reject(axiosError);
-    }
-
-    if (axiosError?.response?.status === 401 && !originalRequest.sent) {
-      originalRequest.sent = true;
-
-      const accessToken = await this.rootStore.authStore.refreshAuth();
-
-      if (accessToken) {
-        return this.axios.request({
-          ...originalRequest,
-          headers: {
-            ...originalRequest.headers,
-            ...this.getAuthHeader(accessToken),
-          },
-        });
-      }
+    if (axiosError?.response?.status === 401) {
+      return this.rootStore.authStore.signOut();
     } else {
       return Promise.reject(axiosError);
     }
@@ -77,7 +59,27 @@ class CustomHttpClient implements IHttpClient {
   private getAuthHeader(accessToken?: string) {
     const { auth } = this.rootStore.authStore;
     const tokenType = 'Bearer';
-    return { Authorization: `${tokenType} ${accessToken ?? auth.accessToken}` };
+    return {
+      Authorization: `${tokenType} ${accessToken ?? auth?.accessToken}`,
+    };
+  }
+
+  private buildUrl(path: string, query?: Record<string, unknown>) {
+    const searchParams = new URLSearchParams();
+
+    for (const [key, value] of Object.entries(query ?? {})) {
+      if (value !== null && value !== undefined && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    }
+
+    const stringifiedParams = searchParams.toString();
+
+    if (stringifiedParams) {
+      return `${path}?${stringifiedParams}`;
+    }
+
+    return path;
   }
 
   private handleRequestError(httpRequestError: HttpRequestError) {
@@ -104,8 +106,15 @@ class CustomHttpClient implements IHttpClient {
     method,
     data,
     isAuth = true,
+    query,
+    headers,
   }: HttpClientRequestConfig) {
-    let requestConfig: AxiosRequestConfig = { url: this.baseUrl + url, method };
+    const builtUrl = this.buildUrl(this.baseUrl + url, query);
+
+    let requestConfig: AxiosRequestConfig = {
+      url: builtUrl,
+      method,
+    };
 
     if (data) {
       requestConfig = { ...requestConfig, data };
@@ -114,7 +123,7 @@ class CustomHttpClient implements IHttpClient {
     if (isAuth) {
       requestConfig = {
         ...requestConfig,
-        headers: { ...this.getAuthHeader() },
+        headers: { ...this.getAuthHeader(), ...headers },
       };
     }
 

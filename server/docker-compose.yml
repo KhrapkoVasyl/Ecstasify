@@ -1,6 +1,7 @@
 version: '3.8'
+
 services:
-  db:
+  postgres:
     image: postgres:14.1-alpine
     restart: always
     environment:
@@ -12,11 +13,32 @@ services:
     networks:
       - network
     volumes:
-      - db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ecstasify']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 1m
+
+  mongodb:
+    image: mongo:latest
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=ecstasify
+    ports:
+      - '27017:27017'
+    networks:
+      - network
+    volumes:
+      - mongodb_data:/data/db
 
 networks:
   network:
     driver: bridge
 
 volumes:
-  db:
+  postgres_data:
+  mongodb_data:

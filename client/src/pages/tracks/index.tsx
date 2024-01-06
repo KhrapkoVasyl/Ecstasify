@@ -5,28 +5,25 @@ import EntityDashboard from '@/components/entity-dashboard';
 import TrackForm from './components/track-form';
 import { observer } from 'mobx-react-lite';
 import { Author } from '@/models/author';
+import { Genre } from '@/models/genre';
 
 const columns: IColumn<Track>[] = [
-  {
-    title: 'ID',
-    key: 'id',
-    dataIndex: 'id',
-  },
-  {
-    title: 'Created At',
-    key: 'createdAt',
-    dataIndex: 'createdAt',
-  },
   {
     title: 'Name',
     key: 'name',
     dataIndex: 'name',
   },
   {
-    title: 'Author name',
+    title: 'Author',
     key: 'author',
     dataIndex: 'author',
-    render: (value: Author) => value.name,
+    render: (value: Author) => value?.name,
+  },
+  {
+    title: 'Genre',
+    key: 'genre',
+    dataIndex: 'genre',
+    render: (value: Genre) => value.name,
   },
 ];
 

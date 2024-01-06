@@ -7,6 +7,8 @@ import { ProfileStore } from './profile.store';
 import { SubscriptionsStore } from './subscriptions.store';
 import { TracksStore } from './tracks.store';
 import { UsersStore } from './users.store';
+import { HeaderStore } from './header.store';
+import { FilesStore } from './files.store';
 
 export class RootStore {
   private rootService = new RootService(this);
@@ -19,6 +21,8 @@ export class RootStore {
   authStore = new AuthStore(this.rootService, this);
   profileStore = new ProfileStore(this.rootService, this);
   subscriptionsStore = new SubscriptionsStore(this.rootService, this);
+  headerStore = new HeaderStore(this.rootService, this);
+  filesStore = new FilesStore(this.rootService);
 }
 
 export const store = new RootStore();

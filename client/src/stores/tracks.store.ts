@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import { RootStore } from './root.store';
 import { Track } from '@/models/track';
 import { sortByCreatedDate } from '@/helpers';
+import { Genre } from '@/models/genre';
 
 export class TracksStore {
   private rootStore?: RootStore;
@@ -11,6 +12,7 @@ export class TracksStore {
   // data
   tracks: Track[] = [];
   currentTrack: Track | null = null;
+  genres: Genre[] = [];
 
   // loading states
   createTrackLoading = false;
@@ -23,13 +25,23 @@ export class TracksStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-  async getAllTracks() {
+  async getAllGenres() {
+    const genres = await this.rootService.tracksService.getAllGenres();
+
+    if (genres) {
+      runInAction(() => {
+        this.genres = genres;
+      });
+    }
+  }
+
+  async getAllTracks(name?: string) {
     runInAction(() => {
       this.getAllTracksLoading = true;
     });
 
     const { getAllTracks } = this.rootService.tracksService;
-    const data = await getAllTracks();
+    const data = await getAllTracks({ name });
 
     if (data) {
       runInAction(() => {
@@ -42,13 +54,13 @@ export class TracksStore {
     });
   }
 
-  async createTrack(track: Track) {
+  async createTrack(track: Partial<Track>) {
     runInAction(() => {
       this.createTrackLoading = true;
     });
 
     const { createTrack } = this.rootService.tracksService;
-    await createTrack({ ...track, author: track.author?.id });
+    await createTrack(track);
     this.getAllTracks();
 
     runInAction(() => {
@@ -71,16 +83,13 @@ export class TracksStore {
     });
   }
 
-  async updateTrack(trackId: Track['id'], updatedTrackData: Track) {
+  async updateTrack(trackId: Track['id'], updatedTrackData: Partial<Track>) {
     runInAction(() => {
       this.createTrackLoading = true;
     });
 
     const { updateTrack } = this.rootService.tracksService;
-    await updateTrack(trackId, {
-      ...updatedTrackData,
-      author: updatedTrackData.author.id,
-    });
+    await updateTrack(trackId, updatedTrackData);
     this.getAllTracks();
 
     runInAction(() => {

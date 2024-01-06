@@ -7,6 +7,7 @@ import { IEntityFormProps } from '@/types/entity-form';
 import { useEffect } from 'react';
 import Modal from '@/components/modal';
 import { FormMode } from '@/enums/form-mode';
+import ImageUpload from '@/components/image-upload';
 
 const AuthorForm = ({ open, onClose }: IEntityFormProps) => {
   const {
@@ -20,11 +21,7 @@ const AuthorForm = ({ open, onClose }: IEntityFormProps) => {
   const formMode = currentAuthor ? FormMode.Edit : FormMode.Create;
 
   const defaultValues: Partial<Author> =
-    formMode === FormMode.Edit
-      ? { ...currentAuthor }
-      : {
-          name: '',
-        };
+    formMode === FormMode.Edit ? { name: currentAuthor?.name } : { name: '' };
 
   const { control, handleSubmit, reset } = useForm<Author>({
     defaultValues,
@@ -73,6 +70,15 @@ const AuthorForm = ({ open, onClose }: IEntityFormProps) => {
       onClose={handleClose}
     >
       <Stack spacing={3}>
+        {formMode !== FormMode.Edit && (
+          <Controller
+            name="file"
+            control={control}
+            render={({ field }) => (
+              <ImageUpload value={field.value} onChange={field.onChange} />
+            )}
+          />
+        )}
         <Controller
           name="name"
           control={control}
