@@ -17,6 +17,7 @@ async function bootstrap() {
   );
   const appConfigService = app.get<AppConfigService>(AppConfigService);
 
+  app.enableCors();
   await app.register(multipart, {
     limits: {
       fileSize: appConfigService.get<number>('MULTIPART_FILE_SIZE_LIMIT'),
