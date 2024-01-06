@@ -11,16 +11,27 @@ import { AuthorEntity } from './author.schema';
 import { FindAllAuthorOptionsDto } from './dto';
 import { IdDto } from 'src/common/dto';
 import { DeletedAuthorsPublisher } from './deleted-authors.publisher';
+import { DbFilesService } from '../db-files/db-files.service';
+import { DbFileEntity } from '../db-files/db-file.schema';
 
 @Injectable()
 export class AuthorsService {
   constructor(
     @InjectModel('Author') private authorModel: Model<AuthorEntity>,
     private readonly deletedAuthorsPublisher: DeletedAuthorsPublisher,
+    private readonly dbFilesService: DbFilesService,
   ) {}
 
-  async createOne(author: Partial<AuthorEntity>) {
-    const newAuthor = new this.authorModel({ ...author });
+  async createOne(author: Partial<AuthorEntity>, file?: Partial<DbFileEntity>) {
+    console.log('\n\nFile: ', file, '\n\n');
+    const authorCover = file ? await this.dbFilesService.createOne(file) : null;
+
+    console.log('\n\nauthorCover: ', authorCover, '\n\n');
+
+    const newAuthor = new this.authorModel({ ...author, image: authorCover });
+
+    console.log('\n\nNew authro: ', newAuthor, '\n\n');
+
     await newAuthor.save().catch(() => {
       throw new ConflictException(ErrorMessagesEnum.AUTHOR_ALREADY_EXISTS);
     });
@@ -70,7 +81,7 @@ export class AuthorsService {
   async findOne(conditions: IdDto): Promise<AuthorEntity> {
     const existingAuthor = await this.authorModel
       .findOne(conditions)
-      .lean()
+      .populate('image')
       .exec();
     if (!existingAuthor) {
       throw new NotFoundException(ErrorMessagesEnum.AUTHOR_NOT_FOUND);
