@@ -3,8 +3,8 @@ import BaseService from './base.service';
 import { Genre } from '@/models/genre';
 
 class TracksService extends BaseService {
-  getAllTracks = () => {
-    return this.httpRequest.get<Track[]>('/tracks');
+  getAllTracks = (query: { name?: string }) => {
+    return this.httpRequest.get<Track[]>('/tracks', true, query);
   };
 
   createTrack = (data: Partial<Track>) => {

@@ -3,8 +3,14 @@ import PageNavigationControls from '../page-navigation-controls';
 import ProfileChip from '../profile-chip';
 import { styles } from './styles';
 import { Search } from '@mui/icons-material';
+import { observer } from 'mobx-react-lite';
+import { useStores } from '@/hooks';
 
 const Header = () => {
+  const {
+    headerStore: { searchString, setSearchString },
+  } = useStores();
+
   return (
     <AppBar
       color="transparent"
@@ -16,6 +22,8 @@ const Header = () => {
         <Stack direction="row" gap={2} flexBasis="400px">
           <PageNavigationControls />
           <TextField
+            value={searchString}
+            onChange={(e) => setSearchString(e.target.value)}
             fullWidth
             placeholder="What do you want to listen to?"
             sx={{
@@ -40,4 +48,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default observer(Header);

@@ -8,6 +8,7 @@ export type HttpClientRequestConfig = {
   method: string;
   data?: any;
   isAuth?: boolean;
+  query?: Record<string, unknown>;
 };
 
 export interface IHttpClient {
@@ -48,7 +49,7 @@ class CustomHttpClient implements IHttpClient {
 
   private async handleUnauthorized(axiosError: AxiosError) {
     if (axiosError?.response?.status === 401) {
-      this.rootStore.authStore.signOut();
+      return this.rootStore.authStore.signOut();
     } else {
       return Promise.reject(axiosError);
     }
@@ -60,6 +61,18 @@ class CustomHttpClient implements IHttpClient {
     return {
       Authorization: `${tokenType} ${accessToken ?? auth?.accessToken}`,
     };
+  }
+
+  private buildUrl(path: string, query?: Record<string, unknown>) {
+    const url = new URL(path || '/', `https://${window.location.host}`);
+
+    for (const [key, value] of Object.entries(query ?? {})) {
+      if (value !== null && value !== undefined && value !== '') {
+        url.searchParams.append(key, String(value));
+      }
+    }
+
+    return url.pathname + url.search;
   }
 
   private handleRequestError(httpRequestError: HttpRequestError) {
@@ -86,8 +99,12 @@ class CustomHttpClient implements IHttpClient {
     method,
     data,
     isAuth = true,
+    query,
   }: HttpClientRequestConfig) {
-    let requestConfig: AxiosRequestConfig = { url: this.baseUrl + url, method };
+    let requestConfig: AxiosRequestConfig = {
+      url: this.buildUrl(this.baseUrl + url, query),
+      method,
+    };
 
     if (data) {
       requestConfig = { ...requestConfig, data };

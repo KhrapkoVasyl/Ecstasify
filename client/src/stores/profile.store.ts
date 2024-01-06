@@ -9,6 +9,7 @@ export class ProfileStore {
   private rootService: RootService;
 
   currentUser: User | null = null;
+  getCurrentUserLoading = false;
 
   constructor(rootService: RootService, rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -26,10 +27,12 @@ export class ProfileStore {
   }
 
   async getCurrentUser() {
+    this.getCurrentUserLoading = true;
     const user = await this.rootService.usersService.getProfile();
 
     if (user) {
       this.setCurrentUser({ ...user, role: UserRole.Admin });
     }
+    this.getCurrentUserLoading = false;
   }
 }

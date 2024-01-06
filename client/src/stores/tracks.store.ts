@@ -35,13 +35,13 @@ export class TracksStore {
     }
   }
 
-  async getAllTracks() {
+  async getAllTracks(name?: string) {
     runInAction(() => {
       this.getAllTracksLoading = true;
     });
 
     const { getAllTracks } = this.rootService.tracksService;
-    const data = await getAllTracks();
+    const data = await getAllTracks({ name });
 
     if (data) {
       runInAction(() => {

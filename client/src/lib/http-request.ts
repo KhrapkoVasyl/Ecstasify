@@ -7,11 +7,12 @@ export class HttpRequest {
     this.httpClient = httpClient;
   }
 
-  get<T>(url: string, isAuth?: boolean) {
+  get<T>(url: string, isAuth?: boolean, query?: Record<string, string>) {
     return this.httpClient.request<T>({
       url,
       method: 'GET',
       isAuth,
+      query,
     });
   }
 
