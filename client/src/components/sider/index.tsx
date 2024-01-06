@@ -3,6 +3,7 @@ import {
   Group,
   CardGiftcard,
   AccountCircle,
+  HomeRounded,
 } from '@mui/icons-material';
 import {
   Divider,
@@ -26,7 +27,9 @@ const Sider = () => {
   const { isAdmin } = useStore('profileStore');
 
   const getMenuItems = () => {
-    let menuItems: MenuItem[] = [];
+    let menuItems: MenuItem[] = [
+      { label: 'Home', path: '/', icon: <HomeRounded /> },
+    ];
 
     if (isAdmin) {
       menuItems = menuItems.concat([

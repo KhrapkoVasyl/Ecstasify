@@ -14,9 +14,10 @@ export const styles = createStyleSheet({
     borderRadius: 0,
     width: 0,
     flex: 1,
+    position: 'relative',
   },
   content: {
-    padding: '18px 32px 32px 32px',
+    padding: '70px 32px 32px 32px',
     flex: 1,
     height: 0,
     overflow: 'auto',

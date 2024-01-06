@@ -138,9 +138,6 @@ const HomePage = () => {
 
   return (
     <Stack gap={1}>
-      <Typography variant="h4" fontWeight={600}>
-        Good morning
-      </Typography>
       <Stack direction="row" flexWrap="wrap" gap="16px">
         {tracks.map((track) => (
           <Card
