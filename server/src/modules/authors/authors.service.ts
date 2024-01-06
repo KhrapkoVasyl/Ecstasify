@@ -99,7 +99,10 @@ export class AuthorsService {
     if (imageFile) {
       const dataBuffer = Buffer.from(imageFile.data?.buffer);
       imageFile.base64 = dataBuffer.toString('base64');
+      delete imageFile.data;
     }
+
+    author.imageFile = imageFile;
   }
 
   async deleteOne(conditions: IdDto) {
