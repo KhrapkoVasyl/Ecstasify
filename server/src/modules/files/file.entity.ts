@@ -51,6 +51,19 @@ export class FileEntity extends BaseEntity {
     return new URL(filePath).toString();
   }
 
+  // TODO: реализовать 3 метода, srcSmall srcMedium и srcLarge, каждый из которых возвращает файл в соответсвующей папке
+  @Expose()
+  @ApiProperty({ readOnly: true })
+  get srcSmall(): string {
+    const isImage = true; // TODO
+    if (!this.filePath || !isImage) return null;
+    const filePath = path
+      .join(appConfigService.get('CDN'), this.filePath) //
+      .replace(/\\/g, '/');
+
+    return new URL(filePath).toString();
+  }
+
   @ApiProperty({ readOnly: true })
   @CreateDateColumn({
     readonly: true,
