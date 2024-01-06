@@ -10,6 +10,7 @@ import { IMultipartFile, IStorageConfiguration } from './interfaces';
 import { STORAGE_DEFAULT_UPLOAD_OPTIONS } from './storage.constants';
 import { FileEntity } from 'src/modules/files/file.entity';
 import { ErrorMessagesEnum } from 'src/common/enums';
+import { imagesMimetypes } from 'src/common/constants';
 
 @Injectable()
 export class StorageService {
@@ -41,7 +42,21 @@ export class StorageService {
     const { name, ext } = parse(filename);
     const filePath = join(pathToFile, filename).replace(/\\/g, '/');
 
+    const isImage = imagesMimetypes.includes(file?.mimetype);
+    // если картинка - обрезать квадратом
+
     await this.uploadOne(file, filePath, uploadOptions);
+
+    if (isImage) {
+      // uploadResized ---> сжимать картинку для медиум смалл и лардж
+      // и сохранять в соответствующих папках
+      const filePathForThisSize = join(
+        pathToFile,
+        'medium/large/small',
+        filename,
+      ).replace(/\\/g, '/');
+    }
+
     return {
       fileName: name,
       fileNameWithExt: filename,
