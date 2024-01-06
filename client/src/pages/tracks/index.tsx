@@ -17,7 +17,7 @@ const columns: IColumn<Track>[] = [
     title: 'Author',
     key: 'author',
     dataIndex: 'author',
-    render: (value: Author) => value.name,
+    render: (value: Author) => value?.name,
   },
   {
     title: 'Genre',
