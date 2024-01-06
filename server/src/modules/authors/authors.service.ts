@@ -100,8 +100,6 @@ export class AuthorsService {
       const dataBuffer = Buffer.from(imageFile.data?.buffer);
       imageFile.base64 = dataBuffer.toString('base64');
     }
-
-    author.imageFile = imageFile;
   }
 
   async deleteOne(conditions: IdDto) {
