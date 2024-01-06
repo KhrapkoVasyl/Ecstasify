@@ -10,7 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SubscriptionPlansService } from './subscription-plans.service';
 import { SubscriptionPlanEntity } from './subscription-plan.entity';
 import { IdDto } from 'src/common/dto';
@@ -21,6 +21,7 @@ import { AccessTokenGuard } from '../auth/guards';
 @ApiTags('subscription-plans')
 @Controller('subscription-plans')
 @UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class SubscriptionPlansController {
   constructor(

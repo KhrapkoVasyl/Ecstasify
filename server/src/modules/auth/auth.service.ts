@@ -139,4 +139,10 @@ export class AuthService {
 
     return tokens;
   }
+
+  async findUser(
+    conditions: FindOptionsWhere<UserEntity>,
+  ): Promise<UserEntity> {
+    return this.usersService.findOne(conditions);
+  }
 }

@@ -7,53 +7,53 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
-import { AuthorEntity } from './author.entity';
-import { IdDto } from 'src/common/dto';
-import { CreateAuthorDto, UpdateAuthorDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
-import { plainToInstance } from 'class-transformer';
+import {
+  CreateAuthorDto,
+  FindAllAuthorOptionsDto,
+  UpdateAuthorDto,
+} from './dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from '../auth/guards';
+import { IdDto } from 'src/common/dto';
 
 @ApiTags('authors')
 @Controller('authors')
 @UseGuards(AccessTokenGuard)
+@ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Get()
-  findAll(): Promise<AuthorEntity[]> {
-    return this.authorsService.findAll();
+  findAll(@Query() options: FindAllAuthorOptionsDto) {
+    return this.authorsService.findAll(options);
   }
 
   @Get(':id')
-  findOne(@Param() conditions: IdDto): Promise<AuthorEntity> {
+  findOne(@Param() conditions: IdDto) {
     return this.authorsService.findOne(conditions);
   }
 
   @Post()
-  createOne(@Body() createEntityDto: CreateAuthorDto): Promise<AuthorEntity> {
-    const model = plainToInstance(AuthorEntity, createEntityDto);
-
-    return this.authorsService.createOne(model);
+  createOne(@Body() createAuthorDto: CreateAuthorDto) {
+    return this.authorsService.createOne(createAuthorDto);
   }
 
   @Patch(':id')
   updateOne(
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateAuthorDto,
-  ): Promise<AuthorEntity> {
-    const model = plainToInstance(AuthorEntity, updateEntityDto);
-
-    return this.authorsService.updateOne(conditions, model);
+  ) {
+    return this.authorsService.updateOne(conditions, updateEntityDto);
   }
 
   @Delete(':id')
-  deleteOne(@Param() conditions: IdDto): Promise<AuthorEntity> {
+  deleteOne(@Param() conditions: IdDto) {
     return this.authorsService.deleteOne(conditions);
   }
 }
