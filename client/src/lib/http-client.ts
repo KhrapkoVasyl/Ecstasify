@@ -64,15 +64,21 @@ class CustomHttpClient implements IHttpClient {
   }
 
   private buildUrl(path: string, query?: Record<string, unknown>) {
-    const url = new URL(path || '/', `https://${window.location.host}`);
+    const searchParams = new URLSearchParams();
 
     for (const [key, value] of Object.entries(query ?? {})) {
       if (value !== null && value !== undefined && value !== '') {
-        url.searchParams.append(key, String(value));
+        searchParams.append(key, String(value));
       }
     }
 
-    return url.pathname + url.search;
+    const stringifiedParams = searchParams.toString();
+
+    if (stringifiedParams) {
+      return `${path}?${stringifiedParams}`;
+    }
+
+    return path;
   }
 
   private handleRequestError(httpRequestError: HttpRequestError) {
@@ -101,8 +107,10 @@ class CustomHttpClient implements IHttpClient {
     isAuth = true,
     query,
   }: HttpClientRequestConfig) {
+    const builtUrl = this.buildUrl(this.baseUrl + url, query);
+
     let requestConfig: AxiosRequestConfig = {
-      url: this.buildUrl(this.baseUrl + url, query),
+      url: builtUrl,
       method,
     };
 

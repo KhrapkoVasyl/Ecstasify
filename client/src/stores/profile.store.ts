@@ -31,7 +31,7 @@ export class ProfileStore {
     const user = await this.rootService.usersService.getProfile();
 
     if (user) {
-      this.setCurrentUser({ ...user, role: UserRole.Admin });
+      this.setCurrentUser(user);
     }
     this.getCurrentUserLoading = false;
   }
