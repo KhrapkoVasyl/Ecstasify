@@ -1,0 +1,101 @@
+version: "3.9"
+
+services:
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        container_name: client
+        ports:
+            - 8000:80
+        depends_on:
+            - server
+        networks:
+            - network
+
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        container_name: server
+        ports:
+            - 8080:8080
+        depends_on:
+            - postgres
+            - mongodb
+        networks:
+            - network
+        environment:
+            - NEST_HOST=localhost
+            - NEST_PORT=8080
+            - GLOBAL_PREFIX='/api/v1'
+            - ENABLE_SWAGGER=true
+            - SWAGGER_DOCS_PATH='/'
+            - TYPEORM_CONNECTION_NAME=postgres-db
+            - TYPEORM_TYPE=postgres
+            - TYPEORM_HOST=postgres
+            - TYPEORM_PORT=5432
+            - TYPEORM_CACHE=true
+            - TYPEORM_LOGGING=all
+            - TYPEORM_DATABASE=ecstasify
+            - TYPEORM_USERNAME=ecstasify
+            - TYPEORM_PASSWORD=postgres
+            - TYPEORM_SSL=false
+            - TYPEORM_DROP_SCHEMA=false
+            - TYPEORM_SYNCHRONIZE=true
+            - TYPEORM_MIGRATIONS_RUN=true
+            - MONGOOSE_URI=mongodb://admin:admin@mongodb:27017
+            - MONGOOSE_DATABASE=ecstasify
+            - CDN=cdn
+            - MULTIPART_FILE_SIZE_LIMIT=3e8
+            - JWT_ACCESS_SECRET=jwt-access-secret
+            - JWT_REFRESH_SECRET=jwt-refresh-secret
+            - JWT_ACCESS_EXPIRES_IN=1h
+            - JWT_REFRESH_EXPIRES_IN=7d
+            - EMAIL_HOST='smtp.example.com'
+            - EMAIL_PORT=587
+            - EMAIL_USER='user@example.com'
+            - EMAIL_PASSWORD='password'
+            - EMAIL_FROM="No Reply" <noreply@example.com>
+            - AZURE_BLOB_STORAGE_CONTAINER_NAME=container-name
+            - AZURE_BLOB_STORAGE_CONNECTION_STRING=connection-string
+            - npm_package_name='ecstasify'
+            - npm_package_version='1.0.0'
+
+    postgres:
+        image: postgres:14.1-alpine
+        container_name: postgres
+        restart: always
+        environment:
+            - POSTGRES_USER=ecstasify
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=ecstasify
+        ports:
+            - 5432:5432
+        networks:
+            - network
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+    mongodb:
+        image: mongo:latest
+        container_name: mongodb
+        restart: always
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=admin
+            - MONGO_INITDB_ROOT_PASSWORD=admin
+            - MONGO_INITDB_DATABASE=ecstasify
+        ports:
+            - 27017:27017
+        networks:
+            - network
+        volumes:
+            - mongodb_data:/data/db
+
+networks:
+    network:
+        driver: bridge
+
+volumes:
+    postgres_data:
+    mongodb_data:
