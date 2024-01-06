@@ -1,9 +1,20 @@
 import { Delete, Image } from '@mui/icons-material';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const CoverUpload = () => {
+interface IImageUploadProps {
+  value?: string;
+  onChange: (value: string) => void;
+}
+
+const ImageUpload = ({ value, onChange }: IImageUploadProps) => {
   const [previewImg, setPreviewImg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (value) {
+      setPreviewImg(value);
+    }
+  }, [value]);
 
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const [file] = e.target.files ?? [];
@@ -17,6 +28,7 @@ const CoverUpload = () => {
       reader.onload = (e) => {
         if (e.target?.result) {
           setPreviewImg(e.target.result as string);
+          onChange(e.target.result as string);
         }
       };
 
@@ -35,7 +47,7 @@ const CoverUpload = () => {
         color="text.secondary"
         sx={{ marginBottom: 1 }}
       >
-        Upload cover image
+        Upload image
       </Typography>
       {!previewImg ? (
         <Box
@@ -94,14 +106,14 @@ const CoverUpload = () => {
               color="text.secondary"
               sx={{ margin: 0 }}
             >
-              Supported format: .jpg, .png
+              Supported format: .jpg, .png, .gif
             </Typography>
           </Stack>
         </Box>
       ) : (
         <Box
           sx={{
-            backgroundColor: (theme) => theme.palette.primary.light,
+            backgroundColor: 'rgba(0, 0, 0, 0.06)',
             height: '70px',
             padding: '7px',
             display: 'flex',
@@ -127,4 +139,4 @@ const CoverUpload = () => {
   );
 };
 
-export default CoverUpload;
+export default ImageUpload;

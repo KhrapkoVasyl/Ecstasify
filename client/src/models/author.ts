@@ -3,4 +3,5 @@ export interface Author {
   updatedAt: string;
   id: string;
   name: string;
+  avatar: string;
 }

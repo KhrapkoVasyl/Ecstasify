@@ -7,7 +7,7 @@ import { IEntityFormProps } from '@/types/entity-form';
 import { FormMode } from '@/enums/form-mode';
 import { useEffect } from 'react';
 import { Track } from '@/models/track';
-import CoverUpload from '../cover-upload';
+import ImageUpload from '@/components/image-upload';
 
 const TrackForm = ({ open, onClose }: IEntityFormProps) => {
   const {
@@ -58,6 +58,7 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
   };
 
   const handleCreateTrack = async (data: Track) => {
+    console.log({ data });
     await createTrack({
       name: data.name,
       genre: { id: data.genreId },
@@ -94,7 +95,13 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
       onClose={handleClose}
     >
       <Stack spacing={3}>
-        <CoverUpload />
+        <Controller
+          name="coverImg"
+          control={control}
+          render={({ field }) => (
+            <ImageUpload value={field.value} onChange={field.onChange} />
+          )}
+        />
         <Controller
           name="name"
           control={control}

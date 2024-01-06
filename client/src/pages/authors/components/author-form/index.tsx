@@ -7,6 +7,7 @@ import { IEntityFormProps } from '@/types/entity-form';
 import { useEffect } from 'react';
 import Modal from '@/components/modal';
 import { FormMode } from '@/enums/form-mode';
+import ImageUpload from '@/components/image-upload';
 
 const AuthorForm = ({ open, onClose }: IEntityFormProps) => {
   const {
@@ -69,6 +70,13 @@ const AuthorForm = ({ open, onClose }: IEntityFormProps) => {
       onClose={handleClose}
     >
       <Stack spacing={3}>
+        <Controller
+          name="avatar"
+          control={control}
+          render={({ field }) => (
+            <ImageUpload value={field.value} onChange={field.onChange} />
+          )}
+        />
         <Controller
           name="name"
           control={control}
