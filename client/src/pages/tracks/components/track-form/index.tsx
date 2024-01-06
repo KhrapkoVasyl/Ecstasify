@@ -58,11 +58,11 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
   };
 
   const handleCreateTrack = async (data: Track) => {
-    console.log({ data });
     await createTrack({
       name: data.name,
-      genre: { id: data.genreId },
+      genreId: data.genreId,
       authorId: data.authorId,
+      file: data.file,
     });
     handleClose();
   };
@@ -71,7 +71,7 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
     if (currentTrack) {
       await updateTrack(currentTrack?.id, {
         name: data.name,
-        genre: { id: data.genreId },
+        genreId: data.genreId,
         authorId: data.authorId,
       });
       handleClose();
@@ -95,13 +95,15 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
       onClose={handleClose}
     >
       <Stack spacing={3}>
-        <Controller
-          name="coverImg"
-          control={control}
-          render={({ field }) => (
-            <ImageUpload value={field.value} onChange={field.onChange} />
-          )}
-        />
+        {formMode !== FormMode.Edit && (
+          <Controller
+            name="file"
+            control={control}
+            render={({ field }) => (
+              <ImageUpload value={field.value} onChange={field.onChange} />
+            )}
+          />
+        )}
         <Controller
           name="name"
           control={control}

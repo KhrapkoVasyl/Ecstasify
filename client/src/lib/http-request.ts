@@ -7,21 +7,36 @@ export class HttpRequest {
     this.httpClient = httpClient;
   }
 
-  get<T>(url: string, isAuth?: boolean, query?: Record<string, string>) {
+  get<T>(
+    url: string,
+    isAuth?: boolean,
+    query?: Record<string, unknown>,
+    headers?: Record<string, string>
+  ) {
     return this.httpClient.request<T>({
       url,
       method: 'GET',
       isAuth,
       query,
+      headers,
     });
   }
 
   post<T>(
     url: string,
     data?: HttpClientRequestConfig['data'],
-    isAuth?: boolean
+    isAuth?: boolean,
+    query?: Record<string, unknown>,
+    headers?: Record<string, string>
   ) {
-    return this.httpClient.request<T>({ url, method: 'POST', data, isAuth });
+    return this.httpClient.request<T>({
+      url,
+      method: 'POST',
+      data,
+      isAuth,
+      query,
+      headers,
+    });
   }
 
   patch<T>(

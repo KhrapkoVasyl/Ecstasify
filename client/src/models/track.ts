@@ -11,6 +11,7 @@ export interface Track {
   genre: {
     id: string;
   };
-  file: string;
+  file: File;
+  image: { src: string };
   coverImg: string;
 }

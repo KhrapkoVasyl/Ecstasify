@@ -8,7 +8,16 @@ class TracksService extends BaseService {
   };
 
   createTrack = (data: Partial<Track>) => {
-    return this.httpRequest.post<Track>('/tracks', data);
+    const formData = new FormData();
+    for (const key in data) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      formData.append(key, data[key]);
+    }
+
+    return this.httpRequest.post<Track>('/tracks', formData, true, undefined, {
+      contentType: 'multipart/form-data',
+    });
   };
 
   updateTrack = (trackId: Track['id'], data: Partial<Track>) => {

@@ -9,6 +9,7 @@ export type HttpClientRequestConfig = {
   data?: any;
   isAuth?: boolean;
   query?: Record<string, unknown>;
+  headers?: Record<string, string>;
 };
 
 export interface IHttpClient {
@@ -106,6 +107,7 @@ class CustomHttpClient implements IHttpClient {
     data,
     isAuth = true,
     query,
+    headers,
   }: HttpClientRequestConfig) {
     const builtUrl = this.buildUrl(this.baseUrl + url, query);
 
@@ -121,7 +123,7 @@ class CustomHttpClient implements IHttpClient {
     if (isAuth) {
       requestConfig = {
         ...requestConfig,
-        headers: { ...this.getAuthHeader() },
+        headers: { ...this.getAuthHeader(), ...headers },
       };
     }
 

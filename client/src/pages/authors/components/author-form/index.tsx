@@ -70,13 +70,15 @@ const AuthorForm = ({ open, onClose }: IEntityFormProps) => {
       onClose={handleClose}
     >
       <Stack spacing={3}>
-        <Controller
-          name="avatar"
-          control={control}
-          render={({ field }) => (
-            <ImageUpload value={field.value} onChange={field.onChange} />
-          )}
-        />
+        {formMode !== FormMode.Edit && (
+          <Controller
+            name="file"
+            control={control}
+            render={({ field }) => (
+              <ImageUpload value={field.value} onChange={field.onChange} />
+            )}
+          />
+        )}
         <Controller
           name="name"
           control={control}

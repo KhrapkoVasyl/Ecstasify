@@ -1,20 +1,26 @@
+import { useStore } from '@/hooks';
 import { Delete, Image } from '@mui/icons-material';
-import { Box, IconButton, Stack, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import {
+  Box,
+  IconButton,
+  LinearProgress,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { observer } from 'mobx-react-lite';
+import { useState } from 'react';
 
 interface IImageUploadProps {
-  value?: string;
-  onChange: (value: string) => void;
+  value?: File;
+  onChange: (value: File) => void;
 }
 
 const ImageUpload = ({ value, onChange }: IImageUploadProps) => {
   const [previewImg, setPreviewImg] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (value) {
-      setPreviewImg(value);
-    }
-  }, [value]);
+  const { uploadFile, uploadFileLoading } = useStore('filesStore');
+
+  console.log({ value });
 
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const [file] = e.target.files ?? [];
@@ -23,16 +29,12 @@ const ImageUpload = ({ value, onChange }: IImageUploadProps) => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const reader = new FileReader();
+      const src = await uploadFile(formData);
 
-      reader.onload = (e) => {
-        if (e.target?.result) {
-          setPreviewImg(e.target.result as string);
-          onChange(e.target.result as string);
-        }
-      };
-
-      reader.readAsDataURL(file);
+      if (src) {
+        setPreviewImg(src);
+        onChange(file);
+      }
     }
   };
 
@@ -49,6 +51,7 @@ const ImageUpload = ({ value, onChange }: IImageUploadProps) => {
       >
         Upload image
       </Typography>
+      {uploadFileLoading && <LinearProgress sx={{ marginBottom: '20px' }} />}
       {!previewImg ? (
         <Box
           sx={{
@@ -66,6 +69,7 @@ const ImageUpload = ({ value, onChange }: IImageUploadProps) => {
           <Box
             component="input"
             type="file"
+            accept="image/png, image/jpeg, image/gif"
             onChange={handleUploadImage}
             sx={{
               position: 'absolute',
@@ -139,4 +143,4 @@ const ImageUpload = ({ value, onChange }: IImageUploadProps) => {
   );
 };
 
-export default ImageUpload;
+export default observer(ImageUpload);

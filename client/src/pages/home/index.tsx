@@ -61,7 +61,10 @@ const HomePage = () => {
             }}
           >
             <picture>
-              <source srcSet={image.large} media="(min-width: 1200px)" />
+              <source
+                srcSet={track.image?.src || image.large}
+                media="(min-width: 1200px)"
+              />
               <source srcSet={image.medium} media="(min-width: 700px)" />
               <img width={156} height={156} src={image.small} />
             </picture>
