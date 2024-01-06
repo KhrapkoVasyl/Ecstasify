@@ -5,8 +5,8 @@ export interface Track {
   updatedAt: string;
   id: string;
   name: string;
-  author: Author;
-  authorId: string;
+  author: Author | null;
+  authorId: string | null;
   genreId: string;
   genre: {
     id: string;

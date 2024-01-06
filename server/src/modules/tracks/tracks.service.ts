@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/common/services';
 import {
@@ -19,6 +19,8 @@ import {
   TRACKS_IMAGES_DIRECTORY,
 } from 'src/systems/storage/storage.constants';
 import { IMultipartFile } from 'src/systems/storage/interfaces';
+import { ErrorMessagesEnum } from 'src/common/enums';
+
 
 @Injectable()
 export class TracksService extends BaseService<TrackEntity> {
@@ -103,5 +105,16 @@ export class TracksService extends BaseService<TrackEntity> {
       : null;
 
     track.author = author;
+  }
+
+  public async updateMany(
+    conditions: FindOptionsWhere<TrackEntity>,
+    dataToUpdate: Partial<TrackEntity>,
+  ): Promise<void> {
+    await this.trackEntityRepository
+      .update(conditions, dataToUpdate)
+      .catch(() => {
+        throw new BadRequestException(ErrorMessagesEnum.INVALID_DATA);
+      });
   }
 }

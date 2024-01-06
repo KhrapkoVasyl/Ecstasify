@@ -78,7 +78,7 @@ const HomePage = () => {
                 {track.name}
               </Typography>
               <Typography fontSize="14px" color="text.secondary">
-                {track.author.name}
+                {track.author?.name}
               </Typography>
             </CardContent>
           </Card>
