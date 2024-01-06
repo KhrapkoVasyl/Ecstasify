@@ -20,13 +20,17 @@ RUN apk add --no-cache tini
 
 ENTRYPOINT ["/sbin/tini", "--"]
 
+ENV NODE_ENV=production
+
 WORKDIR /app
 
 COPY --from=build /app/*.env /app/package*.json ./
+
+COPY .env.${NODE_ENV} ./
 
 RUN npm ci --production
 
 COPY --from=build /app/dist ./src/
 
-CMD ["node", "./src/main.js"]
+CMD ["npm", "run", "start:prod"]
   

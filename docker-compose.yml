@@ -1,0 +1,65 @@
+version: '3.9'
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client
+    ports:
+      - 8000:80
+    depends_on:
+      - server
+    networks:
+      - network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - mongodb
+    networks:
+      - network
+
+  postgres:
+    image: postgres:14.1-alpine
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=ecstasify
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ecstasify
+    ports:
+      - 5432:5432
+    networks:
+      - network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=ecstasify
+    ports:
+      - 27017:27017
+    networks:
+      - network
+    volumes:
+      - mongodb_data:/data/db
+
+networks:
+  network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongodb_data:
