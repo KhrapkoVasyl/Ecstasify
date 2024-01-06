@@ -28,7 +28,7 @@ import { FilesModule } from './modules/files';
     UsersModule,
     AuthModule,
     TracksModule,
-    //FilesModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

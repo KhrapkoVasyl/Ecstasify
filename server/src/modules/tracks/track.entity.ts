@@ -8,11 +8,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { GenreEntity } from '../genres/genre.entity';
 import { PlaylistEntity } from '../playlists/playlist.entity';
 import { CommonEntity } from 'src/common/entities';
 import { AuthorEntity } from '../authors/author.schema';
+import { FileEntity } from '../files/file.entity';
 
 @Entity({ name: 'tracks' })
 export class TrackEntity extends CommonEntity {
@@ -40,10 +42,14 @@ export class TrackEntity extends CommonEntity {
   @ManyToMany(() => PlaylistEntity, ({ tracks }) => tracks, { nullable: true })
   playlists: PlaylistEntity[];
 
-  // @ApiProperty({ type: () => FileEntity })
-  // @OneToOne(() => FileEntity, { onDelete: 'CASCADE', eager: true })
-  // @JoinColumn()
-  // file: FileEntity;
+  @ApiProperty({ type: () => FileEntity })
+  @OneToOne(() => FileEntity, {
+    onDelete: 'CASCADE',
+    eager: true,
+    nullable: true,
+  })
+  @JoinColumn()
+  image: Partial<FileEntity>;
 
   @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   @CreateDateColumn({ readonly: true })
