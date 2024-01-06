@@ -16,7 +16,7 @@ const Header = () => {
       color="transparent"
       position="static"
       elevation={0}
-      sx={{ position: 'absolute' }}
+      sx={{ position: 'absolute', zIndex: 1000 }}
     >
       <Toolbar sx={styles.toolbar}>
         <Stack direction="row" gap={2} flexBasis="400px">

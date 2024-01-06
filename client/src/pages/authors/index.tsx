@@ -15,6 +15,18 @@ const columns: IColumn<Author>[] = [
     key: 'name',
     dataIndex: 'name',
   },
+  {
+    title: 'Picture',
+    key: 'imageFile',
+    dataIndex: 'imageFile',
+    render: (item) => (
+      <img
+        width={50}
+        height={50}
+        src={`data:${item?.mimetype};base64,${item?.base64}`}
+      />
+    ),
+  },
 ];
 
 const AuthorsPage = () => {
