@@ -13,6 +13,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SubscriptionPlansModule } from './modules/subscription-plans';
 import { SubscriptionFeaturesModule } from './modules/subscription-features';
 import { FilesModule } from './modules/files';
+import { DbFilesModule } from './modules/db-files/db-files.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FilesModule } from './modules/files';
     UsersModule,
     AuthModule,
     TracksModule,
+    DbFilesModule,
     //FilesModule,
   ],
   controllers: [AppController],

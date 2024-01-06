@@ -20,14 +20,17 @@ import {
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from '../auth/guards';
 import { IdDto } from 'src/common/dto';
+import { DbFilesService } from '../db-files/db-files.service';
 
 @ApiTags('authors')
 @Controller('authors')
-@UseGuards(AccessTokenGuard)
+//@UseGuards(AccessTokenGuard)
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthorsController {
-  constructor(private readonly authorsService: AuthorsService) {}
+  constructor(
+    private readonly authorsService: AuthorsService, // private readonly dbFilesService: DbFilesService,
+  ) {}
 
   @Get()
   findAll(@Query() options: FindAllAuthorOptionsDto) {
@@ -44,7 +47,9 @@ export class AuthorsController {
   @ApiConsumes('multipart/form-data')
   createOne(@Body() createAuthorDto: CreateAuthorDto) {
     const { file, ...dto } = createAuthorDto;
-    return this.authorsService.createOne(createAuthorDto);
+
+    // const dbFile = this.dbFilesService.saveFileToDB(file);
+    return this.authorsService.createOne(dto);
   }
 
   @Patch(':id')
