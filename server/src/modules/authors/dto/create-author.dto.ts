@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { CreateFileDto } from 'src/modules/files/dto';
 
-export class CreateAuthorDto {
+export class CreateAuthorDto extends CreateFileDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(1)

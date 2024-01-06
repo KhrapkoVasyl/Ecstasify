@@ -17,7 +17,7 @@ import {
   FindAllAuthorOptionsDto,
   UpdateAuthorDto,
 } from './dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from '../auth/guards';
 import { IdDto } from 'src/common/dto';
 
@@ -40,7 +40,10 @@ export class AuthorsController {
   }
 
   @Post()
+  @ApiBody({ type: CreateAuthorDto })
+  @ApiConsumes('multipart/form-data')
   createOne(@Body() createAuthorDto: CreateAuthorDto) {
+    const { file, ...dto } = createAuthorDto;
     return this.authorsService.createOne(createAuthorDto);
   }
 
