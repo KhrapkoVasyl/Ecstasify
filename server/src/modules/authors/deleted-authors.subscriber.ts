@@ -37,12 +37,11 @@ class DeletedAuthorsSubscriber extends BaseSubscriber implements OnModuleInit {
   }
 
   async processMessage(message: ServiceBusReceivedMessage) {
+    const authorId = message.body;
+
     await this.subscriber.completeMessage(message);
 
-    await this.tracksService.updateMany(
-      { authorId: message.body },
-      { authorId: null },
-    );
+    await this.tracksService.updateMany({ authorId }, { authorId: null });
   }
 }
 

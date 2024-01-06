@@ -77,8 +77,10 @@ export class TracksService extends BaseService<TrackEntity> {
     conditions: FindOptionsWhere<TrackEntity>,
     dataToUpdate: Partial<TrackEntity>,
   ): Promise<void> {
-    this.trackEntityRepository.update(conditions, dataToUpdate).catch(() => {
-      throw new BadRequestException(ErrorMessagesEnum.INVALID_DATA);
-    });
+    await this.trackEntityRepository
+      .update(conditions, dataToUpdate)
+      .catch(() => {
+        throw new BadRequestException(ErrorMessagesEnum.INVALID_DATA);
+      });
   }
 }

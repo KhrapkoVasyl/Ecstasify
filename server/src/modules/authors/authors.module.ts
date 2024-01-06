@@ -31,7 +31,9 @@ import { TracksModule } from '../tracks';
     },
     {
       provide: SERVICE_BUS_QUEUE_NAME_TOKEN,
-      useValue: DELETED_AUTHORS_QUEUE_NAME,
+      useFactory: (appConfigService: AppConfigService) =>
+        appConfigService.get('AZURE_SERVICE_BUS_DELETED_AUTHORS_QUEUE_NAME'),
+      inject: [AppConfigService],
     },
     DeletedAuthorsPublisher,
     DeletedAuthorsSubscriber,
