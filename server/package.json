@@ -24,7 +24,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli",
     "typeorm:migrations": "npm run typeorm:cli -- migration:create src/systems/database/migrations/users",
-    "prepare": "cd .. && husky install server/.husky"
+    "husky:prepare": "cd .. && husky install server/.husky"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.14.0",
