@@ -6,10 +6,7 @@ import { AuthorsController } from './authors.controller';
 import { DeletedAuthorsPublisher } from './deleted-authors.publisher';
 import { AppConfigService } from 'src/config/app-config.service';
 import { ServiceBusClient } from '@azure/service-bus';
-import {
-  DELETED_AUTHORS_QUEUE_NAME,
-  SERVICE_BUS_QUEUE_NAME_TOKEN,
-} from 'src/common/constants';
+import { SERVICE_BUS_QUEUE_NAME_TOKEN } from 'src/common/constants';
 import { DeletedAuthorsSubscriber } from './deleted-authors.subscriber';
 import { TracksModule } from '../tracks';
 
