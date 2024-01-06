@@ -20,11 +20,7 @@ const AuthorForm = ({ open, onClose }: IEntityFormProps) => {
   const formMode = currentAuthor ? FormMode.Edit : FormMode.Create;
 
   const defaultValues: Partial<Author> =
-    formMode === FormMode.Edit
-      ? { ...currentAuthor }
-      : {
-          name: '',
-        };
+    formMode === FormMode.Edit ? { name: currentAuthor?.name } : { name: '' };
 
   const { control, handleSubmit, reset } = useForm<Author>({
     defaultValues,

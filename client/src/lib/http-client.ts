@@ -47,28 +47,8 @@ class CustomHttpClient implements IHttpClient {
   }
 
   private async handleUnauthorized(axiosError: AxiosError) {
-    const originalRequest = axiosError.config as AxiosRequestConfig & {
-      sent: boolean;
-    };
-
-    if (!axiosError?.response || !originalRequest) {
-      return Promise.reject(axiosError);
-    }
-
-    if (axiosError?.response?.status === 401 && !originalRequest.sent) {
-      originalRequest.sent = true;
-
-      const accessToken = await this.rootStore.authStore.refreshAuth();
-
-      if (accessToken) {
-        return this.axios.request({
-          ...originalRequest,
-          headers: {
-            ...originalRequest.headers,
-            ...this.getAuthHeader(accessToken),
-          },
-        });
-      }
+    if (axiosError?.response?.status === 401) {
+      this.rootStore.authStore.signOut();
     } else {
       return Promise.reject(axiosError);
     }
@@ -77,7 +57,9 @@ class CustomHttpClient implements IHttpClient {
   private getAuthHeader(accessToken?: string) {
     const { auth } = this.rootStore.authStore;
     const tokenType = 'Bearer';
-    return { Authorization: `${tokenType} ${accessToken ?? auth.accessToken}` };
+    return {
+      Authorization: `${tokenType} ${accessToken ?? auth?.accessToken}`,
+    };
   }
 
   private handleRequestError(httpRequestError: HttpRequestError) {

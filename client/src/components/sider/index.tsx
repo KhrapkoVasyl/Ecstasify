@@ -1,7 +1,6 @@
 import {
   LibraryMusic,
   Group,
-  CardGiftcard,
   AccountCircle,
   HomeRounded,
 } from '@mui/icons-material';
@@ -42,11 +41,6 @@ const Sider = () => {
           label: 'Tracks',
           path: '/tracks',
           icon: <LibraryMusic />,
-        },
-        {
-          label: 'Subscriptions',
-          path: '/subscriptions',
-          icon: <CardGiftcard />,
         },
         {
           label: 'Authors',

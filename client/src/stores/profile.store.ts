@@ -1,4 +1,3 @@
-import { makePersistable } from 'mobx-persist-store';
 import { User } from '@/models/user';
 import { RootService } from '@/services';
 import { RootStore } from './root.store';
@@ -9,26 +8,28 @@ export class ProfileStore {
   private rootStore: RootStore;
   private rootService: RootService;
 
-  currentUser: User = { name: 'artemko', role: UserRole.Admin } as User;
+  currentUser: User | null = null;
 
   constructor(rootService: RootService, rootStore: RootStore) {
     this.rootStore = rootStore;
     this.rootService = rootService;
 
     makeAutoObservable(this, {}, { autoBind: true });
-
-    makePersistable(this, {
-      name: 'ProfileStore',
-      properties: ['currentUser'],
-      storage: window.localStorage,
-    });
   }
 
   get isAdmin() {
-    return this.currentUser.role === UserRole.Admin;
+    return this.currentUser?.role === UserRole.Admin;
   }
 
-  setCurrentUser(user: User) {
+  setCurrentUser(user: typeof this.currentUser) {
     this.currentUser = user;
+  }
+
+  async getCurrentUser() {
+    const user = await this.rootService.usersService.getProfile();
+
+    if (user) {
+      this.setCurrentUser({ ...user, role: UserRole.Admin });
+    }
   }
 }

@@ -7,11 +7,6 @@ import { Author } from '@/models/author';
 
 const columns: IColumn<Author>[] = [
   {
-    title: 'ID',
-    key: 'id',
-    dataIndex: 'id',
-  },
-  {
     title: 'Name',
     key: 'name',
     dataIndex: 'name',

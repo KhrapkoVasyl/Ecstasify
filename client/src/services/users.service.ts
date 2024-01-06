@@ -53,7 +53,11 @@ class UsersService extends BaseService {
   };
 
   refreshAuth = () => {
-    return this.httpRequest.post<RefreshAuthResponse>('/users/auth/refresh');
+    return this.httpRequest.post<RefreshAuthResponse>('/auth/tokens/refresh');
+  };
+
+  getProfile = () => {
+    return this.httpRequest.get<User>('/auth/profile');
   };
 }
 

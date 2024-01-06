@@ -17,6 +17,8 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
       resetCurrentTrack,
       updateTrack,
       currentTrack,
+      getAllGenres,
+      genres,
     },
     authorsStore: { authors, getAllAuthors },
   } = useStores();
@@ -24,7 +26,14 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
   const formMode = currentTrack ? FormMode.Edit : FormMode.Create;
 
   const defaultValues =
-    formMode === FormMode.Edit ? { ...currentTrack } : { name: '' };
+    formMode === FormMode.Edit
+      ? {
+          name: currentTrack?.name,
+          genreId: currentTrack?.genre.id,
+          authorId: currentTrack?.authorId,
+        }
+      : { name: '' };
+
   const { control, handleSubmit, reset } = useForm<Track>({
     defaultValues,
   });
@@ -39,6 +48,7 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
 
   useEffect(() => {
     getAllAuthors();
+    getAllGenres();
   }, []);
 
   const handleClose = () => {
@@ -47,20 +57,28 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
     onClose();
   };
 
-  const handleCreateUser = async (data: Track) => {
-    await createTrack(data);
+  const handleCreateTrack = async (data: Track) => {
+    await createTrack({
+      name: data.name,
+      genre: { id: data.genreId },
+      authorId: data.authorId,
+    });
     handleClose();
   };
 
-  const handleUpdateUser = async (data: Track) => {
+  const handleUpdateTrack = async (data: Track) => {
     if (currentTrack) {
-      await updateTrack(currentTrack?.id, data);
+      await updateTrack(currentTrack?.id, {
+        name: data.name,
+        genre: { id: data.genreId },
+        authorId: data.authorId,
+      });
       handleClose();
     }
   };
 
   const submitHandler =
-    formMode === FormMode.Create ? handleCreateUser : handleUpdateUser;
+    formMode === FormMode.Create ? handleCreateTrack : handleUpdateTrack;
 
   return (
     <Modal
@@ -91,14 +109,17 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
           )}
         />
         <Controller
-          name="author"
+          name="authorId"
           control={control}
           render={({ field }) => (
             <Autocomplete
               {...field}
-              options={authors}
-              getOptionLabel={(option) => option?.name}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
+              options={authors.map((item) => item.id)}
+              getOptionLabel={(option) => {
+                return (
+                  authors.find((author) => author.id === option)?.name ?? ''
+                );
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -109,7 +130,31 @@ const TrackForm = ({ open, onClose }: IEntityFormProps) => {
               )}
               onChange={(_, data) => {
                 field.onChange(data);
-                return data;
+              }}
+            />
+          )}
+        />
+        <Controller
+          name="genreId"
+          control={control}
+          render={({ field }) => (
+            <Autocomplete
+              {...field}
+              options={genres.map((item) => item.id)}
+              getOptionLabel={(option) => {
+                return genres.find((genre) => genre.id === option)?.name ?? '';
+              }}
+              getOptionKey={(option) => option}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Genre"
+                  placeholder="Choose a genre"
+                  variant="outlined"
+                />
+              )}
+              onChange={(_, data) => {
+                field.onChange(data);
               }}
             />
           )}
