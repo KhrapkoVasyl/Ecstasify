@@ -1,0 +1,1 @@
+export const SERVICE_BUS_QUEUE_NAME_TOKEN = 'QUEUE_NAME';
