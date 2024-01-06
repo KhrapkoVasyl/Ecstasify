@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Schema as MongooseSchema } from 'mongoose';
+import mongoose, { Schema as MongooseSchema } from 'mongoose';
 import * as uuid from 'uuid';
+import { DbFile } from '../db-files/db-file.schema';
 
 @Schema({ collection: 'authors', timestamps: true })
 export class AuthorEntity {
@@ -23,6 +24,9 @@ export class AuthorEntity {
 
   @ApiProperty({ type: 'string', readOnly: true, format: 'date-time' })
   updatedAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'DbFile' })
+  dbfile: DbFile;
 }
 
 export const AuthorSchema = SchemaFactory.createForClass(AuthorEntity);
