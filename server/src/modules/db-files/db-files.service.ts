@@ -1,36 +1,25 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { DbFile, DbFileDocument } from './db-file.schema';
+import { DbFileEntity, DbFileDocument } from './db-file.schema';
 import { IdDto } from 'src/common/dto';
+import { ErrorMessagesEnum } from 'src/common/enums';
 
 @Injectable()
 export class DbFilesService {
-  private allowedExtensions = ['jpeg', 'png', 'gif'];
-
   constructor(
-    @InjectModel(DbFile.name)
+    @InjectModel(DbFileEntity.name)
     private readonly dbFileModel: Model<DbFileDocument>,
   ) {}
 
-  async saveFileToDB(file) {
-    this.checkFileMimetype(file.mimetype);
+  async createOne(entity: Partial<DbFileEntity>) {
+    const { data } = entity;
+    const newAuthor = new this.dbFileModel(entity);
+    await newAuthor.save().catch(() => {
+      throw new BadRequestException(ErrorMessagesEnum.INVALID_DATA);
+    });
 
-    const dbFile = new this.dbFileModel(file);
-    await dbFile.save();
-
-    return this.findOne(dbFile.id);
-  }
-
-  checkFileMimetype(mimetype: string) {
-    const subtype = mimetype.split('/').at(-1);
-
-    if (!this.allowedExtensions.includes(subtype)) {
-      throw new HttpException(
-        'Unsupported media type. Only .jpeg, .png, .gif files are allowed.',
-        HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-      );
-    }
+    return this.findOne({ id: newAuthor.id });
   }
 
   findAll() {

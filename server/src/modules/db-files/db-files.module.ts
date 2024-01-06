@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { DbFile, DbFileSchema } from './db-file.schema';
+import { DbFileEntity, DbFileSchema } from './db-file.schema';
 import { DbFilesService } from './db-files.service';
 import { DbFilesController } from './db-files.controller';
 
@@ -8,7 +8,7 @@ import { DbFilesController } from './db-files.controller';
   imports: [
     MongooseModule.forFeature([
       {
-        name: DbFile.name,
+        name: DbFileEntity.name,
         schema: DbFileSchema,
       },
     ]),

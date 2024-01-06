@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  UploadedFile,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CreateFileDto } from '../files/dto';
 import { DbFilesService } from './db-files.service';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -19,9 +12,11 @@ export class DbFilesController {
   @Post()
   @ApiBody({ type: CreateFileDto })
   @ApiConsumes('multipart/form-data')
-  create(@UploadedFile() file: CreateFileDto) {
+  create(@Body() dto: CreateFileDto) {
+    const { file } = dto;
+    const { data, filename: fileName, mimetype } = file;
     console.log(file);
-    return this.dbFilesService.saveFileToDB(file);
+    return this.dbFilesService.createOne({ data, fileName, mimetype });
   }
 
   @Get()

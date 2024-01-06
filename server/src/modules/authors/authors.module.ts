@@ -9,11 +9,13 @@ import { ServiceBusClient } from '@azure/service-bus';
 import { SERVICE_BUS_QUEUE_NAME_TOKEN } from 'src/common/constants';
 import { DeletedAuthorsSubscriber } from './deleted-authors.subscriber';
 import { TracksModule } from '../tracks';
+import { DbFilesModule } from '../db-files/db-files.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Author', schema: AuthorSchema }]),
     forwardRef(() => TracksModule),
+    DbFilesModule,
   ],
   controllers: [AuthorsController],
   providers: [

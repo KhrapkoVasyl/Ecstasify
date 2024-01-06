@@ -11,16 +11,27 @@ import { AuthorEntity } from './author.schema';
 import { FindAllAuthorOptionsDto } from './dto';
 import { IdDto } from 'src/common/dto';
 import { DeletedAuthorsPublisher } from './deleted-authors.publisher';
+import { DbFilesService } from '../db-files/db-files.service';
+import { DbFileEntity } from '../db-files/db-file.schema';
 
 @Injectable()
 export class AuthorsService {
   constructor(
     @InjectModel('Author') private authorModel: Model<AuthorEntity>,
     private readonly deletedAuthorsPublisher: DeletedAuthorsPublisher,
+    private readonly dbFilesService: DbFilesService,
   ) {}
 
-  async createOne(author: Partial<AuthorEntity>) {
-    const newAuthor = new this.authorModel({ ...author });
+  async createOne(author: Partial<AuthorEntity>, file?: Partial<DbFileEntity>) {
+    const authorCoverId = file
+      ? await this.dbFilesService.createOne(file).then(({ id }) => id)
+      : undefined;
+
+    const newAuthor = new this.authorModel({
+      ...author,
+      imageId: authorCoverId,
+    });
+
     await newAuthor.save().catch(() => {
       throw new ConflictException(ErrorMessagesEnum.AUTHOR_ALREADY_EXISTS);
     });
@@ -60,8 +71,8 @@ export class AuthorsService {
       authorData = await this.authorModel.find().lean().exec();
     }
 
-    if (!authorData) {
-      throw new NotFoundException(ErrorMessagesEnum.AUTHORS_NOT_FOUND);
+    for (const author of authorData) {
+      await this.assignImage(author);
     }
 
     return authorData;
@@ -75,7 +86,22 @@ export class AuthorsService {
     if (!existingAuthor) {
       throw new NotFoundException(ErrorMessagesEnum.AUTHOR_NOT_FOUND);
     }
+    await this.assignImage(existingAuthor);
     return existingAuthor;
+  }
+
+  private async assignImage(author: Partial<AuthorEntity>) {
+    const imageId = author.imageId;
+    const imageFile = imageId
+      ? await this.dbFilesService.findOne({ id: imageId })
+      : null;
+
+    if (imageFile) {
+      const dataBuffer = Buffer.from(imageFile.data?.buffer);
+      imageFile.base64 = dataBuffer.toString('base64');
+    }
+
+    author.imageFile = imageFile;
   }
 
   async deleteOne(conditions: IdDto) {

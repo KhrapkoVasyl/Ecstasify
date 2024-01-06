@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Document } from 'mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
 import * as uuid from 'uuid';
 
-export type DbFileDocument = DbFile & Document;
+export type DbFileDocument = DbFileEntity & Document;
 
-@Schema()
-export class DbFile {
+@Schema({ collection: 'dbFiles', timestamps: true })
+export class DbFileEntity {
   @ApiProperty({ type: 'string', maxLength: 36, uniqueItems: true })
   @Prop({
     type: MongooseSchema.Types.String,
@@ -25,6 +25,13 @@ export class DbFile {
   @Prop({ type: String, required: true, maxlength: 256 })
   mimetype: string;
 
+  @ApiProperty({ type: 'blob', required: true })
+  @Prop({ type: Buffer })
+  data: Buffer;
+
+  @ApiHideProperty()
+  base64: string;
+
   @ApiProperty({ readOnly: true })
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
@@ -34,4 +41,4 @@ export class DbFile {
   updatedAt: Date;
 }
 
-export const DbFileSchema = SchemaFactory.createForClass(DbFile);
+export const DbFileSchema = SchemaFactory.createForClass(DbFileEntity);

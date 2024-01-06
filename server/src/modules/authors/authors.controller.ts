@@ -18,9 +18,9 @@ import {
   UpdateAuthorDto,
 } from './dto';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { AccessTokenGuard } from '../auth/guards';
 import { IdDto } from 'src/common/dto';
-import { DbFilesService } from '../db-files/db-files.service';
+import { FileMimetypeValidationPipe } from 'src/common/pipes';
+import { imagesMimetypes } from 'src/common/constants';
 
 @ApiTags('authors')
 @Controller('authors')
@@ -45,11 +45,14 @@ export class AuthorsController {
   @Post()
   @ApiBody({ type: CreateAuthorDto })
   @ApiConsumes('multipart/form-data')
-  createOne(@Body() createAuthorDto: CreateAuthorDto) {
+  createOne(
+    @Body(new FileMimetypeValidationPipe(imagesMimetypes))
+    createAuthorDto: CreateAuthorDto,
+  ) {
     const { file, ...dto } = createAuthorDto;
+    const { data, filename: fileName, mimetype } = file;
 
-    // const dbFile = this.dbFilesService.saveFileToDB(file);
-    return this.authorsService.createOne(dto);
+    return this.authorsService.createOne(dto, { data, fileName, mimetype });
   }
 
   @Patch(':id')
