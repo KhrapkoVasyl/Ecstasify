@@ -19,7 +19,9 @@ export class FileMimetypeValidationPipe implements PipeTransform {
    * @param value
    */
   transform(value: CreateFileDto) {
-    if (!this.allowedTypes.includes(value.file.mimetype))
+    if (!value.file) return value;
+
+    if (!this.allowedTypes.includes(value.file?.mimetype))
       throw new UnsupportedMediaTypeException(
         ErrorMessagesEnum.FILE_UNSUPPORTED_TYPE,
       );
