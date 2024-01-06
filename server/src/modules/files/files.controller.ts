@@ -15,6 +15,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateFileDto } from './dto';
 import { IdDto } from 'src/common/dto';
 import { AccessTokenGuard } from '../auth/guards';
+import { FileMimetypeValidationPipe } from 'src/common/pipes';
 
 @ApiTags('files')
 @Controller('files')

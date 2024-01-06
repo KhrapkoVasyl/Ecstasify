@@ -10,11 +10,13 @@ import { ErrorMessagesEnum } from 'src/common/enums';
 import { AuthorEntity } from './author.schema';
 import { FindAllAuthorOptionsDto } from './dto';
 import { IdDto } from 'src/common/dto';
+import { DeletedAuthorsPublisher } from './deleted-authors.publisher';
 
 @Injectable()
 export class AuthorsService {
   constructor(
     @InjectModel('Author') private authorModel: Model<AuthorEntity>,
+    private readonly deletedAuthorsPublisher: DeletedAuthorsPublisher,
   ) {}
 
   async createOne(author: Partial<AuthorEntity>) {
@@ -86,6 +88,8 @@ export class AuthorsService {
     if (!deletedAuthor) {
       throw new NotFoundException(ErrorMessagesEnum.AUTHOR_NOT_FOUND);
     }
+
+    this.deletedAuthorsPublisher.publish(deletedAuthor.id);
 
     return deletedAuthor;
   }

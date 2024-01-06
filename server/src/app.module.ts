@@ -30,7 +30,7 @@ import { DbFilesModule } from './modules/db-files/db-files.module';
     AuthModule,
     TracksModule,
     DbFilesModule,
-    //FilesModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -15,9 +15,11 @@ import { TracksService } from './tracks.service';
 import { TrackEntity } from './track.entity';
 import { IdDto } from 'src/common/dto';
 import { CreateTrackDto, FindAllTracksOptionsDto, UpdateTrackDto } from './dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { AccessTokenGuard } from '../auth/guards';
+import { FileMimetypeValidationPipe } from 'src/common/pipes';
+import { imagesMimetypes } from 'src/common/constants';
 
 @ApiTags('tracks')
 @Controller('tracks')
@@ -45,10 +47,19 @@ export class TracksController {
   }
 
   @Post()
-  createOne(@Body() createEntityDto: CreateTrackDto): Promise<TrackEntity> {
-    const model = plainToInstance(TrackEntity, createEntityDto);
+  @ApiBody({ type: CreateTrackDto })
+  @ApiConsumes('multipart/form-data')
+  createOne(
+    @Body(new FileMimetypeValidationPipe(imagesMimetypes))
+    createEntityDto: CreateTrackDto,
+  ): Promise<TrackEntity> {
+    const { file, genreId, ...dto } = createEntityDto;
+    const model = plainToInstance(TrackEntity, {
+      ...dto,
+      genre: { id: genreId },
+    });
 
-    return this.tracksService.createOne(model);
+    return this.tracksService.createOne(model, file);
   }
 
   @Patch(':id')
@@ -56,7 +67,11 @@ export class TracksController {
     @Param() conditions: IdDto,
     @Body() updateEntityDto: UpdateTrackDto,
   ): Promise<TrackEntity> {
-    const model = plainToInstance(TrackEntity, updateEntityDto);
+    const { genreId } = updateEntityDto;
+    const model = plainToInstance(TrackEntity, {
+      ...updateEntityDto,
+      genre: { id: genreId },
+    });
 
     return this.tracksService.updateOne(conditions, model);
   }
