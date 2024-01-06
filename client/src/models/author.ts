@@ -5,4 +5,5 @@ export interface Author {
   name: string;
   avatar: string;
   file: File;
+  imageFile: { base64: string; mimetype: string };
 }
