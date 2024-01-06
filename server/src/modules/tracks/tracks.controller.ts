@@ -7,13 +7,14 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { TrackEntity } from './track.entity';
 import { IdDto } from 'src/common/dto';
-import { CreateTrackDto, UpdateTrackDto } from './dto';
+import { CreateTrackDto, FindAllTracksOptionsDto, UpdateTrackDto } from './dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { AccessTokenGuard } from '../auth/guards';
@@ -27,9 +28,12 @@ export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
   @Get()
-  findAll(): Promise<TrackEntity[]> {
+  findAll(
+    @Query() { searchName }: FindAllTracksOptionsDto,
+  ): Promise<TrackEntity[]> {
     return this.tracksService.findAll({
       relations: { genre: true },
+      where: { name: searchName },
     });
   }
 
