@@ -2,16 +2,22 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Get,
   Post,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SingInDto, SignUpDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
-import { RefreshTokenGuard, RolesGuard } from 'src/modules/auth/guards';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  AccessTokenGuard,
+  RefreshTokenGuard,
+  RolesGuard,
+} from 'src/modules/auth/guards';
 import { User } from 'src/common/decorators';
 import { AuthTokens, JwtPayloadUser } from './types';
+import { UserEntity } from '../users/user.entity';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -42,5 +48,12 @@ export class AuthController {
       { id: user.id },
       { id: user.refreshTokenId },
     );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AccessTokenGuard)
+  @Get('profile')
+  getProfile(@User() user: JwtPayloadUser): Promise<UserEntity> {
+    return this.authService.findUser({ id: user.id });
   }
 }
